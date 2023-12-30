@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juan Marulanda</title>
+
+  <!--
+    - favicon
+  -->
+  <link rel="shortcut icon" href="./pictures/millenium.png" type="image/x-icon">
+
+  <!--
+    - custom css link
+  -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <!--
+    - google font link
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!--
+    - #MAIN
+  -->
+  <div>
+    <video autoplay loop muted plays-inline class="b-video">
+      <source src="./pictures/video.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <main>
+
+    <!--
+      - #SIDEBAR
+    -->
+    <aside class="sidebar" data-sidebar>
+
+      <div class="sidebar-info">
+
+        <figure class="avatar-box">
+          <img src="./pictures/webb.png" alt="Dying Star" width="38%">
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="Juan Marulanda">Juan Marulanda</h1>
+          <h2 class="title">Software Developer</h2>
+      
+        </div>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Show Contacts</span>
+
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+
+      </div>
+
+      <div class="sidebar-info_more">
+
+        <div class="separator"></div>
+
+        <ul class="contacts-list">
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Email</p>
+
+              <a href="mailto: juanmarulandadelosri@cmail.carleton.ca" class="contact-link" target="_blank">juanmarulandadelosri@cmail.carleton.ca</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="logo-LinkedIn"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">LinkedIn</p>
+              <a href="https://www.linkedin.com/in/juan-marulanda-6b3655215/" class="contact-link" target="_blank">Juan Marulanda</a>
+            </div>
+
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="logo-github"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">GitHub</p>
+
+              <a href="https://github.com/Juan-789" class="contact-link" target="_blank">Juan-789</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="phone-portrait-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Phone</p>
+
+              <a href="tel:+16132865120" class="contact-link">+1 613 286 5120</a>
+            </div>
+
+          </li>
+
+          <li class="contact-item">
+
+            <div class="icon-box">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
+
+            <div class="contact-info">
+              <p class="contact-title">Location</p>
+
+              <address>Ottawa, ON, Canada</address>
+            </div>
+
+          </li>
+
+        </ul>
+
+    </aside>
+
+    <!--
+      - #main-content
+    -->
+
+    <div class="main-content">
+
+      <!--
+        - #NAVBAR
+      -->
+
+      <nav class="navbar">
+
+        <ul class="navbar-list">
+
+          <li class="navbar-item">
+            <button class="navbar-link  active" data-nav-link>About</button>
+          </li>
+
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Resume</button>
+          </li>
+
+          <!-- <li class="navbar-item">
+            <button class="navbar-link" data-nav-link>Projects</button>
+          </li> -->
+
+        </ul>
+
+      </nav>
+
+
+
+
+
+      <!--
+        - #ABOUT
+      -->
+
+      <article class="about  active" data-page="about">
+
+        <header>
+          <div class="effect">
+            <span class="auto-type"></span>
+          </div>
+        </header>
+        
+        <h3 class="h3 service-title">About me</h3>
+        <section class="about-text">
+          
+          <p>
+            Hello, I'm Juan Marulanda, a computer science student at the Carleton University 
+            specializing in Artificial Intelligence and Machine Learning.
+            I am passionate about using technology to make a positive impact on the world and strive 
+            to be a valuable asset to the tech industry. My skillset includes 
+            expertise in multiple programming languages such as Python, C++, Java, 
+            R, Rust, and JavaScript. I have experience working with popular frameworks 
+            like Pandas, TensorFlow, and Keras. I am a dedicated and ambitious 
+            individual who is constantly looking to learn and improve my skills.
+          </p>
+
+          <p>
+            In addition to my passion for technology, I also have an interest in 
+            Mathematics, Physics, and Chemistry Competitions and have placed highly ranked among these.
+            Competitions have taught me the importance of staying 
+            calm under pressure, quick decision making and teamwork.
+          </p>
+        </section>
+
+
+        <!--
+          - service
+        -->
+
+        <section class="service">
+
+          <h3 class="h3 service-title">What i'm doing</h3>
+
+          <ul class="service-list">
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <img src="./pictures/web.png" alt="Development icon" width="48">
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Back-End development</h4>
+
+                <p class="service-item-text">
+                  I develop back-end with multiple languages.
+                </p>
+              </div>
+
+            </li>
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <img src="./pictures/phone.png" alt="mobile app icon" width="32">
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Desktop apps</h4>
+
+                <p class="service-item-text">
+                  I develop applications for Desktop using tools like Tkinter, JavaFX, JavaSwing.
+                </p>
+              </div>
+
+            </li>
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <img src="./pictures/machine.png
+                " alt="design icon" width="52">
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Machine Learning</h4>
+
+                <p class="service-item-text">
+                  I use advanced supervised learning algorithms to solve common problems.
+                </p>
+              </div>
+
+            </li>
+
+            <li class="service-item">
+
+              <div class="service-icon-box">
+                <img src="./pictures/12.png" alt="camera icon" width="45">
+              </div>
+
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Recreation</h4>
+
+                <p class="service-item-text">
+                  I compete in Math Competitions and develop for the CUInspace rocket club at Carleton. 
+                </p>
+              </div>
+
+            </li>
+
+          </ul>
+
+        </section>
+        
+        
+        <div class="modal-container" data-modal-container>
+
+          <div class="overlay" data-overlay></div>
+
+          <section class="testimonials-modal">
+
+            <button class="modal-close-btn" data-modal-close-btn>
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          </section>
+        </div>
+
+      </article>
+
+
+
+
+      <!--
+        - #RESUME
+      -->
+
+      <article class="resume" data-page="resume">
+
+        <header>
+          <h2 class="h2 article-title">Resume</h2>
+        </header>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="book-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">Education</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+
+              <h3 class="h3 timeline-item-title">Carleton University</h3>
+
+              <span>Sept 2023 — June 2027</span>
+
+              <h4 class="timeline-text">Bachelors in Computer Science Artificial Intelligence and Machine Learning Stream Honours</h4>
+
+              <br>
+            </li>
+
+          </ol>
+        </section>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="book-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">Skills</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Languages</h4>
+              <p class="timeline-text">
+                Python | HTML | CSS | JavaScript | C++ | Java | Rust | R </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Frameworks</h4>
+              <p class="timeline-text">
+                Django | NodeJS | React | TensorFlow | Keras | Pandas </p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Tools</h4>
+              <p class="timeline-text">
+                GIT | Jupiter | IntelliJ | PyCharm | VSCode | Eclipse</p>
+            </li>
+
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Databases and Cloud</h4>
+              <p class="timeline-text">
+                SQL, JSON, Firebase</p>
+            </li>
+
+          </ol>
+
+        </section>
+        
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="book-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">Experience</h3>
+          </div>
+          
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Back-End Developer</h4>
+              <h5 class="h5 timeline-text-title">CUInspace</h5>
+
+              <span>Sept 2023 — Present</span>
+
+              <p class="timeline-text">
+                • Designed and developed the back-end for the website which displays the statistics for the rocket. 
+              </p><br>
+
+            
+            </li>
+
+          </ol>
+
+        </section>
+        
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="book-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">Techincal Projects</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Self-Driving Car</h4>
+
+              <span>Dec 2021</span>
+
+              <p class="timeline-text">
+                  <p class="timeline-text">
+                  • Designed an algorithm so a car could go through a maze, using Python and C++ 
+                  </p><br>
+                  <p class="timeline-text">
+                  •	Using ultrasound sensors and servos made the car detect walls, and drive itself to continuing the maze
+                  </p><br>
+              </p>
+
+            </li>
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">ship</h4>
+
+              <span>March 2023 - Present</span>
+
+              <p class="timeline-text">
+                  <p class="timeline-text">
+                    •	Chrome extension to track your orders from multiple shippers (in development) 
+                  </p><br>
+              
+
+            </li><li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Course Projects</h4>
+
+              <span>April 2023 - Present</span>
+              
+
+              <h5 class="h5 timeline-item-title">Juanestein:</h5>
+              <p class="timeline-text">
+                • Programmed an open world 2D game using Java, JavaFX, and JavaSwing.
+              </p><br>
+              <p class="timeline-text">
+                • Used the 4 primary concepts of Object Orientation
+              </p><br>
+              <p class="timeline-text">
+                • Implemented my own sprites, wrote and read from a text file to spawn the character in its latest location, and generate the map of the world
+              </p><br>
+              <h5 class="h5 timeline-item-title">• Trees Everywhere:</h5>
+              <p class="timeline-text">
+              
+              </p><br>
+              <h5 class="h5 timeline-item-title">• Tutle Graphics:</h5>
+              <p class="timeline-text">
+
+              </p><br>
+
+            </li>
+
+          </ol>
+
+        </section>
+
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="book-outline"></ion-icon>
+            </div>
+
+            <h3 class="h3">Certifications/Awards</h3>
+          </div>
+
+          <ol class="timeline-list">
+
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Scientific Computing with Python</h4>
+              <h5 class="h5 timeline-text-title">Michigan University at FreeCodeCamp</h5>
+
+              <span>Oct 2023 — Nov 2023</span>
+
+              <p class="timeline-text">
+                •	5 final projects to demonstrate my knowledge of OOP, and a representation of approximately 300 hours of work.
+              </p>
+            </li>
+            <li class="timeline-item">
+
+              <h4 class="h4 timeline-item-title">Sir Isaac Newton Exam</h4>
+              <h5 class="h5 timeline-text-title">Within top 25% of the world</h5>
+
+              <span>Apr 2023</span>
+
+              <p class="timeline-text">
+                •	Achieved first place in my school, along with a certificate stating that I was above 75% of all contestants from the world
+              </li>
+          </ol>
+
+        </section>
+
+        <!-- <div class="download">
+          <h2 class="download">Download Resume</h2>
+        </div> -->
+        <br>
+
+        <!-- <div class="resume1">
+          <button class="btn2" onclick="location.href='https://drive.google.com/uc?export=download&id=1V3bWLltwHVh82OLy0JlHIP4w_iRsZXUc';" target="_blank">Download Resume</button>
+          <!-- <button class="btn1" onclick="location.href='https://drive.google.com/uc?export=download&id=1BuK1f3TC2GCepIcsV_RjO2WOhRNBRr3O';" target="_blank">Dark Theme</button> -->
+        </div>     -->
+
+      </article>
+
+
+
+
+
+      <!--
+        - #PROJECTS
+      -->
+
+      <article class="projects" data-page="projects">
+
+        <header>
+          <h2 class="h2 article-title">Projects</h2>
+        </header>
+
+        <section class="projects">
+
+          <ul class="filter-list">
+
+            <li class="filter-item">
+              <button class="active" data-filter-btn>All</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>Applications</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>Web development</button>
+            </li>
+
+            <li class="filter-item">
+              <button data-filter-btn>Machine Learning</button>
+            </li>
+
+          </ul>
+
+          <div class="filter-select-box">
+
+            <button class="filter-select" data-select>
+
+              <div class="select-value" data-selecct-value>Select category</div>
+
+              <div class="select-icon">
+                <ion-icon name="chevron-down"></ion-icon>
+              </div>
+
+            </button>
+
+            <ul class="select-list">
+
+              <li class="select-item">
+                <button data-select-item>All</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>machine learning</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>Applications</button>
+              </li>
+
+              <li class="select-item">
+                <button data-select-item>Web development</button>
+              </li>
+
+            </ul>
+
+          </div>
+
+          <ul class="project-list">
+
+            <li class="project-item  active" data-filter-item data-category="machine learning">
+              
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+
+                  <img src="car2.jpeg" alt="fundo" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">CARitIn</h3>
+
+                <p class="project-category">Machine Learning</p>
+
+              </a>
+            </li>
+
+            <li class="project-item  active" data-filter-item data-category="applications">
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+
+                  <img src="./HealthCan/HClogo.png" alt="finance" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">HealthCan</h3>
+
+                <p class="project-category">Application</p>
+
+              </a>
+            </li>
+
+            <li class="project-item  active" data-filter-item data-category="applications">
+              <a href="#">
+
+                <figure class="project-img">
+                  <div class="project-item-icon-box">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+
+                  <img src="./Picture1.png" alt="finance" loading="lazy">
+                </figure>
+
+                <h3 class="project-title">CarbonCam</h3>
+
+                <p class="project-category">Application</p>
+
+              </a>
+            </li>
+          </ul>
+      
+        </section>
+
+      </article>
+
+      <!--
+        - #CONTACT
+      -->
+
+    </div>
+    <br>
+
+    <!------------------------------------->
+    <br>
+
+  </main>
+
+
+
+
+
+
+  <!--
+    - custom js link
+  -->
+  <script src="./assets/js/script.js"></script>
+
+  <!--
+    - ionicon link
+  -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+  <script>
+    var typed = new Typed(".auto-type",{
+      strings:["Hello!", "Bonjour!", "Hola!", "Nǐn hǎo!", "As-Salaam-Alaikum!", "Namaste!","Merhaba!", ],
+      typeSpeed: 100,
+      backSpeed: 100,
+      loop: true
+    })
+
+
+        </script>
+</body>
+
+</html>
