@@ -35,8 +35,11 @@ jobs:
       - name: Build site
         run: npm run build
       
-      - name: Deploy with gh-pages and GITHUB_TOKEN
-        run: npx gh-pages -d dist -b gh-pages -r https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+      - name: Deploy to GitHub Pages
+        run: gh-pages -d dist --repo https://${{ secrets.GITHUB_TOKEN }}@github.com/Juan-789/personal-website.git
+  # Replace USERNAME/REPO_NAME with your actual GitHub username and repository name.
+      # - name: Deploy with gh-pages and GITHUB_TOKEN
+      #   run: npx gh-pages -d dist -b gh-pages -r https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
       
       - name: Run Deploy Script (Build & Publish)
         run: npm run deploy
