@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import bedarraLogo from '/bedarra.jpeg'
 // import bedarraLogo from '/bedarra_new.png'
+import rabbit from '/waiting-rabbit.gif'
 
 
 import './App.css'
@@ -27,38 +28,12 @@ function App() {
   return (
     <div>
     {/* this div should be like the top Hello */}
-      <div>
+      {/* <div> */}
         {/* <button onClick={toggleSidebar}>
           {isSidebarOpen ? 'Close Sections' : 'Open Sections'}
         </button> */}
-
-        <Sidebar isOpen={isSidebarOpen}>
-          <h3>Page Navigation</h3>
-          <ul>
-            <li>Home</li>
-            <li>Building</li>
-            <ul>
-              <li>Projects</li>
-              <li>Learning</li>
-              <li>Experience</li>
-            </ul>
-            <li>Reading</li>
-            <ul>
-              <li>Essays</li>
-              <li>Books</li>
-              <li>To be read</li>
-              <li>Notes</li>
-            </ul>
-            <li>Exploring</li>
-            <ul>
-            <li>Community</li>
-            <li>Food</li>
-            <li>Movies</li>
-            <li>Cool links</li>
-            </ul>
-          </ul>
-        </Sidebar>
-      </div>
+        <Sidebar isOpen={isSidebarOpen} />
+      {/* </div> */}
       <div style={{marginLeft: isSidebarOpen ? '250px' : '0',
           transition: 'margin-left 0.3s ease-in-out', backgroundColor: 'transparent'}}>
 
@@ -139,8 +114,9 @@ function About() {
       <div className='profile-text'>
         <h1>Hi I'm Juan :)</h1> 
         <h3>
-          I like to learn how stuff works, and build indie, fun programs <i>Just for the sake of it</i>
+          I like to learn how stuff works, and build indie, fun programs 
         </h3>
+          <h3><i>Just for the sake of it</i></h3>
         <p>Also a Computer Science major @ <a href="https://carleton.ca/">Carleton University</a>, community coordinator at <a href='https://www.uottahack.ca/'>uOttahack</a>, and an organizor at <a href='https://luma.com/synchronize'>Synchronize</a>, (Ottawa's <a href='https://www.socratica.info/'>Socratica</a> Node)</p>
       </div>
       <div className='profile-image'>
@@ -238,7 +214,7 @@ function Experience() {
   );
 }
 // 1. Define the component and accept props for content and state
-function Sidebar({ isOpen, children }) {
+function Sidebar({ isOpen }) {
   // 2. Add classes dynamically based on the 'isOpen' prop
   const sidebarClasses = `sidebar ${isOpen ? 'open' : 'closed'}`;
 
@@ -246,7 +222,42 @@ function Sidebar({ isOpen, children }) {
     <div className={sidebarClasses}>
       {/* 3. Render any passed content */}
       <div className="sidebar-content">
-        {children}
+        <div className='sidebar-header'>
+          <div className='sidebar-avatar'>
+            <img
+              className=""
+              src={rabbit}
+              alt="Photo of me aurafarming"
+              width={'150px'}
+            > 
+            </img> 
+          </div>
+        </div>
+        <nav className='sidebar-nav'>
+           <ul>
+            <li>Home</li>
+            <li>Building</li>
+            <ul>
+              <li>Projects</li>
+              <li>Learning</li>
+              <li>Experience</li>
+            </ul>
+            <li>Reading</li>
+            <ul>
+              <li>Essays</li>
+              <li>Books</li>
+              <li>To be read</li>
+              <li>Notes</li>
+            </ul>
+            <li>Exploring</li>
+            <ul>
+            <li>Community</li>
+            <li>Food</li>
+            <li>Movies</li>
+            <li>Cool links</li>
+            </ul>
+          </ul>
+        </nav>
       </div>
     </div>
   );

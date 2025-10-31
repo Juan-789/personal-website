@@ -23,6 +23,177 @@
   }
 }
 
+/* Commodore 64 inspired sidebar */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 250px;
+  background: #3e31a2; /* C64 blue */
+  border-right: 4px solid #7869c4;
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
+  z-index: 100;
+  font-family: 'VT323', monospace;
+  box-shadow: 
+    inset -8px 0 16px rgba(0, 0, 0, 0.3),
+    4px 0 12px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* Header section */
+.sidebar-header {
+  text-align: center;
+  padding: 20px;
+  background: #3e31a2;
+  border-bottom: 3px solid #7869c4;
+}
+
+.sidebar-avatar {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 15px;
+  border: 4px solid #7869c4;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-gif {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated; /* Makes it look more retro */
+}
+
+.sidebar-header h3 {
+  margin: 10px 0 5px 0;
+  font-size: 1.8em;
+  color: #a5a5ff; /* Light C64 blue */
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+  letter-spacing: 2px;
+}
+
+.sidebar-tagline {
+  font-size: 1.1em;
+  color: #7869c4;
+  margin: 0;
+}
+
+/* Navigation styling */
+.sidebar-nav {
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Top level items */
+.sidebar-nav > ul > li {
+  padding: 12px 20px;
+  color: #a5a5ff;
+  cursor: pointer;
+  font-size: 1.4em;
+  letter-spacing: 1px;
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, transparent 0%, rgba(120, 105, 196, 0.1) 100%);
+  margin-bottom: 2px;
+}
+
+.sidebar-nav > ul > li:hover {
+  background: #5542d4;
+  border-left: 4px solid #a5a5ff;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(165, 165, 255, 0.8);
+  padding-left: 25px;
+}
+
+/* Nested items */
+.sidebar-nav ul ul {
+  margin: 5px 0 10px 15px;
+  padding-left: 15px;
+  border-left: 2px solid rgba(120, 105, 196, 0.3);
+}
+
+.sidebar-nav ul ul li {
+  padding: 8px 10px;
+  font-size: 1.2em;
+  color: #7869c4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.sidebar-nav ul ul li::before {
+  content: '>';
+  position: absolute;
+  left: -10px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-nav ul ul li:hover {
+  color: #a5a5ff;
+  padding-left: 15px;
+  text-shadow: 0 0 6px rgba(165, 165, 255, 0.6);
+}
+
+.sidebar-nav ul ul li:hover::before {
+  opacity: 1;
+}
+
+/* Add CRT scanline effect */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.1) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sidebar-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #2a2180;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #7869c4;
+  border: 2px solid #3e31a2;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #a5a5ff;
+}
 .ul{
   text-align: left;
 }
