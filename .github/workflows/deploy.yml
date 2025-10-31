@@ -31,6 +31,22 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
+      - name: Show build output for debugging
+        run: |
+          echo "Working directory: $(pwd)"
+          echo "List repo root:"
+          ls -la
+          echo "List .github directory:"
+          ls -la .github || true
+          echo "Check dist directory:"
+          if [ -d "./dist" ]; then
+            echo "dist exists"
+            ls -la ./dist
+            du -sh ./dist || true
+          else
+            echo "dist NOT found"
+            find . -maxdepth 3 -type d -name "dist" || true
+          fi
   
   deploy:
     needs: build
