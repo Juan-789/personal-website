@@ -1,3 +1,6 @@
+/* Commodore 64 inspired sidebar */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -23,8 +26,7 @@
   }
 }
 
-/* Commodore 64 inspired sidebar */
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 
 .sidebar {
   position: fixed;
@@ -119,6 +121,10 @@
   color: #fff;
   text-shadow: 0 0 8px rgba(165, 165, 255, 0.8);
   padding-left: 25px;
+}
+
+.sidebar-nav li a {
+  display: block;
 }
 
 /* Nested items */

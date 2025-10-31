@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import {BrowserRouter, Routes, Route, Link, useLocation} from 'react-router-dom'
 import zaratusthra from '/zarathustra.jpg'
 import outsider from '/the outsider.jpg'
 import white_nights from '/white_nights.jpg'
@@ -24,29 +25,57 @@ function App() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }
+  const Layout = () => {
+    const location = useLocation();
+
+    const activeRoute = location.pathname.substring(1) || 'Home';
+  
 
   return (
     <div>
-    {/* this div should be like the top Hello */}
-      {/* <div> */}
-        {/* <button onClick={toggleSidebar}>
-          {isSidebarOpen ? 'Close Sections' : 'Open Sections'}
-        </button> */}
-        <Sidebar isOpen={isSidebarOpen} />
-      {/* </div> */}
-      <div style={{marginLeft: isSidebarOpen ? '250px' : '0',
-          transition: 'margin-left 0.3s ease-in-out', backgroundColor: 'transparent'}}>
+      <Sidebar
+        toggleSidebar={toggleSidebar} // Pass the toggle function
+        activeRoute={activeRoute}
+      />
+      <div style={{
+            marginLeft: isSidebarOpen ? '250px' : '0',
+            transition: 'margin-left 0.3s ease-in-out', 
+            backgroundColor: 'transparent'
+          }}>
 
-      <div > 
-        <About />
-        <FeaturedSection/>
-        <Experience />
-      </div>
-        {/* <Project />
-        <Blog /> */}
+        {/* 3. DEFINE THE ROUTES HERE */}
+        <Routes>
+          {/* The default path "/" shows the main About/Featured/Experience sections */}
+          <Route path="/" element={<HomeContent />} /> 
+          
+          {/* Building Routes */}
+          <Route path="/projects" element={<Project />} />
+          <Route path="/experience" element={<Experience />} />
+          {/* Add more routes here */}
+          <Route path="/essays" element={<Blog />} />
+
+          {/* A catch-all route for paths that don't match */}
+          <Route path="*" element={<h2>404: Page Not Found</h2>} />
+        </Routes>
       </div>
     </div>
-  )
+    );
+  };
+  const HomeContent = () => (
+    <>
+      <About />
+      <FeaturedSection />
+      <Experience />
+      {/* If you want Blog here, add it back: <Blog /> */}
+    </>
+  );
+
+  return (
+    // 2. WRAP THE ENTIRE APP IN BROWSER ROUTER
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
+  );
 }
 
 
@@ -214,10 +243,28 @@ function Experience() {
   );
 }
 // 1. Define the component and accept props for content and state
-function Sidebar({ isOpen }) {
+function Sidebar({  toggleSidebar, activeRoute }) {
   // 2. Add classes dynamically based on the 'isOpen' prop
-  const sidebarClasses = `sidebar ${isOpen ? 'open' : 'closed'}`;
+  const sidebarClasses = `sidebar  open`;
+// Helper function to convert a display name to a URL path
+  const toPath = (name) => {
+    if (name === 'Home') return '/';
+    return `/${name.toLowerCase().replace(/\s/g, '-')}`;
+  }
 
+  // Helper component to render a clickable link using <Link>
+  const NavLink = ({ name }) => {
+    const path = toPath(name);
+    const isActive = path === activeRoute || (name === 'Home' && activeRoute === '');
+
+    return (
+      <li className={isActive ? 'active-link' : ''}>
+        <Link to={path} onClick={toggleSidebar}>
+          {name}
+        </Link>
+      </li>
+    );
+  };
   return (
     <div className={sidebarClasses}>
       {/* 3. Render any passed content */}
@@ -225,9 +272,9 @@ function Sidebar({ isOpen }) {
         <div className='sidebar-header'>
           <div className='sidebar-avatar'>
             <img
-              className=""
+              className="sidebar-gif"
               src={rabbit}
-              alt="Photo of me aurafarming"
+              alt="Waiting rabbit"
               width={'150px'}
             > 
             </img> 
@@ -235,26 +282,28 @@ function Sidebar({ isOpen }) {
         </div>
         <nav className='sidebar-nav'>
            <ul>
-            <li>Home</li>
-            <li>Building</li>
+            <NavLink name="Home" />
+            <NavLink name="Building" />
+
             <ul>
-              <li>Projects</li>
-              <li>Learning</li>
-              <li>Experience</li>
+              <NavLink name="Projects" />
+              <NavLink name="Learning" />
+              <NavLink name="Employment" />
             </ul>
-            <li>Reading</li>
+            <NavLink name="Reading" />
             <ul>
-              <li>Essays</li>
-              <li>Books</li>
-              <li>To be read</li>
-              <li>Notes</li>
+              <NavLink name="Essays" />
+              <NavLink name="Books" />
+              <NavLink name="To be read" />
+              <NavLink name="Notes" />
             </ul>
-            <li>Exploring</li>
+            <NavLink name="Exploring" />
             <ul>
-            <li>Community</li>
-            <li>Food</li>
-            <li>Movies</li>
-            <li>Cool links</li>
+            <NavLink name="Community" />
+            <NavLink name="Food" />
+            <NavLink name="Movies" />
+            <NavLink name="Cool links" />
+
             </ul>
           </ul>
         </nav>
