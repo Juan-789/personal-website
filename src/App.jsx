@@ -2,6 +2,13 @@ import { useState } from 'react'
 import zaratusthra from '/zarathustra.jpg'
 import outsider from '/the outsider.jpg'
 import white_nights from '/white_nights.jpg'
+import me from '/juan_demo_day.jpg'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import CardActionArea from '@mui/material/CardActionArea';
+
 import './App.css'
 
 function App() {
@@ -23,17 +30,18 @@ function App() {
           <h3>Page Navigation</h3>
           <ul>
             <li>Home</li>
+            <li>Building</li>
+            <ul>
+              <li>Projects</li>
+              <li>Learning</li>
+              <li>Experience</li>
+            </ul>
             <li>Reading</li>
             <ul>
               <li>Essays</li>
               <li>Books</li>
               <li>To be read</li>
               <li>Notes</li>
-            </ul>
-            <li>Building</li>
-            <ul>
-              <li>Projects</li>
-              <li>Learning</li>
             </ul>
             <li>Exploring</li>
             <ul>
@@ -46,13 +54,14 @@ function App() {
         </Sidebar>
       </div>
       <div style={{marginLeft: isSidebarOpen ? '250px' : '0',
-          transition: 'margin-left 0.3s ease-in-out' }}>
+          transition: 'margin-left 0.3s ease-in-out', backgroundColor: 'transparent'}}>
 
       <div > 
         <About />
+        <FeaturedSection/>
       </div>
-        <Blog />
-        <Project />
+        {/* <Project />
+        <Blog /> */}
       </div>
     </div>
   )
@@ -118,11 +127,19 @@ function Blog() {
 
 function About() {
   return (
+    <div className='about-container'>
     <div>
-      <h1>Hi I'm Juan :)</h1> 
-      <p>
-        I like to learn how stuff works, and build indie, fun programs <i>Just for the sake of it</i>
-      </p>
+      <div className='profile-text'>
+        <h1>Hi I'm Juan :)</h1> 
+        <h3>
+          I like to learn how stuff works, and build indie, fun programs <i>Just for the sake of it</i>
+        </h3>
+        <p>Also a Computer Science major @ <a href="https://carleton.ca/">Carleton University</a>, community coordinator at <a href='https://www.uottahack.ca/'>uOttahack</a>, and an organizor at <a href='https://luma.com/synchronize'>Synchronize</a>, (Ottawa's <a href='https://www.socratica.info/'>Socratica</a> Node)</p>
+      </div>
+      <div className='profile-image'>
+        <img src={me} alt="Me" width={'300px'} />
+      </div>
+    </div>
     </div>
   )
 }
@@ -160,6 +177,33 @@ function Sidebar({ isOpen, children }) {
         {children}
       </div>
     </div>
+  );
+}
+
+function FeaturedSection(){
+  return (
+    <div>
+      <Card sx={{maxWidth: 345}}>
+        <CardActionArea>
+          <CardMedia
+            component="img"
+            height="140"
+            image={me}
+            alt="green iguana"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              Lizard
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              Lizards are a widespread group of squamate reptiles, with over 6,000
+              species, ranging across all continents except Antarctica
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </div>
+
   );
 }
 
