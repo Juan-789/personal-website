@@ -74,3 +74,22 @@
 .read-the-docs {
   color: #888;
 }
+
+.glass-card-content {
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15x); /* The main blur effect */
+  -webkit-backdrop-filter: blur(15px); /* For Safari compatibility */
+  border-radius: 0 0 4px 4px; /* Matches Material UI's default card border-radius on the bottom */
+  border: 1px solid rgba(255, 255, 255, 0.18); /* Optional: a light border for definition */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Optional: subtle shadow for depth */
+}
+.feat-proj-text{
+  text-align: left;
+}
+.featured-items {
+  display: flex;
+}
+
+.featured-i {
+  padding: 5px;
+}
