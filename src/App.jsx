@@ -11,6 +11,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import bedarraLogo from '/bedarra.jpeg'
+// import bedarraLogo from '/bedarra_new.png'
+
 
 import './App.css'
 
@@ -61,8 +64,8 @@ function App() {
 
       <div > 
         <About />
-
         <FeaturedSection/>
+        <Experience />
       </div>
         {/* <Project />
         <Blog /> */}
@@ -168,7 +171,72 @@ function interestingThingsImLearningAbout(){} // how a cd works, how does it rea
 
 function Notes(){}  // notes i've taken when learning something, handwritten or digital, notion or something
 
-function Experience() {}
+function Experience() {
+  return(
+    <>
+    <h2 className='feat-proj-text'>
+      Employment:
+    </h2>
+    <div className='company-block'>
+      <div className='company-header'>
+        <img src={bedarraLogo} alt="Bedarra Corporation" className='company-logo' />
+        <div>
+          <h3>Bedarra Corporation</h3>
+          <p className='company-tagline'>Ottawa, Ontario • May 2024 - Aug 2025</p>
+        </div>
+      </div>
+
+      <div className='roles-timeline'>
+        
+        {/* Latest role - most detail */}
+        <div className='role'>
+          <div className='role-header'>
+            <h4>Full-Stack Intern</h4>
+            <span className='date'>May 2025 - Aug 2025</span>
+          </div>
+          <p className='role-summary'>
+            Building a <strong>local-first app</strong> that runs entirely on-device. 
+            Transformed the Rust backend into an FFI library so the app works offline 
+            on iOS, Android, and Chrome. Created custom data structures inspired by 
+            Doug Engelbart's Augment System for rendering PDFs, images, and Markdown.
+          </p>
+          <p className='role-highlight'>
+            Also mentored another intern—created their project roadmap and documented 
+            technical challenges.
+          </p>
+        </div>
+
+        {/* Middle role - medium detail */}
+        <div className='role'>
+          <div className='role-header'>
+            <h4>Part-Time Full-Stack Intern</h4>
+            <span className='date'>Sep 2024 - Apr 2025</span>
+          </div>
+          <p className='role-summary'>
+            Built a secure database architecture (no SQL injection here), and optimized 
+            email downloads by 30% using a WASI-compiled Rust binary. Implemented a 
+            search engine for email data.
+          </p>
+        </div>
+
+        {/* First role - brief */}
+        <div className='role'>
+          <div className='role-header'>
+            <h4>Full-Stack Intern</h4>
+            <span className='date'>May 2024 - Aug 2024</span>
+          </div>
+          <p className='role-summary'>
+            Researched Doug Engelbart's computer science papers (even consulted with 
+            SRI lab), then built apps with Rust and Flutter. Compiled Rust to WebAssembly 
+            for high-performance web apps. Created a P2P file sync system that works 
+            across iOS, Android, Windows, Linux, and macOS.
+          </p>
+        </div>
+      </div>
+    </div>
+    </>
+  );
+}
 // 1. Define the component and accept props for content and state
 function Sidebar({ isOpen, children }) {
   // 2. Add classes dynamically based on the 'isOpen' prop
