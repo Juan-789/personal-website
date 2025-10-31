@@ -1,60 +1,32 @@
-name: Deploy to GitHub Pages
+name: Deploy with gh-pages NPM
 
 on:
   push:
     branches: [ main ]
 
 permissions:
-  contents: read
+  contents: write # gh-pages needs this permission to push to the gh-pages branch
   pages: write
   id-token: write
-  actions: read
+  actions: read # Still good practice
 
 jobs:
-  build:
+  deploy-to-ghpages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          # Required for gh-pages to access the repo history
+          fetch-depth: 0 
       
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20' 
           
       - name: Install dependencies
         run: npm ci
         
-      - name: Build
-        run: npm run build
-        
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-      - name: Show build output for debugging
-        run: |
-          echo "Working directory: $(pwd)"
-          echo "List repo root:"
-          ls -la
-          echo "List .github directory:"
-          ls -la .github || true
-          echo "Check dist directory:"
-          if [ -d "./dist" ]; then
-            echo "dist exists"
-            ls -la ./dist
-            du -sh ./dist || true
-          else
-            echo "dist NOT found"
-            find . -maxdepth 3 -type d -name "dist" || true
-          fi
-  
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+      - name: Run Deploy Script (Build & Publish)
+        run: npm run deploy
