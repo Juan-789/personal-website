@@ -18,6 +18,8 @@ import rabbit from '/waiting-rabbit.gif'
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
+import Building from './Building.jsx';
+import Projects from './Projects.jsx';
 
 
 import './App.css'
@@ -52,7 +54,8 @@ function App() {
           <Route path="/" element={<HomeContent />} /> 
           
           {/* Building Routes */}
-          <Route path="/projects" element={<Project />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/building" element={<Building />} />
           <Route path="/experience" element={<Experience />} />
           {/* Add more routes here */}
           <Route path="/essays" element={<Blog />} />
@@ -159,13 +162,13 @@ function About() {
   )
 }
 
-function Project() {
-  return (
-    <div>
-      <h1>These are some of my projects</h1>
-    </div>
-  )
-}
+// function Project() {
+//   return (
+//     <div>
+//       <h1>These are some of my projects</h1>
+//     </div>
+//   )
+// }
 
 function Food(){} //places i've gone, and or maybe recipes,
 
