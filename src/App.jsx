@@ -15,6 +15,9 @@ import CardActionArea from '@mui/material/CardActionArea';
 import bedarraLogo from '/bedarra.jpeg'
 // import bedarraLogo from '/bedarra_new.png'
 import rabbit from '/waiting-rabbit.gif'
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import EmailIcon from '@mui/icons-material/Email';
 
 
 import './App.css'
@@ -192,8 +195,6 @@ function Experience() {
       </div>
 
       <div className='roles-timeline'>
-        
-        {/* Latest role - most detail */}
         <div className='role'>
           <div className='role-header'>
             <h4>Full-Stack Intern</h4>
@@ -211,7 +212,6 @@ function Experience() {
           </p>
         </div>
 
-        {/* Middle role - medium detail */}
         <div className='role'>
           <div className='role-header'>
             <h4>Part-Time Full-Stack Intern</h4>
@@ -224,7 +224,6 @@ function Experience() {
           </p>
         </div>
 
-        {/* First role - brief */}
         <div className='role'>
           <div className='role-header'>
             <h4>Full-Stack Intern</h4>
@@ -242,17 +241,14 @@ function Experience() {
     </>
   );
 }
-// 1. Define the component and accept props for content and state
+
 function Sidebar({  toggleSidebar, activeRoute }) {
-  // 2. Add classes dynamically based on the 'isOpen' prop
   const sidebarClasses = `sidebar  open`;
-// Helper function to convert a display name to a URL path
   const toPath = (name) => {
     if (name === 'Home') return '/';
     return `/${name.toLowerCase().replace(/\s/g, '-')}`;
   }
 
-  // Helper component to render a clickable link using <Link>
   const NavLink = ({ name }) => {
     const path = toPath(name);
     const isActive = path === activeRoute || (name === 'Home' && activeRoute === '');
@@ -267,7 +263,6 @@ function Sidebar({  toggleSidebar, activeRoute }) {
   };
   return (
     <div className={sidebarClasses}>
-      {/* 3. Render any passed content */}
       <div className="sidebar-content">
         <div className='sidebar-header'>
           <div className='sidebar-avatar'>
@@ -278,6 +273,36 @@ function Sidebar({  toggleSidebar, activeRoute }) {
               width={'150px'}
             > 
             </img> 
+          </div>
+          <h3>Juan Marulanda</h3>
+          <div className='social-links'>
+            <a
+              href="https://github.com/Juan-789" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="GitHub"
+              className='social-item'
+            >
+              <GitHubIcon />
+            </a>
+            <a
+              href="https://linkedin.com/in/juan-marulanda-delosrios/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="Linkedin"
+              className='social-item'
+            >
+              <LinkedInIcon />
+            </a>
+            <a
+              href="mailto:your.email@example.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              title="Email"
+              className='social-item email-display'
+            >
+              <EmailIcon />
+            </a>
           </div>
         </div>
         <nav className='sidebar-nav'>
@@ -303,7 +328,6 @@ function Sidebar({  toggleSidebar, activeRoute }) {
             <NavLink name="Food" />
             <NavLink name="Movies" />
             <NavLink name="Cool links" />
-
             </ul>
           </ul>
         </nav>
