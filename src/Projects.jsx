@@ -12,13 +12,14 @@ import medRot from '/demoing_medrot.JPG'
 import vsc_wrapped from '/vsc_wrapped.mp4'
 import ford_ev from '/mapbox_ford.jpg'
 import foodbank from '/yufeng_orange.jpg'
-
+import korean from '/korean.jpg'
+import self_driving_car from '/seld-drivingcar.MP4'
 
 
 export default function Projects(){
     return (
-    <div>
-    <div className='projects-row'>
+    <div className='projects-container'>
+    <div className='projects-col'>  {/*first column*/}
       <div className='featured-i'>
         <Card sx={{
         maxWidth: 345,
@@ -49,67 +50,6 @@ export default function Projects(){
       
       <div className='featured-i'>
         <Card sx={{
-        maxWidth: 345,
-        backgroundColor: 'transparent'
-        }}>
-        <CardActionArea 
-          href='https://github.com/Juan-789/med-rot'
-          target='_blank'
-          rel="noopener noreferrer"  
-        >
-          <CardMedia
-            component="img"
-            height="140"
-            image={medRot}
-            alt="Med Rot"
-          />
-          <CardContent className='glass-card-content'>
-            <Typography gutterBottom variant="h5" component="div">
-              Med Rot
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Website that calls you to remind you of your meds, with Peter Griffin's voice, and saying brain rotted phrases 
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        </Card>
-      </div>
-    <div className='featured-i'>
-        <Card sx={{
-          maxWidth: 345,
-          backgroundColor: 'transparent'
-        }}>
-          <CardActionArea 
-            href='https://github.com/bskdany/roomba1'
-            target='_blank'
-            rel="noopener noreferrer"  
-          >
-            <CardMedia
-              component="video"
-            //   height="200"
-              width="200"
-              src={roomba}
-              alt="Roomba"
-              autoPlay
-              loop
-              muted
-            />
-            <CardContent className='glass-card-content'>
-              <Typography gutterBottom variant="h5" component="div">
-                Rambo Roomba
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                A Raspberry Pi 4B running QNX controls a Roomba vacuum cleaner
-                equipped with an Arduino and four photoresistors for light-based navigation.
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </div>
-    </div>
-    <div className='projects-row'>
-      <div className='featured-i'>
-        <Card sx={{
           maxWidth: 345,
           backgroundColor: 'transparent'
         }}>
@@ -138,6 +78,95 @@ export default function Projects(){
           </CardActionArea>
         </Card>
       </div>
+        <div className='featured-i'>
+          <Card sx={{
+          maxWidth: 345,
+          backgroundColor: 'transparent'
+          }}>
+            <CardActionArea 
+              href='https://devpost.com/software/foodbank-ai'
+              target='_blank'
+              rel="noopener noreferrer"  
+            >
+              <CardMedia
+                component="img"
+                height="140"
+                image={foodbank}
+                alt="Orange"
+              />
+              <CardContent className='glass-card-content'>
+                <Typography gutterBottom variant="h5" component="div">
+                  FoodBank AI
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                    computer vision to recognize all sorts of foods that can be donated
+                    to a food bank and will give you a score based on how non-perishable
+                    and nutritious it is
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </div>
+        <div className='featured-i'>
+          <Card sx={{
+            maxWidth: 345,
+            backgroundColor: 'transparent'
+          }}>
+            <CardActionArea 
+              href='https://github.com/Juan-789/Udemy_Programs/tree/main/Day21'
+              target='_blank'
+              rel="noopener noreferrer"  
+            >
+              <CardMedia
+                component="video"
+                height="200"
+                src={self_driving_car}
+                alt="Demoing self-driving car"
+                autoPlay
+                loop
+                muted
+              />
+              <CardContent className='glass-card-content'>
+                <Typography gutterBottom variant="h5" component="div">
+                  Self-Driving Car
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Self-driving car with the naive approach to solve mazes
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+      </div>
+    </div>
+    <div className='projects-col'> {/*second column*/}
+      <div className='featured-i'>
+        <Card sx={{
+        maxWidth: 345,
+        backgroundColor: 'transparent'
+        }}>
+        <CardActionArea 
+          href='https://github.com/Juan-789/med-rot'
+          target='_blank'
+          rel="noopener noreferrer"  
+        >
+          <CardMedia
+            component="img"
+            height="140"
+            image={medRot}
+            alt="Med Rot"
+          />
+          <CardContent className='glass-card-content'>
+            <Typography gutterBottom variant="h5" component="div">
+              Med Rot
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              Website that calls you to remind you of your meds, with Peter Griffin's voice, and saying brain rotted phrases 
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        </Card>
+      </div>
+      
       <div className='featured-i'>
         <Card sx={{
             maxWidth: 345,
@@ -168,31 +197,63 @@ export default function Projects(){
       </div>
       <div className='featured-i'>
         <Card sx={{
-        maxWidth: 345,
-        backgroundColor: 'transparent'
+            maxWidth: 345,
+            backgroundColor: 'transparent'
         }}>
         <CardActionArea 
-          href='https://devpost.com/software/foodbank-ai'
+          href='https://github.com/Juan-789/Korean_flashcards'
           target='_blank'
-          rel="noopener noreferrer"  
+          rel="noopener noreferrer"
         >
           <CardMedia
             component="img"
             height="140"
-            image={foodbank}
-            alt="Med Rot"
+            image={korean}
+            alt="Ford EV Companion App"
           />
           <CardContent className='glass-card-content'>
             <Typography gutterBottom variant="h5" component="div">
-              FoodBank AI
+              Korean Flashcards
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                computer vision to recognize all sorts of foods that can be donated
-                to a food bank and will give you a score based on how non-perishable
-                and nutritious it is
+            Had an upcoming test and decided to make a flashcard app to do active recall
             </Typography>
           </CardContent>
         </CardActionArea>
+        </Card>
+      </div>
+    </div>
+     <div className='projects-col'> {/*third column*/}
+    <div className='featured-i'>
+        <Card sx={{
+          maxWidth: 345,
+          backgroundColor: 'transparent'
+        }}>
+          <CardActionArea 
+            href='https://github.com/bskdany/roomba1'
+            target='_blank'
+            rel="noopener noreferrer"  
+          >
+            <CardMedia
+              component="video"
+            //   height="200"
+              width="200"
+              src={roomba}
+              alt="Roomba"
+              autoPlay
+              loop
+              muted
+            />
+            <CardContent className='glass-card-content'>
+              <Typography gutterBottom variant="h5" component="div">
+                Rambo Roomba
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                A Raspberry Pi 4B running QNX controls a Roomba vacuum cleaner
+                equipped with an Arduino and four photoresistors for light-based navigation.
+              </Typography>
+            </CardContent>
+          </CardActionArea>
         </Card>
       </div>
     </div>
