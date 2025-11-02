@@ -42,11 +42,14 @@ function App() {
         toggleSidebar={toggleSidebar} // Pass the toggle function
         activeRoute={activeRoute}
       />
-      <div style={{
-            marginLeft: isSidebarOpen ? '250px' : '0',
-            transition: 'margin-left 0.3s ease-in-out', 
-            backgroundColor: 'transparent'
-          }}>
+       {/** fuck ah classbro made shi ugly ah frfr **/}
+      <div  
+        className='fuck-ass-class' 
+        style={{
+          marginLeft: isSidebarOpen ? '250px' : '250px', 
+          transition: 'margin-left 0.3s ease-in-out', 
+          backgroundColor: 'transparent'
+        }}>
 
         {/* 3. DEFINE THE ROUTES HERE */}
         <Routes>
@@ -318,7 +321,7 @@ function Sidebar({  toggleSidebar, activeRoute }) {
               <NavLink name="Learning" />
               <NavLink name="Employment" />
             </ul>
-            <NavLink name="Reading" />
+            {/* <NavLink name="Reading" />
             <ul>
               <NavLink name="Essays" />
               <NavLink name="Books" />
@@ -331,7 +334,7 @@ function Sidebar({  toggleSidebar, activeRoute }) {
             <NavLink name="Food" />
             <NavLink name="Movies" />
             <NavLink name="Cool links" />
-            </ul>
+            </ul> */}
           </ul>
         </nav>
       </div>

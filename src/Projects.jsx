@@ -60,7 +60,7 @@ export default function Projects(){
           >
             <CardMedia
               component="video"
-              height="185"
+              height="200"
               src={vsc_wrapped}
               alt="Me demoing it"
               autoPlay
