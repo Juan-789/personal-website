@@ -59,7 +59,7 @@ function App() {
           {/* Building Routes */}
           <Route path="/projects" element={<Projects />} />
           <Route path="/building" element={<Building />} />
-          <Route path="/experience" element={<Experience />} />
+          <Route path="/employment" element={<Experience />} />
           {/* Add more routes here */}
           <Route path="/essays" element={<Blog />} />
 
