@@ -60,6 +60,8 @@ function App() {
           <Route path="/projects" element={<Projects />} />
           <Route path="/building" element={<Building />} />
           <Route path="/employment" element={<Experience />} />
+          <Route path="/learning" element={<InterestingThingsImLearningAbout />} />
+
           {/* Add more routes here */}
           <Route path="/essays" element={<Blog />} />
 
@@ -181,7 +183,69 @@ function Movies(){} //movies i've watched that I like
 
 function CoolLinks(){}  // cool websites, inspiration, fun facts, etc...
 
-function interestingThingsImLearningAbout(){} // how a cd works, how does it read, and write, the stars, etc...
+function LearningBlogCard({ title, excerpt, date, image, slug }) {
+  return (
+    <div>
+    <Card sx={{ maxWidth: 345, backgroundColor: 'transparent' }}>
+      <CardActionArea href={`/learning/${slug}`}>
+        <CardMedia
+          component="img"
+          height="200"
+          image={image}
+          alt={title}
+        />
+        <CardContent className='glass-card-content'>
+          <Typography gutterBottom variant="h5" component="div">
+            {title}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {date}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
+            {excerpt}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+    </div>
+  );
+}
+
+
+function InterestingThingsImLearningAbout(){ // how a cd works, how does it read, and write, the stars, etc...
+  return (
+    <div className='learning-container'>
+      <div className='learning-header'>
+        <h3>Currently learning</h3>
+        <h4>  </h4>
+        <div className='learning-cards'>
+          <LearningBlogCard
+            title="Data Structures and Algorithms"
+            excerpt="Binary trees, two-four trees, and abstract syntax trees"
+            date="November 3rd, 2025"
+            image="tr" //tree image
+            slug="data-structures-trees"
+          >
+          </LearningBlogCard>
+          <LearningBlogCard
+            title="How File Compression works"
+            excerpt=""
+            date="November 3rd, 2025"
+            image="?"
+            slug="how-compression-work"
+          ></LearningBlogCard>
+          <LearningBlogCard
+            title="How CDs Actually Work"
+            excerpt="How this mirror looking disk store data?"
+            date="How this mirror looking disk store data?"
+            image="How this mirror looking disk store data?"
+            slug="how-cds-work"
+          ></LearningBlogCard>
+        </div>
+      </div>
+    </div>
+  );
+} 
 
 function Notes(){}  // notes i've taken when learning something, handwritten or digital, notion or something
 
