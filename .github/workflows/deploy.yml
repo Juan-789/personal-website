@@ -1,43 +1,41 @@
-name: Deploy to GitHub Pages
+name: Deploy with gh-pages NPM
 
 on:
   push:
     branches: [ main ]
 
 permissions:
-  contents: read
+  contents: write # gh-pages needs this permission to push to the gh-pages branch
   pages: write
   id-token: write
+  actions: read # Still good practice
 
 jobs:
-  build:
+  deploy-to-ghpages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          # Required for gh-pages to access the repo history
+          fetch-depth: 0 
+      - name: Set Git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20' 
           
       - name: Install dependencies
         run: npm ci
-        
-      - name: Build
+
+      - name: Build site
         run: npm run build
-        
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-  
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
+      
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+        run: npx gh-pages -d dist -r "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"      
+      
