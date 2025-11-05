@@ -20,9 +20,11 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
 import Building from './Building.jsx';
 import Projects from './Projects.jsx';
-
-
 import './App.css'
+
+import { HowFileCompressionWorks } from './LearningPost.jsx'
+
+
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -61,6 +63,7 @@ function App() {
           <Route path="/building" element={<Building />} />
           <Route path="/employment" element={<Experience />} />
           <Route path="/learning" element={<InterestingThingsImLearningAbout />} />
+          <Route path="/learning/how-compression-work" element={<HowFileCompressionWorks />} />
 
           {/* Add more routes here */}
           <Route path="/essays" element={<Blog />} />
