@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import {BrowserRouter, Routes, Route, Link, useLocation} from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import {BrowserRouter, Routes, Route, Link, useLocation, useNavigate, replace} from 'react-router-dom'
 import zaratusthra from '/zarathustra.jpg'
 import outsider from '/the outsider.jpg'
 import white_nights from '/white_nights.jpg'
@@ -34,11 +34,21 @@ function App() {
   }
   const Layout = () => {
     const location = useLocation();
+    const redirect = params.get('redirect');
+
+
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect'); 
+      if (redirect) {
+        navigate(redirect, {replace: true});
+      } 
+    }, [navigate]);
 
     const activeRoute = location.pathname.substring(1) || 'Home';
   
 
-  return (
+    return (
     <div>
       <Sidebar
         toggleSidebar={toggleSidebar} // Pass the toggle function
@@ -86,7 +96,7 @@ function App() {
 
   return (
     // 2. WRAP THE ENTIRE APP IN BROWSER ROUTER
-    <BrowserRouter>
+    <BrowserRouter basename='/'>
       <Layout />
     </BrowserRouter>
   );
