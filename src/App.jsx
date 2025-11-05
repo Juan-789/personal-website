@@ -34,7 +34,7 @@ function App() {
   }
   const Layout = () => {
     const location = useLocation();
-    const redirect = params.get('redirect');
+    const navigate = useNavigate();
 
 
     useEffect(() => {
