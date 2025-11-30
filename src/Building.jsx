@@ -3,25 +3,32 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import job from '/j*b.jpg'
+import wok from '/wok.gif'
+import proj from '/projects.JPG'
+import { Margin } from '@mui/icons-material';
+import './Building.css'
 
 export default function Building() {
   return (
-    <div className="building-container">
+    <div>
         <h2>Building</h2>
+    <div className="building-container">
+        <div style={{ margin: '10px'}}>
         <Card sx={{
         maxWidth: 345,
         backgroundColor: 'transparent'
         }}>
         <CardActionArea 
-          href='https://github.com/Juan-789/med-rot'
+          href='/projects'
           target='_blank'
-          rel="noopener noreferrer"  
         >
           <CardMedia
             component="img"
-            height="140"
-            // image={medRot} ///////
-            alt="Med Rot"
+            height="300"
+            width="300"
+            image={proj} 
+            alt="Projects"
           />
           <CardContent className='glass-card-content'>
             <Typography gutterBottom variant="h5" component="div">
@@ -33,20 +40,22 @@ export default function Building() {
           </CardContent>
         </CardActionArea>
         </Card>
+        </div>
+        <div style={{ margin: '10px'}}>
         <Card sx={{
         maxWidth: 345,
         backgroundColor: 'transparent'
         }}>
         <CardActionArea 
-          href='https://github.com/Juan-789/med-rot'
+          href='/learning'
           target='_blank'
-          rel="noopener noreferrer"  
         >
           <CardMedia
             component="img"
-            height="140"
-            // image={medRot}
-            alt="Med Rot"
+            height="300"
+            width={300}
+            image={wok}
+            alt="Learning"
           />
           <CardContent className='glass-card-content'>
             <Typography gutterBottom variant="h5" component="div">
@@ -58,20 +67,21 @@ export default function Building() {
           </CardContent>
         </CardActionArea>
         </Card>
+        </div>
+        <div style={{ margin: '10px'}}>
         <Card sx={{
         maxWidth: 345,
         backgroundColor: 'transparent'
         }}>
         <CardActionArea 
-          href='https://github.com/Juan-789/med-rot'
+          href='/employment'
           target='_blank'
-          rel="noopener noreferrer"  
         >
           <CardMedia
             component="img"
-            height="140"
-            // image={medRot}
-            alt="Med Rot"
+            height="300"
+            image={job}
+            alt="J*b"
           />
           <CardContent className='glass-card-content'>
             <Typography gutterBottom variant="h5" component="div">
@@ -83,6 +93,8 @@ export default function Building() {
           </CardContent>
         </CardActionArea>
         </Card>
+        </div>
+    </div>
     </div>
   );
 }

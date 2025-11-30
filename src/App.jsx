@@ -15,6 +15,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import bedarraLogo from '/bedarra.jpeg'
 // import bedarraLogo from '/bedarra_new.png'
 import rabbit from '/waiting-rabbit.gif'
+import huffman from '/huffman.jpeg'
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
@@ -232,28 +233,28 @@ function InterestingThingsImLearningAbout(){ // how a cd works, how does it read
         <h3>Currently learning</h3>
         <h4>  </h4>
         <div className='learning-cards'>
-          <LearningBlogCard
+          {/* <LearningBlogCard
             title="Data Structures and Algorithms"
             excerpt="Binary trees, two-four trees, and abstract syntax trees"
             date="November 3rd, 2025"
             image="tr" //tree image
             slug="data-structures-trees"
           >
-          </LearningBlogCard>
+          </LearningBlogCard> */}
           <LearningBlogCard
             title="How File Compression works"
             excerpt=""
             date="November 3rd, 2025"
-            image="?"
+            image={huffman}
             slug="how-compression-work"
           ></LearningBlogCard>
-          <LearningBlogCard
+          {/* <LearningBlogCard
             title="How CDs Actually Work"
             excerpt="How this mirror looking disk store data?"
             date="How this mirror looking disk store data?"
             image="How this mirror looking disk store data?"
             slug="how-cds-work"
-          ></LearningBlogCard>
+          ></LearningBlogCard> */}
         </div>
       </div>
     </div>
@@ -301,7 +302,7 @@ function Experience() {
             <span className='date'>Sep 2024 - Apr 2025</span>
           </div>
           <p className='role-summary'>
-            Built a secure database architecture (no SQL injection here), and optimized 
+            Built a secure database architecture, and optimized 
             email downloads by 30% using a WASI-compiled Rust binary. Implemented a 
             search engine for email data.
           </p>
@@ -313,8 +314,8 @@ function Experience() {
             <span className='date'>May 2024 - Aug 2024</span>
           </div>
           <p className='role-summary'>
-            Researched Doug Engelbart's computer science papers (even consulted with 
-            SRI lab), then built apps with Rust and Flutter. Compiled Rust to WebAssembly 
+            Researched Doug Engelbart's computer science papers (even consulted with The
+            Stanford Reasearch Institute lab), then built apps with Rust and Flutter. Compiled Rust to WebAssembly 
             for high-performance web apps. Created a P2P file sync system that works 
             across iOS, Android, Windows, Linux, and macOS.
           </p>
