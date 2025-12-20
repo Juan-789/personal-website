@@ -88,7 +88,7 @@ export default function Building() {
               Employment
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Website that calls you to remind you of your meds, with Peter Griffin's voice, and saying brain rotted phrases 
+              J*b 
             </Typography>
           </CardContent>
         </CardActionArea>
