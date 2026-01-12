@@ -5,7 +5,11 @@
 
 export function HowFileCompressionWorks(){
     return (
-        <div>
+        <div
+        style={{
+            color: "#e0e0e0"
+        }}
+        >
             <h2>How Does File Compression work?</h2>
         <div>
             <h3>Motivation:</h3>

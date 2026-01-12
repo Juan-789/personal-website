@@ -525,7 +525,7 @@ function FeaturedSection(){
               <Typography gutterBottom variant="h5" component="div">
                 Rambo Roomba
               </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              <Typography variant="body2" sx={{ color: '#e0e0e0' }}>
                 A Raspberry Pi 4B running QNX controls a Roomba vacuum cleaner
                 equipped with an Arduino and four photoresistors for light-based navigation.
               </Typography>
@@ -553,7 +553,7 @@ function FeaturedSection(){
             <Typography gutterBottom variant="h5" component="div">
               Pet Prompt
             </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            <Typography variant="body2" sx={{ color: '#e0e0e0' }}>
               Chrome Extension to help you write better prompts
             </Typography>
           </CardContent>
@@ -580,7 +580,7 @@ function FeaturedSection(){
             <Typography gutterBottom variant="h5" component="div">
               Med Rot
             </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            <Typography variant="body2" sx={{ color: '#e0e0e0' }}>
               Website that calls you to remind you of your meds, with Peter Griffin's voice, and saying brain rotted phrases 
             </Typography>
           </CardContent>
