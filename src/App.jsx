@@ -21,6 +21,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
 import Building from './Building.jsx';
 import Projects from './Projects.jsx';
+import resume from '/resume_Juan.pdf';
 import './App.css'
 
 import { HowFileCompressionWorks } from './LearningPost.jsx'
@@ -72,7 +73,8 @@ function App() {
           {/* Building Routes */}
           <Route path="/projects" element={<Projects />} />
           <Route path="/building" element={<Building />} />
-          <Route path="/employment" element={<Experience />} />
+          <Route path="/employment" element={<Resume />} />
+          {/* <Route path="/resume" element={<Resume />} /> */}
           <Route path="/learning" element={<InterestingThingsImLearningAbout />} />
           <Route path="/learning/how-compression-work" element={<HowFileCompressionWorks />} />
           <Route path="/k33na5" element={<Letter />}></Route>
@@ -266,6 +268,7 @@ function Letter(){
   return (
     <div style={{ 
       position: 'fixed',
+      overflowY: 'auto',
       top: 0,
       left: 0,
       right: 0,
@@ -274,12 +277,71 @@ function Letter(){
       height: '100vh',
       background: 'linear-gradient(180deg, #111827 0%, #1f2937 50%, #111827 100%)',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
+      alignContent: 'center',
       justifyContent: 'center',
       padding: '2rem',
       zIndex: 9999
     }}>
       
+      <div style={{ width: '100%', maxWidth: '56rem' }}>
+        {/* Letter */}
+        <div 
+          style={{
+            width: '100%',
+            minHeight: '24rem',
+            top: 40,
+            borderRadius: '0.5rem',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            border: '4px solid #92400e',
+            background: '#fef3c7',
+            position: 'relative',
+            overflow: 'hidden',
+            backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence baseFrequency=\"0.9\" numOctaves=\"4\" /%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.1\" /%3E%3C/svg%3E')",
+            bottom: 40
+          }}
+        >
+          {/* Letter lines */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            padding: '4rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            pointerEvents: 'none'
+          }}>
+            {[...Array(12)].map((_, i) => (
+              <div key={i} style={{
+                width: '100%',
+                height: '1px',
+                background: 'rgba(156, 163, 175, 0.2)'
+              }} />
+            ))}
+          </div>
+          
+{/* Text content */}
+          <div style={{ 
+            position: 'relative', 
+            padding: '4rem',
+            fontFamily: 'serif',
+            fontSize: '1.125rem',
+            lineHeight: '2.5rem',
+            color: '#78350f',
+            textAlign: 'left',
+
+          }}>
+            <p>I love my Girlfriend,</p> 
+            Hi silly, 
+            am sorry i couldnt make it today, been really anxious about my uncertain future and lowkey i feel pressured to choose between AI or embeded for the rest of my life, when I love all aspects of programming
+            I love CS but am not sure whether the niche I pick will be the one I like the most, anyways, thank you for being there for me  
+            <br />
+            <p>I love you,</p>
+            <p>Juan :)</p>
+          </div>
+        </div>
+      </div>
       <div style={{ width: '100%', maxWidth: '56rem' }}>
         {/* Letter */}
         <div 
@@ -292,7 +354,9 @@ function Letter(){
             background: '#fef3c7',
             position: 'relative',
             overflow: 'hidden',
-            backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence baseFrequency=\"0.9\" numOctaves=\"4\" /%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.1\" /%3E%3C/svg%3E')"
+            backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence baseFrequency=\"0.9\" numOctaves=\"4\" /%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.1\" /%3E%3C/svg%3E')",
+            top: 60,
+            bottom: 0,
           }}
         >
           {/* Letter lines */}
@@ -343,13 +407,42 @@ function Letter(){
 
 function Notes(){}  // notes i've taken when learning something, handwritten or digital, notion or something
 
+
+function Resume() {
+  return (
+    <>
+    <div
+      style={{
+        display: 'flex',
+        alignContent: 'center',
+        alignItems: 'center',
+        gap: '30px',
+        background: 'transparent',
+      }}
+    >
+      <embed src={resume} width="691" height="873">
+
+      </embed>
+    </div>
+    </>
+  )
+}
+
 function Experience() {
+  const navi = useNavigate();
+  const handleExperienceClick = () => {
+    navi('/employment');  
+  };
+
   return(
     <>
     <h2 className='feat-proj-text'>
       Employment:
     </h2>
-    <div className='company-block'>
+    <div className='company-block'
+      onClick={handleExperienceClick}
+      style={{cursor: 'pointer'}}
+    >
       <div className='company-header'>
         <img src={bedarraLogo} alt="Bedarra Corporation" className='company-logo' />
         <div>
@@ -522,7 +615,7 @@ function FeaturedSection(){
               alt="Roomba"
             />
             <CardContent className='glass-card-content'>
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography gutterBottom variant="h5" component="div" sx={{color: '#e0e0e0'}}>
                 Rambo Roomba
               </Typography>
               <Typography variant="body2" sx={{ color: '#e0e0e0' }}>
@@ -550,7 +643,7 @@ function FeaturedSection(){
             alt="Prompt_Pet"
           />
           <CardContent className='glass-card-content'>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography gutterBottom variant="h5" component="div"  sx={{color: '#e0e0e0'}}>
               Pet Prompt
             </Typography>
             <Typography variant="body2" sx={{ color: '#e0e0e0' }}>
@@ -577,7 +670,7 @@ function FeaturedSection(){
             alt="Med Rot"
           />
           <CardContent className='glass-card-content'>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography gutterBottom variant="h5" component="div"  sx={{color: '#e0e0e0'}}>
               Med Rot
             </Typography>
             <Typography variant="body2" sx={{ color: '#e0e0e0' }}>
