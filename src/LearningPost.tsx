@@ -2,14 +2,207 @@
 // the importance of name
 //mr pewa, waterloo qs
 import type { HighlighterCore } from 'shiki'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { createHighlighter, codeToHtml } from 'shiki'
 import { ShikiMagicMove } from 'shiki-magic-move/react'
 
 import 'shiki-magic-move/dist/style.css'
 
+import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, Background, Controls } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
 
+// Base style to match your Catppuccin theme
+const nodeStyle = {
+    background: '#24273a',
+    color: '#cad3f5',
+    border: '2px solid #8aadf4',
+    borderRadius: '8px',
+    padding: '10px',
+    width: 60,
+    textAlign: 'center' as const,
+    fontWeight: 'bold',
+    // THIS IS THE MAGIC: It makes the nodes glide when coordinates change
+    transition: 'all 0.6s ease-in-out', 
+};
+
+const STEPS = [
+    {
+        // STEP 0: Initial Forest (A:3, B:2, C:1)
+        nodes: [
+            { id: 'A', position: { x: 50, y: 150 }, data: { label: 'A:3' }, style: nodeStyle },
+            { id: 'B', position: { x: 150, y: 150 }, data: { label: 'B:2' }, style: nodeStyle },
+            { id: 'C', position: { x: 250, y: 150 }, data: { label: 'C:1' }, style: nodeStyle },
+        ],
+        edges: []
+    },
+    {
+        // STEP 1: Combine the two lowest (B:2 + C:1 -> BC:3)
+        nodes: [
+            { id: 'A', position: { x: 50, y: 150 }, data: { label: 'A:3' }, style: nodeStyle },
+            // B and C stay put, but a new parent appears
+            { id: 'B', position: { x: 150, y: 150 }, data: { label: 'B:2' }, style: nodeStyle },
+            { id: 'C', position: { x: 250, y: 150 }, data: { label: 'C:1' }, style: nodeStyle },
+            // The new parent node!
+            { id: 'BC', position: { x: 200, y: 50 }, data: { label: 'BC:3' }, style: { ...nodeStyle, border: '2px solid #a6da95' } },
+        ],
+        edges: [
+            { id: 'e-bc-b', source: 'BC', target: 'B', animated: true, style: { stroke: '#8aadf4' } },
+            { id: 'e-bc-c', source: 'BC', target: 'C', animated: true, style: { stroke: '#8aadf4' } },
+        ]
+    },
+    {
+        // STEP 2: Combine remaining (A:3 + BC:3 -> Root:6)
+        nodes: [
+            // A moves down to make room
+            { id: 'A', position: { x: 50, y: 150 }, data: { label: 'A:3' }, style: nodeStyle },
+            // B and C shift down and right
+            { id: 'B', position: { x: 200, y: 250 }, data: { label: 'B:2' }, style: nodeStyle },
+            { id: 'C', position: { x: 300, y: 250 }, data: { label: 'C:1' }, style: nodeStyle },
+            // BC shifts down
+            { id: 'BC', position: { x: 250, y: 150 }, data: { label: 'BC:3' }, style: { ...nodeStyle, border: '2px solid #a6da95' } },
+            // The Final Root Node!
+            { id: 'ROOT', position: { x: 150, y: 20 }, data: { label: 'Root:6' }, style: { ...nodeStyle, border: '2px solid #ed8796' } },
+        ],
+        edges: [
+            { id: 'e-bc-b', source: 'BC', target: 'B', style: { stroke: '#8aadf4' } },
+            { id: 'e-bc-c', source: 'BC', target: 'C', style: { stroke: '#8aadf4' } },
+            { id: 'e-root-a', source: 'ROOT', target: 'A', animated: true, style: { stroke: '#a6da95' } },
+            { id: 'e-root-bc', source: 'ROOT', target: 'BC', animated: true, style: { stroke: '#a6da95' } },
+        ]
+    }
+];
+
+const CODE_THEME: string = 'catppuccin-macchiato';
+
+const SNIPPETS = {
+    cargo: `cargo new <name of your compressor>`,
+    starting_code:
+`
+use std::error::Error;
+
+    fn main()-> Result<(), Box<dyn Error>>{
+        let args: Vec<String> = env::args().collect();
+        let argc = args.len();
+        if argc == 1 {
+            return Err("Not given a file".into());
+        }
+        let file_path = &args[1];
+        
+        let contents = read_to_string(file_path)?;
+
+        println!("file contents");
+        println!("{}", contents);
+        return Ok(());
+    }`,
+    run_first_time: `cargo run <name of program .rs> example.txt`
+};
+
+const InlineCode = ({children}: { children: React.ReactNode}) => (
+    <code style={{ 
+        background: '#24273a', // Matches Catppuccin Macchiato base
+        color: '#cad3f5',      // Matches Catppuccin Text
+        padding: '2px 6px', 
+        borderRadius: '4px', 
+        fontFamily: 'monospace',
+        fontSize: '0.9em'
+    }}>
+        {children}
+    </code>
+);
+
+const CodeBlock = ({ code, lang, highlighter }: { code: string, lang: string, highlighter?: HighlighterCore }) => {
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(code);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Reset after 2 seconds
+    };
+
+    return (
+        <div style={{ position: "relative", textAlign: "left", background: "#24273a", padding: "20px", borderRadius: "8px", margin: "15px 0", overflow: "hidden" }}>
+            {/* Copy Button */}
+            <button 
+                onClick={handleCopy}
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    background: "#363a4f",
+                    color: copied ? "#a6da95" : "#cad3f5", // Turns green when copied
+                    border: "none",
+                    padding: "6px 12px",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "12px",
+                    zIndex: 10,
+                    transition: "all 0.2s"
+                }}
+            >
+                {copied ? "Copied!" : "Copy"}
+            </button>
+
+            {highlighter ? (
+                <ShikiMagicMove
+                    lang={lang}
+                    theme={CODE_THEME}
+                    highlighter={highlighter}
+                    code={code}
+                    options={{ duration: 800, stagger: 0.3 }}
+                />
+            ) : (
+                <pre><code>Loading...</code></pre>
+            )}
+        </div>
+    );
+};
+
+export function HuffmanAnimation() {
+    const [step, setStep] = useState(0);
+    const [nodes, setNodes] = useState(STEPS[0].nodes);
+    const [edges, setEdges] = useState(STEPS[0].edges);
+
+    const onNodesChange = useCallback((changes: any) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
+    const onEdgesChange = useCallback((changes: any) => setEdges((eds) => applyEdgeChanges(changes, eds)), []);
+
+    const nextStep = () => {
+        const next = (step + 1) % STEPS.length;
+        setStep(next);
+        setNodes(STEPS[next].nodes);
+        setEdges(STEPS[next].edges);
+    };
+
+    return (
+        <div style={{ margin: '20px 0', border: '1px solid #363a4f', borderRadius: '8px', padding: '10px', background: '#1e1e2e' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <h4 style={{ margin: 0, color: '#cad3f5' }}>Building the Tree (Step {step + 1}/{STEPS.length})</h4>
+                <button 
+                    onClick={nextStep}
+                    style={{ background: '#8aadf4', color: '#181825', border: 'none', padding: '6px 16px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                >
+                    {step === STEPS.length - 1 ? "Reset" : "Next Step"}
+                </button>
+            </div>
+            
+            {/* React Flow requires a fixed height container to render! */}
+            <div style={{ height: '350px', width: '100%' }}>
+                <ReactFlow 
+                    nodes={nodes} 
+                    edges={edges} 
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    fitView
+                >
+                    <Background color="#363a4f" />
+                    <Controls style={{ background: '#24273a', fill: '#cad3f5' }} />
+                </ReactFlow>
+            </div>
+        </div>
+    );
+}
 export function HowFileCompressionWorks(){
+
+
     const [code, setCode] = useState(`
                 use std::error::Error;
 
@@ -33,7 +226,7 @@ export function HowFileCompressionWorks(){
         async function initializeHighlighter() {
         const highlighter = await createHighlighter({
             themes: ['catppuccin-macchiato'],
-            langs: ['rust'],
+            langs: ['rust', 'shell'],
         })
         setHighlighter(highlighter)
         }
@@ -110,37 +303,20 @@ export function HowFileCompressionWorks(){
             </ol>
             Sounds simple right?, it kinda is
             <p>
-                Oh btw, we doing this in Rust, because I was originally was doing this in C, but then got annoyed working with my poor man's dictionary, 
+                Oh btw, we doing this in Rust, because I was originally was doing this in C, but then got annoyed working with my poor man's hash map, 
             </p>
             <h4><b> NO EXTERNAL LIBRARIES HERE</b></h4>
             <p>
                 Anyways, let's just start building our project and i'll explain as I go
             </p>
-            <code>
-                cargo new &lt;name of your compressor&gt;
-            </code>
-            <p>This will create the prohject and provide us with a hello world, however we should use good practices too so lets do that p[lus implement the reading of the origibnal txt file to be compressed] </p>
-            {/* --- SHIKI MAGIC MOVE SECTION --- */}
-            <div style={{ 
-                textAlign: "left", // Force left align
-                // background: "#2e3440", // Matches 'nord' theme background
-                padding: "20px", 
-                borderRadius: "8px",
-                overflow: "hidden" 
-            }}>
-                {highlighter ? (
-                    <ShikiMagicMove
-                        lang="rust"
-                        theme="catppuccin-macchiato"
-                        highlighter={highlighter}
-                        code={code}
-                        options={{ duration: 800, stagger: 0.3 }}
-                    />
-                ) : (
-                    <pre><code>Loading highlighter...</code></pre>
-                )}
+            <div>
+                <InlineCode>{SNIPPETS.cargo}</InlineCode>
             </div>
-            
+            <p>This will create the project and provide us with a hello world, however we should use good practices too so lets do that plus implement the reading of the original txt file to be compressed</p>
+            {/* --- SHIKI MAGIC MOVE SECTION --- */}
+            <div>
+                <CodeBlock code={SNIPPETS.starting_code} lang='rust' highlighter={highlighter} />
+            </div>
             {/* Button to test the animation */}
             <button 
                 onClick={animate}
@@ -148,6 +324,31 @@ export function HowFileCompressionWorks(){
             >
                 Animate Code Step
             </button>
+            <div>
+                <p>
+                    If your not familiar with rust it may look <i>interesting</i> this snippet however this is will be the simplest snippet here  <span>&#128128;</span>.
+                    I recommend looking into the rust book as its quite simple and extensive for any keyword you don't understand,
+                </p>
+                <p>Anyways that snippet just read and prints the contents of a file you give in as an argument in your cli, 
+                    let's prepare an example, in the same directory make a file called example.txt and write on it this,  
+                    you can try running </p>
+                <CodeBlock code={SNIPPETS.run_first_time} lang='shell' highlighter={highlighter} />
+                
+                <p>where example.txt contents are <InlineCode>Hello world</InlineCode>, after succesfully running that let's now continue with doing the actual fun part,
+                <b>THE HUFFMAN TREE</b>(insert scary thunder sound in the background) (maybe click to hear it)
+                </p>
+                <p>Let me explain wth this tree is, a Huffman tree is a tree that represents your compression, you use it to generate the most efficient binaries for your
+                    compressor and also to read the binaries to characters. Now, how do i read one? 
+                    let's say you are given this tree
+
+                     which you build from the bottom up, 
+                    
+                    
+                    utand the way how its used is that if given a binary code you can follow it and end up in a node in that tree that equals the character that that binary represents, as you amy already think, characters that are more frequent would end up in higher levels than those that are more infrequent, anyways le</p>
+            </div>
+            <div>
+                {/* <HuffmanAnimation /> */}
+            </div>
         </div>            
         </div>
     );
