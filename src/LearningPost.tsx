@@ -94,7 +94,173 @@ use std::error::Error;
         println!("{}", contents);
         return Ok(());
     }`,
-    run_first_time: `cargo run <name of program .rs> example.txt`
+    run_first_time: `cargo run <name of program .rs> example.txt`,
+    ending_code:
+`
+use std::cmp::Ordering;
+use std::collections::HashMap;
+use std::env;
+use std::error::Error;
+use std::collections::BinaryHeap;
+use std:: fs::{read_to_string, write};
+
+#[derive(Debug, PartialEq, Eq)]
+struct HuffmanNode{
+    count: u32,
+    c: Option<char>,
+    left: Option<Box<HuffmanNode>>,
+    right: Option<Box<HuffmanNode>>,
+}
+struct BitWriter{
+    buffer: u8,
+    bit_count: u8,
+    bytes: Vec<u8>,
+}
+
+impl BitWriter{
+    fn new() -> Self{
+        BitWriter {buffer: 0, bit_count: 0, bytes: Vec::new()}
+    }
+    fn write_bit(&mut self, bit: bool) {
+        self.buffer = self.buffer << 1;
+        if bit {
+            self.buffer |= 1;
+        }
+        self.bit_count += 1;
+    
+        if self.bit_count == 8 {
+            self.bytes.push(self.buffer);
+            self.buffer = 0;
+            self.bit_count = 0;
+        }
+    }
+    fn flush(&mut self) -> Vec<u8> {
+        if self.bit_count > 0 {
+            self.buffer = self.buffer << (8 - self.bit_count);
+            self.bytes.push(self.buffer);
+        }
+        self.bytes.clone()
+    }
+}
+
+
+
+
+
+fn main()-> Result<(), Box<dyn Error>>{
+    let args: Vec<String> = env::args().collect();
+    let argc = args.len();
+    if argc == 1 {
+        return Err("Not given a file".into());
+    }
+    let file_path = &args[1];
+    
+    let contents = read_to_string(file_path)?;
+
+    println!("file contents");
+    println!("{}", contents);
+    let huffman_tree: Option<HuffmanNode> = huffman_tree_builder(contents.clone());
+
+    if let Some(root_node) = huffman_tree {
+        // 1. Create the empty map to hold our dictionary
+        let mut code_table: HashMap<char, String> = HashMap::new();
+
+        // 2. Kick off the recursion
+        // We start with an empty string ""
+        generate_binary_table(&root_node, String::new(), &mut code_table);
+
+        // 3. Print the results
+        println!("--- Huffman Code Table ---");
+        for (char_key, binary_code) in &code_table {
+            println!("'{}' : {}", char_key, binary_code);
+        }
+        let mut compressed = String::new();
+        for meow in contents.chars() {
+            //maybe one character doesnt get translated
+            compressed.push_str(&code_table.get(&meow).unwrap());
+        }
+        let mut writer = BitWriter::new();
+        
+        for c in compressed.chars(){
+            match c{
+                '1' => writer.write_bit(true),
+                '0' => writer.write_bit(false),
+                _ => panic!("not a bit"),
+            }
+        }
+        writer.flush();
+        //now lets make the binary representation of it
+        write("out_success.juan", &writer.bytes);
+    } else {
+        println!("The tree was empty!");
+    }
+    return Ok(());
+}
+
+
+
+fn huffman_tree_builder(contents: String) -> Option<HuffmanNode> { //makes the string into a map of numbers
+    let mut huffman_tree: HashMap<char, u32> = HashMap::new();
+    for c in contents.chars() { //this  also takes the \n (newline)
+        let count = huffman_tree.entry(c).or_insert(0);
+        *count += 1;
+    }
+
+    let mut min_heap = BinaryHeap::new();
+    //now that we have the map, lets build the min heap
+    for k in huffman_tree.keys() {
+        println!("key:{} count:{:?}", k, huffman_tree.get(k));
+        min_heap.push(HuffmanNode{count: *huffman_tree.get(k).unwrap(), c: Some(*k), left: None, right: None})
+    }
+    println!("{:?}", min_heap);
+    while min_heap.len()>1 {
+        let left = min_heap.pop().unwrap();
+        let right = min_heap.pop().unwrap();
+
+        let merged = Box::new(HuffmanNode{
+            count: left.count+right.count,
+            c: None,
+            left: Some(Box::new(left)),
+            right: Some(Box::new(right)),
+        });
+        min_heap.push(*merged);
+    }
+    let root = min_heap.pop();
+    // now we make our tree
+    println!("tree ts");
+
+    println!("{:#?}", root);
+    return root;
+}
+
+fn generate_binary_table(node: &HuffmanNode, prefix: String, map: &mut HashMap<char, String>) {
+    if let Some(ch) = node.c {
+        map.insert(ch, prefix);
+    } else {
+        if let Some(ref left_child) = node.left {
+            generate_binary_table(left_child, format!("{}0", prefix), map);
+        }
+        if let Some(ref right_child) = node.right {
+            generate_binary_table(right_child, format!("{}1", prefix), map);
+        }
+    }
+}
+
+
+impl Ord for HuffmanNode {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.count.cmp(&self.count)
+            .then_with(|| self.c.cmp(&other.c))
+    }
+}
+
+impl PartialOrd for HuffmanNode {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+`
 };
 
 const InlineCode = ({children}: { children: React.ReactNode}) => (
@@ -317,13 +483,6 @@ export function HowFileCompressionWorks(){
             <div>
                 <CodeBlock code={SNIPPETS.starting_code} lang='rust' highlighter={highlighter} />
             </div>
-            {/* Button to test the animation */}
-            <button 
-                onClick={animate}
-                style={{ marginTop: "10px", padding: "8px 16px", cursor: "pointer" }}
-            >
-                Animate Code Step
-            </button>
             <div>
                 <p>
                     If your not familiar with rust it may look <i>interesting</i> this snippet however this is will be the simplest snippet here  <span>&#128128;</span>.
@@ -337,14 +496,48 @@ export function HowFileCompressionWorks(){
                 <p>where example.txt contents are <InlineCode>Hello world</InlineCode>, after succesfully running that let's now continue with doing the actual fun part,
                 <b>THE HUFFMAN TREE</b>(insert scary thunder sound in the background) (maybe click to hear it)
                 </p>
-                <p>Let me explain wth this tree is, a Huffman tree is a tree that represents your compression, you use it to generate the most efficient binaries for your
-                    compressor and also to read the binaries to characters. Now, how do i read one? 
-                    let's say you are given this tree
+                <p>Let me explain wth this tree is, a Huffman tree is a tree that's generate after doing the Huffman encoding, which represents your compression, 
+                    you use it to generate the most efficient binary value for each character in your text file.
+                    Now, how do i read one?  <br />
 
-                     which you build from the bottom up, 
+                    <b>INSERT AN IMAGE OF A HUFFMAN TREE OR MAYBE SOMEONE SCRATCHING THEIR HEAD</b>
+
+                    <br />
+                    <br />
+                    <br />
+
+                    let's say you are given the already made tree, you make the arbitrary choice of left child being 1, 
+                    and right being 0, each node in the tree has a value, or null, if you trace from the root,
+                    and collect the left children (1s) and the right children (0s) you picked up along the way to arrive to a character,
+                    the binary string you end up is the binary for that particular character,
+                    <br/>
+                    and backwards its true too, if you start from the left of the encoded huffman encoded binary and trace the nuber between left or right until you hit a character you can decode these.
+
+
+                    <br />
+                    Easy, right?
+                    Now an example, lets say you choose to see what the value of o is in this tree, you would see that the value for it by the above technique, (the highlighted edges) makes the binary 1011
+                    
+
+                    <br />
+                    <br />
+                    Ok, now that we know how the already made tree works, how tf do I make my own.
+                    <br />
+
+                    Firstly, lets see the text that we have to encode and take count of each character and its recurrence, and the lowest recurrences become the leaves of our Tree
+                    and each level should match the number of occurrence, by either being a leafd node, (in which case it would be a character), or the sum of the two children (btw, huffman is a binary tree), and then you continue connecting the  tree until you reach the top
+
+                    
+                     so how does each letter gets chosen a node in the tree? well contrary to most trees, we are building 
                     
                     
-                    utand the way how its used is that if given a binary code you can follow it and end up in a node in that tree that equals the character that that binary represents, as you amy already think, characters that are more frequent would end up in higher levels than those that are more infrequent, anyways le</p>
+                    <br />
+Can one make a huffman encode with 2-4 tree, and if so what case would be beneficial?                    
+                </p>
+                <CodeBlock code={SNIPPETS.ending_code} lang='rust' highlighter={highlighter} />
+                <p>
+                Troll about running and not compressing lmao    
+                </p>
             </div>
             <div>
                 {/* <HuffmanAnimation /> */}
