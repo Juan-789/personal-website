@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juan Marulanda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --paper: #F6F4EE;
+      --ink: #1A1A1A;
+      --ink-muted: #6B6B60;
+      --ink-faint: #A8A89E;
+      --rule: #D6D4CC;
+      --serif: 'EB Garamond', Georgia, serif;
+      --mono: 'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    html {
+      font-size: 18px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .page {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3.5rem clamp(1.4rem, 5vw, 3rem) 6rem;
+    }
+
+    @media (max-width: 600px) {
+      html { font-size: 17px; }
+    }
+
+    /* top bar */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .topbar-date {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+    }
+
+    .topbar-links {
+      display: flex;
+      gap: 1.4rem;
+    }
+
+    .topbar-links a {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-muted);
+      text-decoration: none;
+    }
+
+    .topbar-links a:hover { color: var(--ink); }
+
+    /* name */
+    .name-block { margin-bottom: 2.2rem; }
+
+    .name {
+      font-size: clamp(2.6rem, 7vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      border-left: 3px solid var(--ink);
+      padding-left: 0.7rem;
+      margin-left: -0.7rem;
+    }
+
+    .name-sub {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+      margin-top: 0.6rem;
+    }
+
+    /* body text */
+    .letter-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--ink);
+      margin-bottom: 1.1rem;
+    }
+
+    .letter-body em { font-style: italic; }
+
+    .letter-body a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .letter-body a:hover { text-decoration: none; }
+
+    /* sections */
+    .section-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 2.4rem 0 1.8rem;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--ink-faint);
+      margin-bottom: 1.2rem;
+    }
+
+    /* employment */
+    .work-entry { margin-bottom: 1.6rem; }
+
+    .work-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.2rem;
+    }
+
+    .work-company { font-size: 1rem; font-weight: 500; color: var(--ink); }
+
+    .work-dates {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--ink-faint);
+      white-space: nowrap;
+    }
+
+    .work-roles {
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    .work-desc {
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+
+    /* projects */
+    .project-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--rule);
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.15s;
+    }
+
+    .project-row:first-of-type { border-top: 1px solid var(--rule); }
+    .project-row:hover { opacity: 0.6; }
+
+    .project-row:hover .project-name::after {
+      content: ' ↗';
+      font-size: 0.75rem;
+    }
+
+    .project-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .project-name { font-size: 1rem; color: var(--ink); }
+
+    .project-desc { font-size: 0.82rem; color: var(--ink-muted); }
+
+    .project-tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-faint);
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    /* community */
+    .community-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .community-row:first-of-type { border-top: 1px solid var(--rule); }
+    .community-role { font-size: 0.9rem; color: var(--ink); flex: 1; }
+    .community-org { font-size: 0.82rem; color: var(--ink-muted); font-style: italic; }
+
+    /* signature */
+    .sig {
+      margin-top: 2.8rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .sig-text {
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--ink-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .sig-links { display: flex; gap: 1.4rem; flex-wrap: wrap; }
+
+    .sig-links a {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-muted);
+      text-decoration: none;
+    }
+
+    .sig-links a:hover { color: var(--ink); }
+
+    /* desktop-only mode toggle */
+    .mode-toggle { display: none; }
+
+    @media (min-width: 768px) {
+      .mode-toggle {
+        display: block;
+        position: fixed;
+        top: 1.4rem;
+        right: 1.6rem;
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--ink-faint);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 100;
+      }
+      .mode-toggle:hover { color: var(--ink); }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="mode-toggle" onclick="localStorage.removeItem('site_preference'); window.location.href='/';">[ Maximal ]</button>
+
+  <div class="page">
+
+    <header class="topbar">
+      <span class="topbar-date">Ottawa · Jun 2026</span>
+      <nav class="topbar-links" aria-label="Page sections">
+        <a href="#building">Building</a>
+        <a href="#employment">Employment</a>
+        <a href="#community">Community</a>
+      </nav>
+    </header>
+
+    <div class="name-block">
+      <h1 class="name">Juan<br>Marulanda</h1>
+      <p class="name-sub">CS Student · Software Engineer Intern · Ottawa</p>
+    </div>
+
+    <p class="letter-body">
+      Hi I'm Juan :)
+    </p>
+
+    <p class="letter-body">
+      I like to learn how stuff works, and build indie, fun programs — <em>just for the sake of it.</em>
+    </p>
+
+    <p class="letter-body">
+      Also a Computer Science major @ <a href="https://carleton.ca/" target="_blank" rel="noopener">Carleton University</a>, community coordinator at <a href="https://www.uottahack.ca/" target="_blank" rel="noopener">uOttahack</a>, and an organizor at <a href="https://luma.com/synchronize" target="_blank" rel="noopener">Synchronize</a>, (Ottawa's <a href="https://www.socratica.info/" target="_blank" rel="noopener">Socratica</a> Node)
+    </p>
+
+    <hr class="section-rule" id="building" />
+    <p class="section-label">Things I've built</p>
+
+    <a class="project-row" href="https://github.com/Juan-789" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">RISC-V Kernel</span>
+        <span class="project-desc">Engineered a RISC-V kernel from scratch — context switching, virtual memory, user mode, shell, disk driver, and file system. Debugged with QEMU's GDB stub and raw memory inspection.</span>
+      </div>
+      <span class="project-tag">C · RISC-V · QEMU</span>
+    </a>
+
+    <a class="project-row" href="https://github.com/Juan-789" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">Fast Web Browser</span>
+        <span class="project-desc">High-performance HTML pre-scanner using x86_64 SIMD intrinsics (AVX2) to minimize parsing latency. Parser turns token patterns into finite state machines.</span>
+      </div>
+      <span class="project-tag">Rust · SIMD</span>
+    </a>
+
+    <a class="project-row" href="https://github.com/bskdany/roomba1" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">Rambo Roomba</span>
+        <span class="project-desc">A Raspberry Pi 4B running QNX controls a Roomba vacuum cleaner equipped with an Arduino and four photoresistors for light-based navigation.</span>
+      </div>
+      <span class="project-tag">Hardware · QNX</span>
+    </a>
+
+    <a class="project-row" href="https://github.com/Juan-789/prompt-pet" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">Pet Prompt</span>
+        <span class="project-desc">Chrome Extension to help you write better prompts</span>
+      </div>
+      <span class="project-tag">Chrome · AI</span>
+    </a>
+
+    <a class="project-row" href="https://github.com/Juan-789/med-rot" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">Med Rot</span>
+        <span class="project-desc">Website that calls you to remind you of your meds, with Peter Griffin's voice, and saying brain rotted phrases</span>
+      </div>
+      <span class="project-tag">Web</span>
+    </a>
+
+    <a class="project-row" href="https://devpost.com/software/ford-ev-companion-app" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">Ford EV Infotainment</span>
+        <span class="project-desc">The route from current location to destination with charging stations along the way, search engine and suggestions for the driver's/car's needs along the way</span>
+      </div>
+      <span class="project-tag">Hackathon</span>
+    </a>
+
+    <a class="project-row" href="https://devpost.com/software/foodbank-ai" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">FoodBank AI</span>
+        <span class="project-desc">computer vision to recognize all sorts of foods that can be donated to a food bank and will give you a score based on how non-perishable and nutritious it is</span>
+      </div>
+      <span class="project-tag">CV · Hackathon</span>
+    </a>
+
+    <a class="project-row" href="https://github.com/Juan-789/Korean_flashcards" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">Korean Flashcards</span>
+        <span class="project-desc">Had an upcoming test and decided to make a flashcard app to do active recall</span>
+      </div>
+      <span class="project-tag">Web</span>
+    </a>
+
+    <a class="project-row" href="https://github.com/Juan-789/Udemy_Programs/tree/main/Day21" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">Self-Driving Car</span>
+        <span class="project-desc">Self-driving car with the naive approach to solve mazes</span>
+      </div>
+      <span class="project-tag">JS · ML</span>
+    </a>
+
+    <hr class="section-rule" id="employment" />
+    <p class="section-label">Employment</p>
+
+    <div class="work-entry">
+      <div class="work-header">
+        <span class="work-company">Tatlock Systems</span>
+        <span class="work-dates">May 2026 – Aug 2026</span>
+      </div>
+      <p class="work-roles">Software Engineer Intern</p>
+      <p class="work-desc">
+        Designing and implementing a safe, array-oriented systems programming language targeting microcontrollers, with static memory safety guarantees and no runtime overhead. Collaborating with researchers in the low-latency and high-performance computing industry to validate design decisions and iterate on language semantics.
+      </p>
+    </div>
+
+    <div class="work-entry">
+      <div class="work-header">
+        <span class="work-company">Bedarra Corporation</span>
+        <span class="work-dates">May 2024 – Aug 2025</span>
+      </div>
+      <p class="work-roles">Software Engineer Intern</p>
+      <p class="work-desc">
+        Engineered a local-first cross-platform app (iOS, Android, Web, macOS, Windows) with a CRDT-based sync engine using Iroh, implementing store-and-forward propagation so devices sync opportunistically on shared networks without central coordination.
+      </p>
+      <p class="work-desc">
+        Engineered an on-device email ingestion pipeline and local-first authentication using UCAN tokens, eliminating server dependencies. Also optimized email downloads by 30% using a WASI-compiled Rust binary and implemented a search engine for email data.
+      </p>
+      <p class="work-desc">
+        Researched Doug Engelbart's computer science papers (even consulted with The Stanford Research Institute lab), then built apps with Rust and Flutter. Created a P2P file sync system that works across iOS, Android, Windows, Linux, and macOS.
+      </p>
+    </div>
+
+    <hr class="section-rule" id="community" />
+    <p class="section-label">Community</p>
+
+    <div class="community-row">
+      <span class="community-role">Community coordinator</span>
+      <span class="community-org"><a href="https://www.uottahack.ca/" target="_blank" rel="noopener" style="color:inherit;">uOttaHack</a> — Ottawa's largest hackathon, 900+ participants</span>
+    </div>
+    <div class="community-row">
+      <span class="community-role">Host & organizer</span>
+      <span class="community-org"><a href="https://luma.com/synchronize" target="_blank" rel="noopener" style="color:inherit;">Synchronize</a> — Ottawa's Socratica Node</span>
+    </div>
+
+    <div class="sig">
+      <p class="sig-text">— Juan</p>
+      <nav class="sig-links" aria-label="External links">
+        <a href="https://github.com/Juan-789" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com/in/juan-marulanda-delosrios/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:juan.alfredoprincipal@gmail.com">Email</a>
+        <a href="/resume_technical.pdf" target="_blank">Résumé</a>
+      </nav>
+    </div>
+
+  </div>
+
+</body>
+</html>
