@@ -289,31 +289,22 @@ function Letter(){
 
   return (
     <div style={{ 
-      position: 'fixed',
-      overflowY: 'auto',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      width: '100vw',
-      height: '100vh',
+      minHeight: '100vh',
+      width: '100%',
       background: 'linear-gradient(180deg, #111827 0%, #1f2937 50%, #111827 100%)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      alignContent: 'center',
-      justifyContent: 'center',
-      padding: '2rem',
+      padding: '4rem 2rem',
+      gap: '4rem',
       zIndex: 9999
     }}>
       
       <div style={{ width: '100%', maxWidth: '56rem' }}>
-        {/* Letter */}
         <div 
           style={{
             width: '100%',
             minHeight: '24rem',
-            top: 40,
             borderRadius: '0.5rem',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
             border: '4px solid #92400e',
@@ -321,10 +312,8 @@ function Letter(){
             position: 'relative',
             overflow: 'hidden',
             backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence baseFrequency=\"0.9\" numOctaves=\"4\" /%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.1\" /%3E%3C/svg%3E')",
-            bottom: 40
           }}
         >
-          {/* Letter lines */}
           <div style={{
             position: 'absolute',
             inset: 0,
@@ -342,8 +331,6 @@ function Letter(){
               }} />
             ))}
           </div>
-          
-{/* Text content */}
           <div style={{ 
             position: 'relative', 
             padding: '4rem',
@@ -352,7 +339,57 @@ function Letter(){
             lineHeight: '2.5rem',
             color: '#78350f',
             textAlign: 'left',
+          }}>
+            <p>Hiyooo ^_^</p>
+            I broke my website, but wanted to say hi :)
+            <p>AM SO EXCITED TO WATCH STAR WARS TOGETHER YIPIEEEE</p>
+            <p>See you then</p>
+            <br />
+            <p>I love you,</p>
+            <p>Juan :)</p>
+          </div>
+        </div>
+      </div>
 
+      <div style={{ width: '100%', maxWidth: '56rem' }}>
+        <div 
+          style={{
+            width: '100%',
+            minHeight: '24rem',
+            borderRadius: '0.5rem',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            border: '4px solid #92400e',
+            background: '#fef3c7',
+            position: 'relative',
+            overflow: 'hidden',
+            backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence baseFrequency=\"0.9\" numOctaves=\"4\" /%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.1\" /%3E%3C/svg%3E')",
+          }}
+        >
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            padding: '4rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            pointerEvents: 'none'
+          }}>
+            {[...Array(12)].map((_, i) => (
+              <div key={i} style={{
+                width: '100%',
+                height: '1px',
+                background: 'rgba(156, 163, 175, 0.2)'
+              }} />
+            ))}
+          </div>
+          <div style={{ 
+            position: 'relative', 
+            padding: '4rem',
+            fontFamily: 'serif',
+            fontSize: '1.125rem',
+            lineHeight: '2.5rem',
+            color: '#78350f',
+            textAlign: 'left',
           }}>
             <p>I love my Girlfriend,</p> 
             Hi silly, 
@@ -364,8 +401,8 @@ function Letter(){
           </div>
         </div>
       </div>
+
       <div style={{ width: '100%', maxWidth: '56rem' }}>
-        {/* Letter */}
         <div 
           style={{
             width: '100%',
@@ -377,11 +414,8 @@ function Letter(){
             position: 'relative',
             overflow: 'hidden',
             backgroundImage: "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence baseFrequency=\"0.9\" numOctaves=\"4\" /%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.1\" /%3E%3C/svg%3E')",
-            top: 60,
-            bottom: 0,
           }}
         >
-          {/* Letter lines */}
           <div style={{
             position: 'absolute',
             inset: 0,
@@ -399,8 +433,6 @@ function Letter(){
               }} />
             ))}
           </div>
-          
-{/* Text content */}
           <div style={{ 
             position: 'relative', 
             padding: '4rem',
@@ -409,7 +441,6 @@ function Letter(){
             lineHeight: '2.5rem',
             color: '#78350f',
             textAlign: 'left',
-
           }}>
             <p>Merry Christmas Keena,</p> 
             From strangers to intimate souls we have become, am very thankful to have met someone as amazing as you, and to be able to call them much more than a friend (foreshadowing).
@@ -422,9 +453,10 @@ function Letter(){
           </div>
         </div>
       </div>
+
     </div>
   );
-}
+}+
 
 
 function Notes(){}  // notes i've taken when learning something, handwritten or digital, notion or something
