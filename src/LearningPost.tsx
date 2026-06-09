@@ -536,7 +536,7 @@ Can one make a huffman encode with 2-4 tree, and if so what case would be benefi
                 </p>
                 <CodeBlock code={SNIPPETS.ending_code} lang='rust' highlighter={highlighter} />
                 <p>
-                Troll about running and not compressing lmao    
+                    Troll about running and not compressing lmao    
                 </p>
             </div>
             <div>

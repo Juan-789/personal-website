@@ -34,7 +34,11 @@ function App() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }
-  const Layout = () => {
+  const switchToMinimal = () => {
+    localStorage.setItem('site_preference', 'minimal');
+    window.location.replace('/minimal.html');
+  };
+  const Layout = ({switchToMinimal}) => {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -64,7 +68,23 @@ function App() {
           transition: 'margin-left 0.3s ease-in-out', 
           backgroundColor: 'transparent'
         }}>
-
+        <button 
+          onClick={switchToMinimal}
+          style={{
+            position: 'absolute', 
+            top: '20px', 
+            right: '20px', 
+            zIndex: 1000, 
+            padding: '10px 15px', 
+            cursor: 'pointer',
+            backgroundColor: '#1a1a1a',
+            color: '#f5f5f0',
+            border: '1px solid #333',
+            fontFamily: 'monospace'
+          }}
+        >
+          [ Toggle Minimal Mode ]
+        </button>
         {/* 3. DEFINE THE ROUTES HERE */}
         <Routes>
           {/* The default path "/" shows the main About/Featured/Experience sections */}
@@ -100,7 +120,9 @@ function App() {
   return (
     // 2. WRAP THE ENTIRE APP IN BROWSER ROUTER
     <BrowserRouter basename='/'>
-      <Layout />
+      <Layout 
+        switchToMinimal={switchToMinimal}
+      />
     </BrowserRouter>
   );
 }
