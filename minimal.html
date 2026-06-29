@@ -396,9 +396,9 @@
         <span class="work-company">Tatlock Systems</span>
         <span class="work-dates">May 2026 – Aug 2026</span>
       </div>
-      <p class="work-roles">Software Engineer Intern</p>
+      <p class="work-roles">Software Engineer Intern · A subsidiary of Bedarra Corporation</p>
       <p class="work-desc">
-        Designing and implementing a safe, array-oriented systems programming language targeting microcontrollers, with static memory safety guarantees and no runtime overhead. Collaborating with researchers in the low-latency and high-performance computing industry to validate design decisions and iterate on language semantics.
+        I'm currently designing a safer dialect of C for micro-controllers, with safety guarantees enforced at compile time so a lot of common bugs get caught before the code ships. I also built the LSP server and VS Code extension for it, which handle syntax highlighting and simplify statements for beginners. Along the way I've been working with researchers in low-latency, high-performance computing to validate design decisions as the language develops.
       </p>
     </div>
 
@@ -409,13 +409,7 @@
       </div>
       <p class="work-roles">Software Engineer Intern</p>
       <p class="work-desc">
-        Engineered a local-first cross-platform app (iOS, Android, Web, macOS, Windows) with a CRDT-based sync engine using Iroh, implementing store-and-forward propagation so devices sync opportunistically on shared networks without central coordination.
-      </p>
-      <p class="work-desc">
-        Engineered an on-device email ingestion pipeline and local-first authentication using UCAN tokens, eliminating server dependencies. Also optimized email downloads by 30% using a WASI-compiled Rust binary and implemented a search engine for email data.
-      </p>
-      <p class="work-desc">
-        Researched Doug Engelbart's computer science papers (even consulted with The Stanford Research Institute lab), then built apps with Rust and Flutter. Created a P2P file sync system that works across iOS, Android, Windows, Linux, and macOS.
+        I built a local-first, decentralized email client from scratch, working offline across iOS, Android, Web, macOS, and Windows. Devices sync mail directly with each other through a CRDT-based engine built on Iroh, using a key-namespaced, last-write-wins schema so metadata updates instantly while message content streams in asynchronously from a peer-to-peer, content-addressed blob store, meaning two devices that haven't been online together in weeks still catch up the moment they reconnect. On the server side, I built the pipeline that downloads mail and issues UCAN tokens, which let the app authenticate locally afterward without calling back to the server, and got a 30% speedup on download times by compiling the hot path to WASI. On the device, I built a full-text search engine over the downloaded mail. I also drew on research into Doug Engelbart's early computer science work with the Stanford Research Institute lab to shape how mail is structured and rendered in the UI, and mentored another intern along the way.
       </p>
     </div>
 
