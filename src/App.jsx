@@ -456,7 +456,7 @@ function Letter(){
 
     </div>
   );
-}+
+}
 
 
 function Notes(){}  // notes i've taken when learning something, handwritten or digital, notion or something
@@ -493,6 +493,37 @@ function Experience() {
     <h2 className='feat-proj-text'>
       Employment:
     </h2>
+
+    <div className='company-block'
+      onClick={handleExperienceClick}
+      style={{cursor: 'pointer'}}
+    >
+      <div className='company-header'>
+        <img src={bedarraLogo} alt="Tatlock Systems" className='company-logo' />
+        <div>
+          <h3>Tatlock Systems</h3>
+          <p className='company-tagline'>Ottawa, Ontario • May 2026 - Aug 2026 • A subsidiary of Bedarra Corporation</p>
+        </div>
+      </div>
+
+      <div className='roles-timeline'>
+        <div className='role'>
+          <div className='role-header'>
+            <h4>Software Engineer Intern</h4>
+            <span className='date'>May 2026 - Aug 2026</span>
+          </div>
+          <p className='role-summary'>
+            I'm currently designing a safer dialect of C for micro-controllers, with safety 
+            guarantees enforced at compile time so a lot of common bugs get caught before the 
+            code ships. I also built the LSP server and VS Code extension for it, which handle 
+            syntax highlighting and simplify statements for beginners. Along the way I've been 
+            working with researchers in low-latency, high-performance computing to validate 
+            design decisions as the language develops.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div className='company-block'
       onClick={handleExperienceClick}
       style={{cursor: 'pointer'}}
@@ -509,42 +540,22 @@ function Experience() {
         <div className='role'>
           <div className='role-header'>
             <h4>Full-Stack Intern</h4>
-            <span className='date'>May 2025 - Aug 2025</span>
+            <span className='date'>May 2024 - Aug 2025</span>
           </div>
           <p className='role-summary'>
-            Building a <strong>local-first app</strong> that runs entirely on-device. 
-            Transformed the Rust backend into an FFI library so the app works offline 
-            on iOS, Android, and Chrome. Created custom data structures inspired by 
-            Doug Engelbart's Augment System for rendering PDFs, images, and Markdown.
-          </p>
-          <p className='role-highlight'>
-            Also mentored another intern—created their project roadmap and documented 
-            technical challenges.
-          </p>
-        </div>
-
-        <div className='role'>
-          <div className='role-header'>
-            <h4>Part-Time Full-Stack Intern</h4>
-            <span className='date'>Sep 2024 - Apr 2025</span>
-          </div>
-          <p className='role-summary'>
-            Built a secure database architecture, and optimized 
-            email downloads by 30% using a WASI-compiled Rust binary. Implemented a 
-            search engine for email data.
-          </p>
-        </div>
-
-        <div className='role'>
-          <div className='role-header'>
-            <h4>Full-Stack Intern</h4>
-            <span className='date'>May 2024 - Aug 2024</span>
-          </div>
-          <p className='role-summary'>
-            Researched Doug Engelbart's computer science papers (even consulted with The
-            Stanford Reasearch Institute lab), then built apps with Rust and Flutter. Compiled Rust to WebAssembly 
-            for high-performance web apps. Created a P2P file sync system that works 
-            across iOS, Android, Windows, Linux, and macOS.
+            I built a local-first, decentralized email client from scratch, working offline 
+            across iOS, Android, Web, macOS, and Windows. Devices sync mail directly with each 
+            other through a CRDT-based engine built on Iroh, using a key-namespaced, 
+            last-write-wins schema so metadata updates instantly while message content streams 
+            in asynchronously from a peer-to-peer, content-addressed blob store, meaning two 
+            devices that haven't been online together in weeks still catch up the moment they 
+            reconnect. On the server side, I built the pipeline that downloads mail and issues 
+            UCAN tokens, which let the app authenticate locally afterward without calling back 
+            to the server, and got a 30% speedup on download times by compiling the hot path 
+            to WASI. On the device, I built a full-text search engine over the downloaded 
+            mail. I also drew on research into Doug Engelbart's early computer science work 
+            with the Stanford Research Institute lab to shape how mail is structured and 
+            rendered in the UI, and mentored another intern along the way.
           </p>
         </div>
       </div>
