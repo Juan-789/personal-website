@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Juan Marulanda</title>
+  <link rel="icon" type="image/png" href="./millenium.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
@@ -310,26 +311,34 @@
     </p>
 
     <p class="letter-body">
-      Also a Computer Science major @ <a href="https://carleton.ca/" target="_blank" rel="noopener">Carleton University</a>, community coordinator at <a href="https://www.uottahack.ca/" target="_blank" rel="noopener">uOttahack</a>, and an organizor at <a href="https://luma.com/synchronize" target="_blank" rel="noopener">Synchronize</a>, (Ottawa's <a href="https://www.socratica.info/" target="_blank" rel="noopener">Socratica</a> Node)
+      Also a Computer Science major @ <a href="https://carleton.ca/" target="_blank" rel="noopener">Carleton University</a>, community director at <a href="https://www.uottahack.ca/" target="_blank" rel="noopener">uOttahack</a>, and an organizor at <a href="https://luma.com/synchronize" target="_blank" rel="noopener">Synchronize</a>, (Ottawa's <a href="https://www.socratica.info/" target="_blank" rel="noopener">Socratica</a> Node)
     </p>
 
     <hr class="section-rule" id="building" />
     <p class="section-label">Things I've built</p>
 
-    <a class="project-row" href="https://github.com/Juan-789" target="_blank" rel="noopener">
+    <a class="project-row" href="https://github.com/Juan-789/Melquiades" target="_blank" rel="noopener">
       <div class="project-left">
-        <span class="project-name">RISC-V Kernel</span>
-        <span class="project-desc">Engineered a RISC-V kernel from scratch — context switching, virtual memory, user mode, shell, disk driver, and file system. Debugged with QEMU's GDB stub and raw memory inspection.</span>
+        <span class="project-name">Melquíades</span>
+        <span class="project-desc">My from-scratch, Rust take on Google Meet: capture, send, and display video between machines. I am building it partly to see where video-call latency actually lives, and partly because video calls are cool.</span>
       </div>
-      <span class="project-tag">C · RISC-V · QEMU</span>
+      <span class="project-tag">Rust · UDP · Systems</span>
     </a>
 
-    <a class="project-row" href="https://github.com/Juan-789" target="_blank" rel="noopener">
+    <a class="project-row" href="https://github.com/Juan-789/Fast-Web-Browser" target="_blank" rel="noopener">
       <div class="project-left">
         <span class="project-name">Fast Web Browser</span>
         <span class="project-desc">High-performance HTML pre-scanner using x86_64 SIMD intrinsics (AVX2) to minimize parsing latency. Parser turns token patterns into finite state machines.</span>
       </div>
       <span class="project-tag">Rust · SIMD</span>
+    </a>
+
+    <a class="project-row" href="https://github.com/Juan-789/juan_os" target="_blank" rel="noopener">
+      <div class="project-left">
+        <span class="project-name">RISC-V Kernel</span>
+        <span class="project-desc">Engineered a RISC-V kernel from scratch — context switching, virtual memory, user mode, shell, disk driver, and file system. Debugged with QEMU's GDB stub and raw memory inspection.</span>
+      </div>
+      <span class="project-tag">C · RISC-V · QEMU</span>
     </a>
 
     <a class="project-row" href="https://github.com/bskdany/roomba1" target="_blank" rel="noopener">
@@ -398,7 +407,7 @@
       </div>
       <p class="work-roles">Software Engineer Intern · A subsidiary of Bedarra Corporation</p>
       <p class="work-desc">
-        I'm currently designing a safer dialect of C for micro-controllers, with safety guarantees enforced at compile time so a lot of common bugs get caught before the code ships. I also built the LSP server and VS Code extension for it, which handle syntax highlighting and simplify statements for beginners. Along the way I've been working with researchers in low-latency, high-performance computing to validate design decisions as the language develops.
+        I worked on a safer C-like language for embedded devices, along with editor tools that make it easier to use. A lot of the work was about catching mistakes early and making it practical to run on existing hardware.
       </p>
     </div>
 
@@ -409,7 +418,7 @@
       </div>
       <p class="work-roles">Software Engineer Intern</p>
       <p class="work-desc">
-        I built a local-first, decentralized email client from scratch, working offline across iOS, Android, Web, macOS, and Windows. Devices sync mail directly with each other through a CRDT-based engine built on Iroh, using a key-namespaced, last-write-wins schema so metadata updates instantly while message content streams in asynchronously from a peer-to-peer, content-addressed blob store, meaning two devices that haven't been online together in weeks still catch up the moment they reconnect. On the server side, I built the pipeline that downloads mail and issues UCAN tokens, which let the app authenticate locally afterward without calling back to the server, and got a 30% speedup on download times by compiling the hot path to WASI. On the device, I built a full-text search engine over the downloaded mail. I also drew on research into Doug Engelbart's early computer science work with the Stanford Research Institute lab to shape how mail is structured and rendered in the UI, and mentored another intern along the way.
+        I helped build a local-first app that works across desktop, web, and mobile. I spent time on syncing data between devices, making offline search feel quick, and improving how fast email downloads came in.
       </p>
     </div>
 
@@ -417,7 +426,7 @@
     <p class="section-label">Community</p>
 
     <div class="community-row">
-      <span class="community-role">Community coordinator</span>
+      <span class="community-role">Community director</span>
       <span class="community-org"><a href="https://www.uottahack.ca/" target="_blank" rel="noopener" style="color:inherit;">uOttaHack</a> — Ottawa's largest hackathon, 900+ participants</span>
     </div>
     <div class="community-row">
@@ -431,7 +440,7 @@
         <a href="https://github.com/Juan-789" target="_blank" rel="noopener">GitHub</a>
         <a href="https://linkedin.com/in/juan-marulanda-delosrios/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="mailto:juan.alfredoprincipal@gmail.com">Email</a>
-        <a href="/resume_technical.pdf" target="_blank">Résumé</a>
+        <a href="./Juan_Marulanda_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
       </nav>
     </div>
 
