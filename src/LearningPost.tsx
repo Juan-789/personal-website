@@ -423,7 +423,7 @@ export function HowFileCompressionWorks(){
             color: "#e0e0e0"
         }}
         >
-            <h2>How Does File Compression work?</h2>
+            <h2>How Does File Compression Work?</h2>
         <div>
             <h3>Motivation:</h3>
             <p>I am quite distant with films and  TV, not because there’s nothing I like
@@ -496,53 +496,73 @@ export function HowFileCompressionWorks(){
                 <p>where example.txt contents are <InlineCode>Hello world</InlineCode>, after succesfully running that let's now continue with doing the actual fun part,
                 <b>THE HUFFMAN TREE</b>(insert scary thunder sound in the background) (maybe click to hear it)
                 </p>
-                <p>Let me explain wth this tree is, a Huffman tree is a tree that's generate after doing the Huffman encoding, which represents your compression, 
-                    you use it to generate the most efficient binary value for each character in your text file.
-                    Now, how do i read one?  <br />
+                <h3>The Huffman Tree</h3>
+                <p>
+                    A Huffman tree is the dictionary we use to turn characters into bits. The letters
+                    that appear a lot get short codes, while rarer letters get longer ones. That is the
+                    whole trick: if the common stuff is cheap to write, the average message gets smaller.
+                </p>
+                <p>
+                    Once the tree exists, reading it is pretty simple. In my implementation, going left
+                    means <InlineCode>0</InlineCode> and going right means <InlineCode>1</InlineCode>.
+                    Start at the root, follow a path until you reach a character, and the path you took is
+                    that character&apos;s code. To decode, do the same thing in reverse: read bits one by one,
+                    walk the tree, emit a character at a leaf, then jump back to the root.
+                </p>
+                <p>
+                    The nice part is that no character&apos;s code can be the beginning of another character&apos;s
+                    code. That means the decoder never has to guess where one letter ends and the next one
+                    starts. It just keeps walking until it lands on a leaf.
+                </p>
 
-                    <b>INSERT AN IMAGE OF A HUFFMAN TREE OR MAYBE SOMEONE SCRATCHING THEIR HEAD</b>
+                <HuffmanAnimation />
 
-                    <br />
-                    <br />
-                    <br />
+                <h3>How Do We Build It?</h3>
+                <p>
+                    We do not invent the tree by hand. First, count every character in the input. Each
+                    character starts as a leaf with its count. Then put all of those leaves in a min-heap,
+                    repeatedly take out the two least common nodes, join them under a new parent whose count
+                    is their sum, and put that parent back in the heap. When one node is left, that node is
+                    the root of the finished tree.
+                </p>
+                <p>
+                    The tree animation uses a tiny made-up example: <InlineCode>A:3</InlineCode>,
+                    <InlineCode>B:2</InlineCode>, and <InlineCode>C:1</InlineCode>. First
+                    <InlineCode>C</InlineCode> and <InlineCode>B</InlineCode> get merged because they are
+                    the two smallest. Then that merged node gets joined with <InlineCode>A</InlineCode>.
+                    With real text, the exact shape changes, but the procedure stays the same.
+                </p>
+                <p>
+                    A binary tree is a natural fit because the output is bits, but the important thing here
+                    is the prefix-free code. You can make related schemes with more than two children; they
+                    make more sense when the output alphabet is larger than just 0 and 1.
+                </p>
 
-                    let's say you are given the already made tree, you make the arbitrary choice of left child being 1, 
-                    and right being 0, each node in the tree has a value, or null, if you trace from the root,
-                    and collect the left children (1s) and the right children (0s) you picked up along the way to arrive to a character,
-                    the binary string you end up is the binary for that particular character,
-                    <br/>
-                    and backwards its true too, if you start from the left of the encoded huffman encoded binary and trace the nuber between left or right until you hit a character you can decode these.
-
-
-                    <br />
-                    Easy, right?
-                    Now an example, lets say you choose to see what the value of o is in this tree, you would see that the value for it by the above technique, (the highlighted edges) makes the binary 1011
-                    
-
-                    <br />
-                    <br />
-                    Ok, now that we know how the already made tree works, how tf do I make my own.
-                    <br />
-
-                    Firstly, lets see the text that we have to encode and take count of each character and its recurrence, and the lowest recurrences become the leaves of our Tree
-                    and each level should match the number of occurrence, by either being a leafd node, (in which case it would be a character), or the sum of the two children (btw, huffman is a binary tree), and then you continue connecting the  tree until you reach the top
-
-                    
-                     so how does each letter gets chosen a node in the tree? well contrary to most trees, we are building 
-                    
-                    
-                    <br />
-Can one make a huffman encode with 2-4 tree, and if so what case would be beneficial?                    
+                <h3>Putting It in Code</h3>
+                <p>
+                    The rest of the program follows that recipe: count characters with a
+                    <InlineCode>HashMap</InlineCode>, build the tree with a <InlineCode>BinaryHeap</InlineCode>,
+                    recursively make a character-to-bit-string table, and pack those bits into bytes before
+                    writing the <InlineCode>.juan</InlineCode> file.
                 </p>
                 <CodeBlock code={SNIPPETS.ending_code} lang='rust' highlighter={highlighter} />
                 <p>
-                    Troll about running and not compressing lmao    
+                    This version is the compression half of the experiment. A real file format also needs
+                    enough metadata for a future decoder to rebuild the same tree, plus the number of useful
+                    bits in the final byte (because the last byte may be padded with zeroes). Without that,
+                    the bytes are compressed, but another program does not yet know how to uncompress them.
+                </p>
+                <p>
+                    Also, Huffman is not magic. Very small files can get bigger once you include the tree,
+                    and data that already looks random is not going to compress much. But for text with lots
+                    of repeated characters, this is a neat way to see information theory turn into actual
+                    bytes on disk. The next obvious step is writing the decoder and making a proper header
+                    for the <InlineCode>.juan</InlineCode> format.
                 </p>
             </div>
             <div>
-                {/* <HuffmanAnimation /> */}
             </div>
         </div>            
         </div>
     );
-} 
+}

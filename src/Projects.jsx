@@ -1,4 +1,5 @@
 import './Projects.css'
+import CodeCard from './CodeCard.jsx'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -13,13 +14,31 @@ import vsc_wrapped from '/vsc_wrapped.mp4'
 import ford_ev from '/mapbox_ford.jpg'
 import foodbank from '/yufeng_orange.jpg'
 import korean from '/korean.jpg'
-import self_driving_car from '/seld-drivingcar.MP4'
+import self_driving_car from '/self-driving-car.mp4'
 
 
 export default function Projects(){
     return (
     <div className='projects-container'>
     <div className='projects-col'>  {/*first column*/}
+      <CodeCard
+        title="Melquíades"
+        description="My from-scratch, Rust take on Google Meet: capture, send, and display video between machines. I am building it partly to see where video-call latency actually lives, and partly because video calls are cool."
+        tags={['Rust', 'UDP', 'Systems']}
+        href="https://github.com/Juan-789/Melquiades"
+      />
+      <CodeCard
+        title="Fast Web Browser"
+        description="High-performance HTML pre-scanner using x86_64 SIMD intrinsics (AVX2) to minimize parsing latency. The parser turns token patterns into finite state machines."
+        tags={['Rust', 'SIMD', 'AVX2']}
+        href="https://github.com/Juan-789/Fast-Web-Browser"
+      />
+      <CodeCard
+        title="RISC-V Kernel"
+        description="A RISC-V kernel from scratch — context switching, virtual memory, user mode, a shell, a disk driver, and a file system. Debugged with QEMU's GDB stub and raw memory inspection."
+        tags={['C', 'RISC-V', 'QEMU']}
+        href="https://github.com/Juan-789/juan_os"
+      />
       <div className='featured-i'>
         <Card sx={{
         maxWidth: 345,

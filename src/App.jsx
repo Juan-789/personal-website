@@ -14,14 +14,14 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import bedarraLogo from '/bedarra.jpeg'
 // import bedarraLogo from '/bedarra_new.png'
-import rabbit from '/waiting-rabbit.gif'
+import rabbit from '/headshot.jpeg'
 import huffman from '/huffman.jpeg'
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
 import Building from './Building.jsx';
 import Projects from './Projects.jsx';
-import resume from '/resume_Juan.pdf';
+import resume from '/Juan_Marulanda_Resume.pdf';
 import './App.css'
 
 import { HowFileCompressionWorks } from './LearningPost.jsx'
@@ -195,7 +195,7 @@ function About() {
           I like to learn how stuff works, and build indie, fun programs 
         </h3>
           <h3><i>Just for the sake of it</i></h3>
-        <p>Also a Computer Science major @ <a href="https://carleton.ca/">Carleton University</a>, community coordinator at <a href='https://www.uottahack.ca/'>uOttahack</a>, and an organizor at <a href='https://luma.com/synchronize'>Synchronize</a>, (Ottawa's <a href='https://www.socratica.info/'>Socratica</a> Node)</p>
+        <p>Also a Computer Science major @ <a href="https://carleton.ca/">Carleton University</a>, community director at <a href='https://www.uottahack.ca/'>uOttahack</a>, and an organizor at <a href='https://luma.com/synchronize'>Synchronize</a>, (Ottawa's <a href='https://www.socratica.info/'>Socratica</a> Node)</p>
       </div>
       <div className='profile-image'>
         <img src={me} alt="Me" width={'300px'} />
@@ -513,12 +513,9 @@ function Experience() {
             <span className='date'>May 2026 - Aug 2026</span>
           </div>
           <p className='role-summary'>
-            I'm currently designing a safer dialect of C for micro-controllers, with safety 
-            guarantees enforced at compile time so a lot of common bugs get caught before the 
-            code ships. I also built the LSP server and VS Code extension for it, which handle 
-            syntax highlighting and simplify statements for beginners. Along the way I've been 
-            working with researchers in low-latency, high-performance computing to validate 
-            design decisions as the language develops.
+            I worked on a safer C-like language for embedded devices, along with editor tools
+            that make it easier to use. A lot of the work was about catching mistakes early and
+            making it practical to run on existing hardware.
           </p>
         </div>
       </div>
@@ -543,19 +540,9 @@ function Experience() {
             <span className='date'>May 2024 - Aug 2025</span>
           </div>
           <p className='role-summary'>
-            I built a local-first, decentralized email client from scratch, working offline 
-            across iOS, Android, Web, macOS, and Windows. Devices sync mail directly with each 
-            other through a CRDT-based engine built on Iroh, using a key-namespaced, 
-            last-write-wins schema so metadata updates instantly while message content streams 
-            in asynchronously from a peer-to-peer, content-addressed blob store, meaning two 
-            devices that haven't been online together in weeks still catch up the moment they 
-            reconnect. On the server side, I built the pipeline that downloads mail and issues 
-            UCAN tokens, which let the app authenticate locally afterward without calling back 
-            to the server, and got a 30% speedup on download times by compiling the hot path 
-            to WASI. On the device, I built a full-text search engine over the downloaded 
-            mail. I also drew on research into Doug Engelbart's early computer science work 
-            with the Stanford Research Institute lab to shape how mail is structured and 
-            rendered in the UI, and mentored another intern along the way.
+            I helped build a local-first app that works across desktop, web, and mobile. I
+            spent time on syncing data between devices, making offline search feel quick, and
+            improving how fast email downloads came in.
           </p>
         </div>
       </div>
@@ -617,9 +604,7 @@ function Sidebar({  toggleSidebar, activeRoute }) {
               <LinkedInIcon />
             </a>
             <a
-              href="mailto:your.email@example.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
+              href="mailto:juan.alfredoprincipal@gmail.com"
               title="Email"
               className='social-item email-display'
             >
