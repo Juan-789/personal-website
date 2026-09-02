@@ -193,11 +193,6 @@
     .project-row:first-of-type { border-top: 1px solid var(--rule); }
     .project-row:hover { opacity: 0.6; }
 
-    .project-row:hover .project-name::after {
-      content: ' ↗';
-      font-size: 0.75rem;
-    }
-
     .project-left {
       display: flex;
       flex-direction: column;
@@ -284,7 +279,7 @@
 </head>
 <body>
 
-  <button class="mode-toggle" onclick="localStorage.removeItem('site_preference'); window.location.href='/';">[ Maximal ]</button>
+  <button class="mode-toggle" onclick="localStorage.setItem('site_preference', 'maximal'); window.location.href='/';">[ Maximal ]</button>
 
   <div class="page">
 
@@ -311,7 +306,7 @@
     </p>
 
     <p class="letter-body">
-      Also a Computer Science major @ <a href="https://carleton.ca/" target="_blank" rel="noopener">Carleton University</a>, community director at <a href="https://www.uottahack.ca/" target="_blank" rel="noopener">uOttahack</a>, and an organizor at <a href="https://luma.com/synchronize" target="_blank" rel="noopener">Synchronize</a>, (Ottawa's <a href="https://www.socratica.info/" target="_blank" rel="noopener">Socratica</a> Node)
+      Also a Computer Science major @ <a href="https://carleton.ca/">Carleton University</a>, community director at <a href="https://www.uottahack.ca/">uOttahack</a>, and an organizor at <a href="https://luma.com/synchronize">Synchronize</a>, (Ottawa's <a href="https://www.socratica.info/">Socratica</a> Node)
     </p>
 
     <hr class="section-rule" id="building" />
@@ -365,7 +360,7 @@
       <span class="project-tag">Web</span>
     </a>
 
-    <a class="project-row" href="https://devpost.com/software/ford-ev-companion-app" target="_blank" rel="noopener">
+    <a class="project-row" href="https://devpost.com/software/ford-ev-companion-app">
       <div class="project-left">
         <span class="project-name">Ford EV Infotainment</span>
         <span class="project-desc">The route from current location to destination with charging stations along the way, search engine and suggestions for the driver's/car's needs along the way</span>
@@ -373,7 +368,7 @@
       <span class="project-tag">Hackathon</span>
     </a>
 
-    <a class="project-row" href="https://devpost.com/software/foodbank-ai" target="_blank" rel="noopener">
+    <a class="project-row" href="https://devpost.com/software/foodbank-ai">
       <div class="project-left">
         <span class="project-name">FoodBank AI</span>
         <span class="project-desc">computer vision to recognize all sorts of foods that can be donated to a food bank and will give you a score based on how non-perishable and nutritious it is</span>
@@ -427,18 +422,18 @@
 
     <div class="community-row">
       <span class="community-role">Community director</span>
-      <span class="community-org"><a href="https://www.uottahack.ca/" target="_blank" rel="noopener" style="color:inherit;">uOttaHack</a> — Ottawa's largest hackathon, 900+ participants</span>
+      <span class="community-org"><a href="https://www.uottahack.ca/" style="color:inherit;">uOttaHack</a> — Ottawa's largest hackathon, 900+ participants</span>
     </div>
     <div class="community-row">
       <span class="community-role">Host & organizer</span>
-      <span class="community-org"><a href="https://luma.com/synchronize" target="_blank" rel="noopener" style="color:inherit;">Synchronize</a> — Ottawa's Socratica Node</span>
+      <span class="community-org"><a href="https://luma.com/synchronize" style="color:inherit;">Synchronize</a> — Ottawa's Socratica Node</span>
     </div>
 
     <div class="sig">
       <p class="sig-text">— Juan</p>
       <nav class="sig-links" aria-label="External links">
-        <a href="https://github.com/Juan-789" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com/in/juan-marulanda-delosrios/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/Juan-789">GitHub</a>
+        <a href="https://linkedin.com/in/juan-marulanda-delosrios/">LinkedIn</a>
         <a href="mailto:juan.alfredoprincipal@gmail.com">Email</a>
         <a href="./Juan_Marulanda_Resume.pdf" target="_blank" rel="noopener">Résumé</a>
       </nav>

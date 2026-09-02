@@ -27,18 +27,6 @@ export default function Projects(){
         tags={['Rust', 'UDP', 'Systems']}
         href="https://github.com/Juan-789/Melquiades"
       />
-      <CodeCard
-        title="Fast Web Browser"
-        description="High-performance HTML pre-scanner using x86_64 SIMD intrinsics (AVX2) to minimize parsing latency. The parser turns token patterns into finite state machines."
-        tags={['Rust', 'SIMD', 'AVX2']}
-        href="https://github.com/Juan-789/Fast-Web-Browser"
-      />
-      <CodeCard
-        title="RISC-V Kernel"
-        description="A RISC-V kernel from scratch — context switching, virtual memory, user mode, a shell, a disk driver, and a file system. Debugged with QEMU's GDB stub and raw memory inspection."
-        tags={['C', 'RISC-V', 'QEMU']}
-        href="https://github.com/Juan-789/juan_os"
-      />
       <div className='featured-i'>
         <Card sx={{
         maxWidth: 345,
@@ -72,10 +60,10 @@ export default function Projects(){
           maxWidth: 345,
           backgroundColor: 'transparent'
         }}>
-          <CardActionArea 
+          <CardActionArea
             href='https://github.com/bskdany/roomba1'
             target='_blank'
-            rel="noopener noreferrer"  
+            rel="noopener noreferrer"
           >
             <CardMedia
               component="video"
@@ -104,8 +92,6 @@ export default function Projects(){
           }}>
             <CardActionArea 
               href='https://devpost.com/software/foodbank-ai'
-              target='_blank'
-              rel="noopener noreferrer"  
             >
               <CardMedia
                 component="img"
@@ -126,38 +112,14 @@ export default function Projects(){
             </CardActionArea>
           </Card>
         </div>
-        <div className='featured-i'>
-          <Card sx={{
-            maxWidth: 345,
-            backgroundColor: 'transparent'
-          }}>
-            <CardActionArea 
-              href='https://github.com/Juan-789/Udemy_Programs/tree/main/Day21'
-              target='_blank'
-              rel="noopener noreferrer"  
-            >
-              <CardMedia
-                component="video"
-                height="200"
-                src={self_driving_car}
-                alt="Demoing self-driving car"
-                autoPlay
-                loop
-                muted
-              />
-              <CardContent className='glass-card-content'>
-                <Typography gutterBottom variant="h5" component="div">
-                  Self-Driving Car
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  Self-driving car with the naive approach to solve mazes
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-      </div>
     </div>
     <div className='projects-col'> {/*second column*/}
+      <CodeCard
+        title="Fast Web Browser"
+        description="High-performance HTML pre-scanner using x86_64 SIMD intrinsics (AVX2) to minimize parsing latency. The parser turns token patterns into finite state machines."
+        tags={['Rust', 'SIMD', 'AVX2']}
+        href="https://github.com/Juan-789/Fast-Web-Browser"
+      />
       <div className='featured-i'>
         <Card sx={{
         maxWidth: 345,
@@ -193,8 +155,6 @@ export default function Projects(){
         }}>
         <CardActionArea 
           href='https://devpost.com/software/ford-ev-companion-app'
-          target='_blank'
-          rel="noopener noreferrer"
         >
           <CardMedia
             component="img"
@@ -243,6 +203,42 @@ export default function Projects(){
       </div>
     </div>
      <div className='projects-col'> {/*third column*/}
+      <CodeCard
+        title="RISC-V Kernel"
+        description="A RISC-V kernel from scratch — context switching, virtual memory, user mode, a shell, a disk driver, and a file system. Debugged with QEMU's GDB stub and raw memory inspection."
+        tags={['C', 'RISC-V', 'QEMU']}
+        href="https://github.com/Juan-789/juan_os"
+      />
+      <div className='featured-i'>
+        <Card sx={{
+          maxWidth: 345,
+          backgroundColor: 'transparent'
+        }}>
+          <CardActionArea
+            href='https://github.com/Juan-789/Udemy_Programs/tree/main/Day21'
+            target='_blank'
+            rel="noopener noreferrer"
+          >
+            <CardMedia
+              component="video"
+              height="200"
+              src={self_driving_car}
+              alt="Demoing self-driving car"
+              autoPlay
+              loop
+              muted
+            />
+            <CardContent className='glass-card-content'>
+              <Typography gutterBottom variant="h5" component="div">
+                Self-Driving Car
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                Self-driving car with the naive approach to solve mazes
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </div>
     <div className='featured-i'>
         <Card sx={{
           maxWidth: 345,

@@ -433,6 +433,35 @@
   text-align: left;
   color: #e0e0e0
 }
+
+.learning-container {
+  color: #e0e0e0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.learning-header {
+  text-align: left;
+}
+
+.learning-header > p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: -0.35rem 0 1.5rem;
+}
+
+.learning-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 600px) {
+  .learning-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 .featured-items {
   display: flex;
   margin-left: auto;

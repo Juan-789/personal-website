@@ -1,8 +1,23 @@
 .projects-container {
-    display: flex;
-    /* align-items: center; */
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 345px));
+    justify-content: center;
+    align-items: start;
+    gap: 10px;
 }
 
-.projects-row {
-    display: flex;
+.projects-col {
+    min-width: 0;
+}
+
+@media (max-width: 1100px) {
+    .projects-container {
+        grid-template-columns: repeat(2, minmax(0, 345px));
+    }
+}
+
+@media (max-width: 750px) {
+    .projects-container {
+        grid-template-columns: minmax(0, 345px);
+    }
 }

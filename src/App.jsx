@@ -95,7 +95,18 @@ function App() {
           <Route path="/building" element={<Building />} />
           <Route path="/employment" element={<Resume />} />
           {/* <Route path="/resume" element={<Resume />} /> */}
-          <Route path="/learning" element={<InterestingThingsImLearningAbout />} />
+          <Route path="/writing" element={<Writing />} />
+          <Route path="/writing/how-compression-work" element={<HowFileCompressionWorks />} />
+          <Route path="/writing/how-video-calls-work" element={<DraftPost title="How Do Video Calls Work?" />} />
+          <Route path="/writing/what-makes-a-web-browser" element={<DraftPost title="What Makes a Web Browser?" />} />
+          <Route path="/writing/about-math-competitions" element={<DraftPost title="On Math Competitions" />} />
+          {/* Keep the older links alive. */}
+          <Route path="/notes" element={<Writing />} />
+          <Route path="/notes/how-compression-work" element={<HowFileCompressionWorks />} />
+          <Route path="/notes/how-video-calls-work" element={<DraftPost title="How Do Video Calls Work?" />} />
+          <Route path="/notes/what-makes-a-web-browser" element={<DraftPost title="What Makes a Web Browser?" />} />
+          <Route path="/notes/about-math-competitions" element={<DraftPost title="On Math Competitions" />} />
+          <Route path="/learning" element={<Writing />} />
           <Route path="/learning/how-compression-work" element={<HowFileCompressionWorks />} />
           <Route path="/k33na5" element={<Letter />}></Route>
           {/* Add more routes here */}
@@ -224,14 +235,33 @@ function CoolLinks(){}  // cool websites, inspiration, fun facts, etc...
 function LearningBlogCard({ title, excerpt, date, image, slug }) {
   return (
     <div>
-    <Card sx={{ maxWidth: 345, backgroundColor: 'transparent' }}>
-      <CardActionArea href={`/learning/${slug}`}>
-        <CardMedia
-          component="img"
-          height="200"
-          image={image}
-          alt={title}
-        />
+    <Card sx={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}>
+      <CardActionArea href={`/writing/${slug}`} sx={{ height: '100%' }}>
+        {image ? (
+          <CardMedia
+            component="img"
+            height="200"
+            image={image}
+            alt={title}
+          />
+        ) : (
+          <div
+            aria-hidden="true"
+            style={{
+              height: '200px',
+              display: 'flex',
+              alignItems: 'flex-end',
+              padding: '18px',
+              background: 'linear-gradient(135deg, #111827, #312e81)',
+              color: '#a5a5ff',
+              fontFamily: 'monospace',
+              fontSize: '0.8rem',
+              letterSpacing: '0.12em',
+            }}
+          >
+            WRITING / DRAFT
+          </div>
+        )}
         <CardContent className='glass-card-content'>
           <Typography gutterBottom variant="h5" component="div">
             {title}
@@ -250,40 +280,57 @@ function LearningBlogCard({ title, excerpt, date, image, slug }) {
 }
 
 
-function InterestingThingsImLearningAbout(){ // how a cd works, how does it read, and write, the stars, etc...
+function Writing(){
   return (
     <div className='learning-container'>
       <div className='learning-header'>
-        <h3>Currently learning</h3>
-        <h4>  </h4>
+        <h2>Writing</h2>
+        <p>Things I am learning, building, and trying to understand.</p>
         <div className='learning-cards'>
-          {/* <LearningBlogCard
-            title="Data Structures and Algorithms"
-            excerpt="Binary trees, two-four trees, and abstract syntax trees"
-            date="November 3rd, 2025"
-            image="tr" //tree image
-            slug="data-structures-trees"
-          >
-          </LearningBlogCard> */}
           <LearningBlogCard
-            title="How File Compression works"
-            excerpt=""
-            date="November 3rd, 2025"
+            title="On Math Competitions"
+            excerpt="A few thoughts on getting stuck, chasing elegant solutions, and why the problems are fun."
+            date="Draft"
+            slug="about-math-competitions"
+          />
+          <LearningBlogCard
+            title="What Makes a Web Browser?"
+            excerpt="Networking, parsing, layout, painting, compositing, and a suspicious number of edge cases."
+            date="Draft"
+            slug="what-makes-a-web-browser"
+          />
+          <LearningBlogCard
+            title="How Do Video Calls Work?"
+            excerpt="From a camera frame to somebody else's screen: codecs, packets, jitter, and why latency is hard."
+            date="Draft"
+            slug="how-video-calls-work"
+          />
+          <LearningBlogCard
+            title="How File Compression Works"
+            excerpt="Building a Huffman compressor from scratch in Rust, because I wanted to know where the bits actually go."
+            date="Published"
             image={huffman}
             slug="how-compression-work"
-          ></LearningBlogCard>
-          {/* <LearningBlogCard
-            title="How CDs Actually Work"
-            excerpt="How this mirror looking disk store data?"
-            date="How this mirror looking disk store data?"
-            image="How this mirror looking disk store data?"
-            slug="how-cds-work"
-          ></LearningBlogCard> */}
+          />
         </div>
       </div>
     </div>
   );
 } 
+
+function DraftPost({ title }) {
+  return (
+    <article className='learning-container' style={{ maxWidth: '720px', textAlign: 'left' }}>
+      <p style={{ color: '#a5a5ff', fontFamily: 'monospace', fontSize: '0.8rem', letterSpacing: '0.12em' }}>
+        WRITING / DRAFT
+      </p>
+      <h1>{title}</h1>
+      <p style={{ color: '#e0e0e0', lineHeight: 1.7 }}>
+        I&apos;m still writing this one. Come back soon — I want to make it worth the click.
+      </p>
+    </article>
+  );
+}
 
 function Letter(){ 
 
@@ -459,9 +506,6 @@ function Letter(){
 }
 
 
-function Notes(){}  // notes i've taken when learning something, handwritten or digital, notion or something
-
-
 function Resume() {
   return (
     <>
@@ -587,8 +631,6 @@ function Sidebar({  toggleSidebar, activeRoute }) {
           <div className='social-links'>
             <a
               href="https://github.com/Juan-789" 
-              target="_blank" 
-              rel="noopener noreferrer"
               title="GitHub"
               className='social-item'
             >
@@ -596,8 +638,6 @@ function Sidebar({  toggleSidebar, activeRoute }) {
             </a>
             <a
               href="https://linkedin.com/in/juan-marulanda-delosrios/" 
-              target="_blank" 
-              rel="noopener noreferrer"
               title="Linkedin"
               className='social-item'
             >
@@ -619,7 +659,7 @@ function Sidebar({  toggleSidebar, activeRoute }) {
 
             <ul>
               <NavLink name="Projects" />
-              <NavLink name="Learning" />
+              <NavLink name="Writing" />
               <NavLink name="Employment" />
             </ul>
             {/* <NavLink name="Reading" />

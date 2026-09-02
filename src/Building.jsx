@@ -21,7 +21,6 @@ export default function Building() {
         }}>
         <CardActionArea 
           href='/projects'
-          target='_blank'
         >
           <CardMedia
             component="img"
@@ -47,22 +46,21 @@ export default function Building() {
         backgroundColor: 'transparent'
         }}>
         <CardActionArea 
-          href='/learning'
-          target='_blank'
+          href='/writing'
         >
           <CardMedia
             component="img"
             height="300"
             width={300}
             image={wok}
-            alt="Learning"
+            alt="Writing"
           />
           <CardContent className='glass-card-content'>
             <Typography gutterBottom variant="h5" component="div">
-              Learning
+              Writing
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Website that calls you to remind you of your meds, with Peter Griffin's voice, and saying brain rotted phrases 
+              Short writeups about things I'm building and trying to understand.
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -75,7 +73,6 @@ export default function Building() {
         }}>
         <CardActionArea 
           href='/employment'
-          target='_blank'
         >
           <CardMedia
             component="img"
