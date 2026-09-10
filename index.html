@@ -2,16 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/millenium.png" />
+    <link rel="icon" type="image/png" href="/millenium.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Juan Marulanda</title>
     <script>
-      if (localStorage.getItem('site_preference') === 'minimal') {
+      const preference = localStorage.getItem('site_preference');
+      const isPhone = window.matchMedia('(max-width: 767px)').matches;
+
+      if (preference === 'minimal' || (!preference && isPhone)) {
         window.location.replace('/minimal.html');
       }
     </script>
-    <script type="module" crossorigin src="/assets/main-B40cVcpu.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/main-92tZfGua.css">
+    <script type="module" crossorigin src="/assets/main-CYaOMVDC.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/main-DoIXC-7I.css">
   </head>
   <body>
     <div class="site-bg" aria-hidden="true">
