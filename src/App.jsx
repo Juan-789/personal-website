@@ -13,7 +13,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import bedarraLogo from '/bedarra.jpeg'
-// import bedarraLogo from '/bedarra_new.png'
 import rabbit from '/headshot.jpeg'
 import huffman from '/huffman.jpeg'
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -25,6 +24,7 @@ import resume from '/Juan_Marulanda_Resume.pdf';
 import './App.css'
 
 import { HowFileCompressionWorks } from './LearningPost.jsx'
+import MathCompetitionsPost from './MathCompetitionsPost.jsx'
 
 
 
@@ -99,13 +99,13 @@ function App() {
           <Route path="/writing/how-compression-work" element={<HowFileCompressionWorks />} />
           <Route path="/writing/how-video-calls-work" element={<DraftPost title="How Do Video Calls Work?" />} />
           <Route path="/writing/what-makes-a-web-browser" element={<DraftPost title="What Makes a Web Browser?" />} />
-          <Route path="/writing/about-math-competitions" element={<DraftPost title="On Math Competitions" />} />
+          <Route path="/writing/about-math-competitions" element={<MathCompetitionsPost />} />
           {/* Keep the older links alive. */}
           <Route path="/notes" element={<Writing />} />
           <Route path="/notes/how-compression-work" element={<HowFileCompressionWorks />} />
           <Route path="/notes/how-video-calls-work" element={<DraftPost title="How Do Video Calls Work?" />} />
           <Route path="/notes/what-makes-a-web-browser" element={<DraftPost title="What Makes a Web Browser?" />} />
-          <Route path="/notes/about-math-competitions" element={<DraftPost title="On Math Competitions" />} />
+          <Route path="/notes/about-math-competitions" element={<MathCompetitionsPost />} />
           <Route path="/learning" element={<Writing />} />
           <Route path="/learning/how-compression-work" element={<HowFileCompressionWorks />} />
           <Route path="/k33na5" element={<Letter />}></Route>
@@ -232,7 +232,7 @@ function Movies(){} //movies i've watched that I like
 
 function CoolLinks(){}  // cool websites, inspiration, fun facts, etc...
 
-function LearningBlogCard({ title, excerpt, date, image, slug }) {
+function LearningBlogCard({ title, excerpt, date, image, imageFit = 'cover', imageBackground = 'transparent', slug }) {
   return (
     <div>
     <Card sx={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}>
@@ -243,6 +243,7 @@ function LearningBlogCard({ title, excerpt, date, image, slug }) {
             height="200"
             image={image}
             alt={title}
+            sx={{ objectFit: imageFit, backgroundColor: imageBackground }}
           />
         ) : (
           <div
@@ -291,6 +292,9 @@ function Writing(){
             title="On Math Competitions"
             excerpt="A few thoughts on getting stuck, chasing elegant solutions, and why the problems are fun."
             date="Draft"
+            image="/CEMC-logo-2.png"
+            imageFit="contain"
+            imageBackground="#ffffff"
             slug="about-math-competitions"
           />
           <LearningBlogCard
