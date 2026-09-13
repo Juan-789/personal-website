@@ -17,7 +17,7 @@ export default function MathCompetitionsPost() {
   return (
     <article className='learning-container' style={{ maxWidth: '720px', textAlign: 'left' }}>
       <p style={{ color: '#a5a5ff', fontFamily: 'monospace', fontSize: '0.8rem', letterSpacing: '0.12em' }}>
-        WRITING / DRAFT
+        WRITING
       </p>
       <h1>On Math Competitions</h1>
 

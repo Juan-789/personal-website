@@ -97,14 +97,14 @@ function App() {
           {/* <Route path="/resume" element={<Resume />} /> */}
           <Route path="/writing" element={<Writing />} />
           <Route path="/writing/how-compression-work" element={<HowFileCompressionWorks />} />
-          <Route path="/writing/how-video-calls-work" element={<DraftPost title="How Do Video Calls Work?" />} />
-          <Route path="/writing/what-makes-a-web-browser" element={<DraftPost title="What Makes a Web Browser?" />} />
+          <Route path="/writing/how-video-calls-work" element={<WritingPost title="How Do Video Calls Work?" />} />
+          <Route path="/writing/what-makes-a-web-browser" element={<WritingPost title="What Makes a Web Browser?" />} />
           <Route path="/writing/about-math-competitions" element={<MathCompetitionsPost />} />
           {/* Keep the older links alive. */}
           <Route path="/notes" element={<Writing />} />
           <Route path="/notes/how-compression-work" element={<HowFileCompressionWorks />} />
-          <Route path="/notes/how-video-calls-work" element={<DraftPost title="How Do Video Calls Work?" />} />
-          <Route path="/notes/what-makes-a-web-browser" element={<DraftPost title="What Makes a Web Browser?" />} />
+          <Route path="/notes/how-video-calls-work" element={<WritingPost title="How Do Video Calls Work?" />} />
+          <Route path="/notes/what-makes-a-web-browser" element={<WritingPost title="What Makes a Web Browser?" />} />
           <Route path="/notes/about-math-competitions" element={<MathCompetitionsPost />} />
           <Route path="/learning" element={<Writing />} />
           <Route path="/learning/how-compression-work" element={<HowFileCompressionWorks />} />
@@ -260,16 +260,18 @@ function LearningBlogCard({ title, excerpt, date, image, imageFit = 'cover', ima
               letterSpacing: '0.12em',
             }}
           >
-            WRITING / DRAFT
+            WRITING
           </div>
         )}
         <CardContent className='glass-card-content'>
           <Typography gutterBottom variant="h5" component="div">
             {title}
           </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {date}
-          </Typography>
+          {date && (
+            <Typography variant="caption" color="text.secondary">
+              {date}
+            </Typography>
+          )}
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 1 }}>
             {excerpt}
           </Typography>
@@ -291,7 +293,6 @@ function Writing(){
           <LearningBlogCard
             title="On Math Competitions"
             excerpt="A few thoughts on getting stuck, chasing elegant solutions, and why the problems are fun."
-            date="Draft"
             image="/CEMC-logo-2.png"
             imageFit="contain"
             imageBackground="#ffffff"
@@ -300,13 +301,11 @@ function Writing(){
           <LearningBlogCard
             title="What Makes a Web Browser?"
             excerpt="Networking, parsing, layout, painting, compositing, and a suspicious number of edge cases."
-            date="Draft"
             slug="what-makes-a-web-browser"
           />
           <LearningBlogCard
             title="How Do Video Calls Work?"
             excerpt="From a camera frame to somebody else's screen: codecs, packets, jitter, and why latency is hard."
-            date="Draft"
             slug="how-video-calls-work"
           />
           <LearningBlogCard
@@ -322,16 +321,13 @@ function Writing(){
   );
 } 
 
-function DraftPost({ title }) {
+function WritingPost({ title }) {
   return (
     <article className='learning-container' style={{ maxWidth: '720px', textAlign: 'left' }}>
       <p style={{ color: '#a5a5ff', fontFamily: 'monospace', fontSize: '0.8rem', letterSpacing: '0.12em' }}>
-        WRITING / DRAFT
+        WRITING
       </p>
       <h1>{title}</h1>
-      <p style={{ color: '#e0e0e0', lineHeight: 1.7 }}>
-        I&apos;m still writing this one. Come back soon — I want to make it worth the click.
-      </p>
     </article>
   );
 }
