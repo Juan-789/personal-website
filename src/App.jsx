@@ -25,6 +25,7 @@ import './App.css'
 
 import { HowFileCompressionWorks } from './LearningPost.jsx'
 import MathCompetitionsPost from './MathCompetitionsPost.jsx'
+import VideoCallsPost from './VideoCallsPost.jsx'
 
 
 
@@ -97,17 +98,18 @@ function App() {
           {/* <Route path="/resume" element={<Resume />} /> */}
           <Route path="/writing" element={<Writing />} />
           <Route path="/writing/how-compression-work" element={<HowFileCompressionWorks />} />
-          <Route path="/writing/how-video-calls-work" element={<WritingPost title="How Do Video Calls Work?" />} />
+          <Route path="/writing/how-video-calls-work" element={<VideoCallsPost />} />
           <Route path="/writing/what-makes-a-web-browser" element={<WritingPost title="What Makes a Web Browser?" />} />
           <Route path="/writing/about-math-competitions" element={<MathCompetitionsPost />} />
           {/* Keep the older links alive. */}
           <Route path="/notes" element={<Writing />} />
           <Route path="/notes/how-compression-work" element={<HowFileCompressionWorks />} />
-          <Route path="/notes/how-video-calls-work" element={<WritingPost title="How Do Video Calls Work?" />} />
+          <Route path="/notes/how-video-calls-work" element={<VideoCallsPost />} />
           <Route path="/notes/what-makes-a-web-browser" element={<WritingPost title="What Makes a Web Browser?" />} />
           <Route path="/notes/about-math-competitions" element={<MathCompetitionsPost />} />
           <Route path="/learning" element={<Writing />} />
           <Route path="/learning/how-compression-work" element={<HowFileCompressionWorks />} />
+          <Route path="/learning/how-video-calls-work" element={<VideoCallsPost />} />
           <Route path="/k33na5" element={<Letter />}></Route>
           {/* Add more routes here */}
           <Route path="/essays" element={<Blog />} />
