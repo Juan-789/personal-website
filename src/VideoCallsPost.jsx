@@ -1,14 +1,14 @@
 const remainingChapters = [
-  ['03', 'The first surprise: “30 fps” was actually 15 fps', 'Measure the physical source before optimizing software.'],
-  ['04', 'Bounded ownership, not a growing queue', 'Four slots, SPSC ownership, and dropping stale work.'],
-  ['05', 'Screen capture is not one API', 'Portal and PipeWire on Linux; ScreenCaptureKit on macOS.'],
-  ['06', 'Why Deflate was useful—and not enough', 'A simple baseline before motion-aware compression.'],
-  ['07', 'What H.264 actually changed', 'Access units, NAL units, IDRs, SPS/PPS, and AVCC → Annex B.'],
-  ['08', 'A tiny UDP protocol, on purpose', 'The 14-byte JUAN header and the limits of an experimental LAN protocol.'],
-  ['09', 'The stream froze', 'How keyframe bursts overflowed a Linux receive buffer.'],
-  ['10', 'What the measurements actually say', 'Software timings versus honest glass-to-glass latency.'],
-  ['11', 'What is unfinished', 'The boundaries that still own latency.'],
-  ['12', 'What comes next', 'Controlled 30/60 fps experiments, high-speed measurement, and BedWars.'],
+  ['03', 'The First Surprise: “30 fps” Was Actually 15 fps', 'V4L2, camera cadence, dynamic exposure, measure the source first.'],
+  ['04', 'Live Video Is a Queueing Problem', 'Four slots, SPSC ownership, bounded memory, freshness over completeness.'],
+  ['05', 'Screen Capture Is Not One API', 'Linux portal + PipeWire; macOS ScreenCaptureKit and IOSurfaces.'],
+  ['06', 'Why Deflate Was Useful, but Not Enough', 'A measurable independent-frame baseline before real video coding.'],
+  ['07', 'What H.264 Actually Changed', 'Access units, IDRs, SPS/PPS, AVCC → Annex B, decoder recovery.'],
+  ['08', 'A Tiny UDP Protocol, Deliberately', 'JUAN’s 14-byte header and why it is not WebRTC or RTP.'],
+  ['09', 'The Stream Froze', 'Keyframe bursts, socket-buffer overflow, ss, nstat, and the fix.'],
+  ['10', 'What the Measurements Actually Say', 'Local timing segments, informal glass-to-glass results, and unknowns.'],
+  ['11', 'What Is Still Unfinished', 'Software decode, one receiver thread, CPU copies, no Internet transport.'],
+  ['12', 'What Comes Next', 'Controlled 30/60 fps tests, high-speed-camera measurement, VA-API, then the BedWars remote-play demo.'],
 ]
 
 function IrisEvidence() {
@@ -77,24 +77,96 @@ function WebRtcNote() {
         <h3>WebRTC, since 2011</h3>
         <p>
           Google announced the open WebRTC project on May 3, 2011. It brought its real-time voice and video engine
-          work to the web as browser APIs and an open-source project—part of the foundation beneath modern tools such
+          work to the web as browser APIs and an open-source project, part of the foundation beneath modern tools such
           as Google Meet.
         </p>
         <a href="https://webrtc.github.io/webrtc-org/blog/2011/05/03/introducing-webrtc-an-open-realtime-communications-project.html">
           Read the announcement →
         </a>
+        <a href="https://www.youtube.com/watch?v=p2HzZkd2A40">Watch the Google I/O 2013 demo →</a>
       </aside>
 
       <details className="article-sidenote-mobile">
         <summary><span>UNDER THE HOOD</span> WebRTC, since 2011</summary>
         <p>
           Google announced the open WebRTC project on May 3, 2011. It brought its real-time voice and video engine
-          work to the web as browser APIs and an open-source project—part of the foundation beneath modern tools such
+          work to the web as browser APIs and an open-source project, part of the foundation beneath modern tools such
           as Google Meet.
         </p>
         <a href="https://webrtc.github.io/webrtc-org/blog/2011/05/03/introducing-webrtc-an-open-realtime-communications-project.html">
           Read the announcement →
         </a>
+        <a href="https://www.youtube.com/watch?v=p2HzZkd2A40">Watch the Google I/O 2013 demo →</a>
+      </details>
+    </div>
+  )
+}
+
+function H264ReadingNote() {
+  return (
+    <div className="sidenote-anchor" id="h264-reading">
+      <aside className="article-sidenote" aria-label="Further reading: what H.264 is actually doing">
+        <span className="sidenote-type">FURTHER READING</span>
+        <h3>What H.264 is actually doing</h3>
+        <p>
+          This chapter only explains why Melquiades needs a video codec. H.264 itself goes much deeper: colour-space
+          conversion, block-based prediction, motion estimation, transforms, quantization, entropy coding,
+          keyframes, NAL units, and packetization.
+        </p>
+        <p>
+          Sam Considine&apos;s <a href="https://samconsidine.com/posts/h264-encoding/">The H.264 Encoding and WebRTC Stack</a>
+          {' '}is an excellent visual explanation of that full path. A later chapter here will focus on VideoToolbox
+          output, AVCC versus Annex B, SPS/PPS, IDR recovery, and sending complete access units over UDP.
+        </p>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>FURTHER READING</span> What H.264 is actually doing</summary>
+        <p>
+          This chapter only explains why Melquiades needs a video codec. H.264 itself goes much deeper: colour-space
+          conversion, block-based prediction, motion estimation, transforms, quantization, entropy coding,
+          keyframes, NAL units, and packetization.
+        </p>
+        <p>
+          Sam Considine&apos;s <a href="https://samconsidine.com/posts/h264-encoding/">The H.264 Encoding and WebRTC Stack</a>
+          {' '}is an excellent visual explanation of that full path. A later chapter here will focus on VideoToolbox
+          output, AVCC versus Annex B, SPS/PPS, IDR recovery, and sending complete access units over UDP.
+        </p>
+      </details>
+    </div>
+  )
+}
+
+function RealTimeNote() {
+  return (
+    <div className="sidenote-anchor sidenote-left" id="real-time-note">
+      <aside className="article-sidenote" aria-label="Detour: what is real time">
+        <span className="sidenote-type">DETOUR</span>
+        <h3>What is real time?</h3>
+        <p>
+          The useful number is not a packet&apos;s travel time. It is how long it takes from when you speak to when the
+          other person hears you: mouth to ear. Around 150–300 ms end to end is the rough range where voice calls
+          still feel natural; beyond that, people begin to pause, interrupt, and talk over each other.
+        </p>
+        <p>
+          Video has a second version of the same question: from something happening in front of one camera to the
+          other person seeing it on their screen. Around 200 ms glass-to-glass is a reasonable place to aim. My
+          informal Google Meet test landed around there. The last chapter gets into the funny way I measured that.
+        </p>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>DETOUR</span> What is real time?</summary>
+        <p>
+          The useful number is not a packet&apos;s travel time. It is how long it takes from when you speak to when the
+          other person hears you: mouth to ear. Around 150–300 ms end to end is the rough range where voice calls
+          still feel natural; beyond that, people begin to pause, interrupt, and talk over each other.
+        </p>
+        <p>
+          Video has a second version of the same question: from something happening in front of one camera to the
+          other person seeing it on their screen. Around 200 ms glass-to-glass is a reasonable place to aim. My
+          informal Google Meet test landed around there. The last chapter gets into the funny way I measured that.
+        </p>
       </details>
     </div>
   )
@@ -111,7 +183,7 @@ export default function VideoCallsPost() {
 
       <section className="chapter-with-sidenote">
         <div className="chapter-main">
-          <h2 className="chapter-title"><span className="chapter-index">01</span><span>The question behind Melquiades</span></h2>
+          <h2 className="chapter-title"><span className="chapter-index">01</span><span>How Do Video Calls Work?</span></h2>
           <p>One of the things I admire most about modern technology is how ubiquitous video calling has become.</p>
 
           <div className="sidenote-row">
@@ -136,11 +208,14 @@ export default function VideoCallsPost() {
 
           <p>But it also made me wonder: how does this actually work?</p>
 
-          <p>
-            A call has to feel close to real time. It needs to carry audio and video, survive imperfect networks,
-            avoid freezing, avoid showing old frames, and make all of that feel simple enough that nobody thinks
-            about it while they are talking.
-          </p>
+          <div className="sidenote-row">
+            <p>
+              A call has to feel close to <a className="sidenote-reference" href="#real-time-note">real time</a>.
+              It needs to carry audio and video, survive imperfect networks, avoid freezing, avoid showing old
+              frames, and make all of that feel simple enough that nobody thinks about it while they are talking.
+            </p>
+            <RealTimeNote />
+          </div>
 
           <p>At a high level, I assumed the video part worked like this:</p>
 
@@ -202,11 +277,11 @@ export default function VideoCallsPost() {
           <h3>Constraints</h3>
           <p>The first experiments used hardware I already had:</p>
           <ul>
-            <li>a ThinkPad with a 60 Hz screen and a 30 fps integrated camera;</li>
-            <li>a Mac mini with a 100 Hz display;</li>
-            <li>a local network connection;</li>
+            <li>ThinkPad with a 60 Hz screen and a 30 fps integrated camera;</li>
+            <li>Mac mini with a 100 Hz display;</li>
+            <li>local network connection;</li>
             <li>Rust and operating-system media APIs;</li>
-            <li>a preference for recent frames over a growing queue of complete but old ones.</li>
+            <li>preference for recent frames over a growing queue of complete but old ones.</li>
           </ul>
 
           <p>
@@ -342,7 +417,10 @@ export default function VideoCallsPost() {
           of another complete 8 MB image.
         </p>
 
-        <p>That is why H.264 is the right next experiment for Melquiades.</p>
+        <div className="sidenote-row">
+          <p>That is why <a className="sidenote-reference" href="#h264-reading">H.264</a> is the right next experiment for Melquiades.</p>
+          <H264ReadingNote />
+        </div>
 
         <p>
           It is not free. It adds encoder delay, decoder delay, predictive-frame dependencies, keyframes, and harder
@@ -350,7 +428,7 @@ export default function VideoCallsPost() {
           send only the visual information that changed, while keeping the stream responsive?”
         </p>
 
-          <p>That distinction is where video streaming becomes interesting.</p>
+        <p>That distinction is where video streaming becomes interesting.</p>
         </div>
       </section>
 

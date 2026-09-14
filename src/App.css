@@ -535,7 +535,7 @@
   line-height: 1.65;
 }
 
-/* Optional reading lives beside—not inside—the main article column. */
+/* Optional reading lives beside, not inside, the main article column. */
 .video-call-post {
   max-width: 1080px;
 }
@@ -574,6 +574,32 @@
   width: 250px;
   min-width: 0;
   z-index: 1;
+}
+
+.sidenote-left {
+  right: calc(100% + 2rem);
+  left: auto;
+}
+
+@media (max-width: 1399px) and (min-width: 901px) {
+  .sidenote-left {
+    right: auto;
+    left: calc(100% + 2rem);
+  }
+}
+
+@media (min-width: 1400px) {
+  .video-call-post {
+    max-width: 1364px;
+  }
+
+  .video-call-post > .article-kicker,
+  .video-call-post > h1,
+  .video-call-post > .article-dek,
+  .article-outline,
+  .chapter-with-sidenote > .chapter-main {
+    margin-left: 282px;
+  }
 }
 
 .standalone-chapter {
@@ -710,9 +736,13 @@
   line-height: 1.55;
 }
 
+.article-sidenote p + p {
+  margin-top: 0.7rem;
+}
+
 .article-sidenote a,
 .article-sidenote-mobile a {
-  display: inline-block;
+  display: block;
   margin-top: 0.7rem;
   color: #bdbdff;
   font-family: 'VT323', ui-monospace, monospace;
@@ -834,6 +864,10 @@
     color: rgba(255, 255, 255, 0.75);
     font-size: 0.84rem;
     line-height: 1.55;
+  }
+
+  .article-sidenote-mobile p + p {
+    margin-top: 0.7rem;
   }
 
   .article-sidenote-mobile a {
