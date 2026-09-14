@@ -1,5 +1,4 @@
 const remainingChapters = [
-  ['02', 'Pixels are much bigger than they look', 'Raw-frame size, bandwidth, and why codecs exist.'],
   ['03', 'The first surprise: “30 fps” was actually 15 fps', 'Measure the physical source before optimizing software.'],
   ['04', 'Bounded ownership, not a growing queue', 'Four slots, SPSC ownership, and dropping stale work.'],
   ['05', 'Screen capture is not one API', 'Portal and PipeWire on Linux; ScreenCaptureKit on macOS.'],
@@ -45,6 +44,62 @@ function IrisEvidence() {
   )
 }
 
+function FlateNote() {
+  return (
+    <div className="sidenote-anchor" id="flate2-note">
+      <aside className="article-sidenote" aria-label="Under the hood: flate2">
+        <span className="sidenote-type">UNDER THE HOOD</span>
+        <h3>flate2</h3>
+        <p>
+          The Rust crate I used for this baseline. It is a DEFLATE-based compression and decompression library with
+          support for raw DEFLATE, zlib, and gzip streams.
+        </p>
+        <a href="https://docs.rs/flate2/latest/flate2/">Read the flate2 docs →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>UNDER THE HOOD</span> flate2</summary>
+        <p>
+          The Rust crate I used for this baseline. It is a DEFLATE-based compression and decompression library with
+          support for raw DEFLATE, zlib, and gzip streams.
+        </p>
+        <a href="https://docs.rs/flate2/latest/flate2/">Read the flate2 docs →</a>
+      </details>
+    </div>
+  )
+}
+
+function WebRtcNote() {
+  return (
+    <div className="sidenote-anchor" id="webrtc-note">
+      <aside className="article-sidenote" aria-label="Under the hood: WebRTC">
+        <span className="sidenote-type">UNDER THE HOOD</span>
+        <h3>WebRTC, since 2011</h3>
+        <p>
+          Google announced the open WebRTC project on May 3, 2011. It brought its real-time voice and video engine
+          work to the web as browser APIs and an open-source project—part of the foundation beneath modern tools such
+          as Google Meet.
+        </p>
+        <a href="https://webrtc.github.io/webrtc-org/blog/2011/05/03/introducing-webrtc-an-open-realtime-communications-project.html">
+          Read the announcement →
+        </a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>UNDER THE HOOD</span> WebRTC, since 2011</summary>
+        <p>
+          Google announced the open WebRTC project on May 3, 2011. It brought its real-time voice and video engine
+          work to the web as browser APIs and an open-source project—part of the foundation beneath modern tools such
+          as Google Meet.
+        </p>
+        <a href="https://webrtc.github.io/webrtc-org/blog/2011/05/03/introducing-webrtc-an-open-realtime-communications-project.html">
+          Read the announcement →
+        </a>
+      </details>
+    </div>
+  )
+}
+
 export default function VideoCallsPost() {
   return (
     <article className="writing-article video-call-post">
@@ -59,13 +114,15 @@ export default function VideoCallsPost() {
           <h2 className="chapter-title"><span className="chapter-index">01</span><span>The question behind Melquiades</span></h2>
           <p>One of the things I admire most about modern technology is how ubiquitous video calling has become.</p>
 
-          <p>
-            Not that long ago, seeing the person on the other end of a call meant using specialized hardware or a
-            dedicated application. I remember standalone videophones such as <a className="sidenote-reference" href="#iris-evidence">ACN&apos;s IRIS devices</a>:
-            desk-phone-like
-            machines with a handset, camera, screen, and Internet connection. Then applications like Skype made
-            calling someone across the world feel strangely normal.
-          </p>
+          <div className="sidenote-row">
+            <p>
+              Not that long ago, seeing the person on the other end of a call meant using specialized hardware or a
+              dedicated application. I remember standalone videophones such as <a className="sidenote-reference" href="#iris-evidence">ACN&apos;s IRIS devices</a>:
+              desk-phone-like machines with a handset, camera, screen, and Internet connection. Then applications
+              like Skype made calling someone across the world feel strangely normal.
+            </p>
+            <IrisEvidence />
+          </div>
 
           <p>Now video calling is everywhere.</p>
 
@@ -161,11 +218,14 @@ export default function VideoCallsPost() {
           <p>That is the territory where WebRTC becomes useful.</p>
 
           <h3>What about WebRTC?</h3>
-          <p>
-            WebRTC exists because browser-based real-time media is difficult. It provides the pieces needed to
-            capture media, negotiate connectivity, transport it securely, handle loss, and adapt to network
-            conditions.
-          </p>
+          <div className="sidenote-row">
+            <p>
+              <a className="sidenote-reference" href="#webrtc-note">WebRTC</a> exists because browser-based
+              real-time media is difficult. It provides the pieces needed to capture media, negotiate connectivity,
+              transport it securely, handle loss, and adapt to network conditions.
+            </p>
+            <WebRtcNote />
+          </div>
 
           <p>For a real video-call product, I would start there.</p>
 
@@ -184,7 +244,114 @@ export default function VideoCallsPost() {
           <p>That is where the experiment started.</p>
         </div>
 
-        <IrisEvidence />
+      </section>
+
+      <section className="chapter-with-sidenote">
+        <div className="chapter-main">
+          <h2 className="chapter-title"><span className="chapter-index">02</span><span>Pixels Are Much Bigger Than They Look</span></h2>
+
+        <p>When I think of a screenshot, I instinctively think of a few megabytes. Maybe less.</p>
+
+        <p>
+          But a screenshot is one image saved once. A video stream is a new image arriving repeatedly, whether the
+          rest of the system is ready for it or not.
+        </p>
+
+        <p>Take a 1920×1080 screen:</p>
+        <div className="article-equation">1920 × 1080 = 2,073,600 pixels</div>
+
+        <p>
+          For Melquiades, the screen capture arrives in a BGRA-style format: blue, green, red, and one extra byte
+          per pixel. That means four bytes per pixel.
+        </p>
+        <div className="article-equation">2,073,600 pixels × 4 bytes = 8,294,400 bytes per frame</div>
+
+        <p>One uncompressed 1080p frame is therefore about 7.91 MiB.</p>
+
+        <p>That is already much larger than I expected. Now multiply it by the frame rate:</p>
+        <div className="article-equation article-equation-multiline">
+          <span>8,294,400 bytes × 30 frames / second</span>
+          <span>= 248,832,000 bytes / second</span>
+          <span>≈ 1.99 Gb/s</span>
+        </div>
+
+        <p>
+          That is nearly two gigabits per second of raw pixel data, before UDP headers, before Wi-Fi overhead, and
+          before any other program on the network gets a chance to exist.
+        </p>
+
+        <p>At 60 fps, the raw rate would be almost four gigabits per second.</p>
+
+        <p>
+          My Mac display runs at 100 Hz, but that does not mean Melquiades automatically produces 100 frames each
+          second. The current H.264 experiment intentionally captures at 30 fps. Display refresh rate, capture rate,
+          encoder throughput, and network throughput are related, but they are not the same thing.
+        </p>
+
+        <p>So raw pixels were not going to work.</p>
+
+          <h3>The first attempt: generic compression</h3>
+          <div className="sidenote-row">
+            <p>
+              My first baseline used <a className="sidenote-reference" href="#flate2-note">fast DEFLATE compression</a>.
+              DEFLATE is a good general-purpose compressor, and it was useful because it let me measure the tradeoff
+              before introducing a real video codec.
+            </p>
+            <FlateNote />
+          </div>
+
+        <p>
+          On the original 640×480 camera stream, a raw YUYV frame was 614,400 bytes. Fast DEFLATE reduced it, but
+          compression still took roughly 8–9 milliseconds per frame in representative runs.
+        </p>
+
+        <p>Eight milliseconds does not sound huge. At 30 fps, though, one frame period is only:</p>
+        <div className="article-equation">1 second / 30 frames = 33.33 ms per frame</div>
+
+        <p>Compression was using roughly a quarter of that budget.</p>
+
+        <p>
+          That does not mean I should multiply eight milliseconds by thirty and call the result “latency.” A pipeline
+          can overlap work: while one frame is being compressed, the camera may be preparing another. The important
+          question is whether every stage can keep up with the rate of incoming frames.
+        </p>
+
+        <p>
+          If compression takes longer than the available frame budget, or if it delays the sender enough for frames
+          to queue behind it, the stream starts aging. Then the user is not seeing the newest camera or screen image
+          anymore. They are seeing a backlog.
+        </p>
+
+        <p>
+          The compression ratio also changed dramatically with content. A mostly static desktop can compress
+          extremely well. Moving windows, games, video, and camera noise give the compressor less repeated data to
+          exploit. There is no single honest “this reduces video by 40%” number.
+        </p>
+
+        <h3>Why video needs a video codec</h3>
+        <p>
+          DEFLATE understands repeated bytes inside one frame. It does not understand that the next frame is usually
+          very similar to the previous one.
+        </p>
+
+        <p>A video codec such as H.264 does.</p>
+
+        <p>
+          Instead of independently compressing every full image, H.264 can encode a frame relative to earlier
+          frames. If only a small part of the screen changes, it can often send information about that change instead
+          of another complete 8 MB image.
+        </p>
+
+        <p>That is why H.264 is the right next experiment for Melquiades.</p>
+
+        <p>
+          It is not free. It adds encoder delay, decoder delay, predictive-frame dependencies, keyframes, and harder
+          loss recovery. But it changes the problem from “how do I move raw screenshots quickly?” into “how do I
+          send only the visual information that changed, while keeping the stream responsive?”
+        </p>
+
+          <p>That distinction is where video streaming becomes interesting.</p>
+        </div>
       </section>
 
       <section className="article-outline" aria-label="Remaining chapter outline">

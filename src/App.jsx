@@ -234,12 +234,23 @@ function Movies(){} //movies i've watched that I like
 
 function CoolLinks(){}  // cool websites, inspiration, fun facts, etc...
 
-function LearningBlogCard({ title, excerpt, date, image, imageFit = 'cover', imageBackground = 'transparent', slug }) {
+function LearningBlogCard({ title, excerpt, date, image, video, imageFit = 'cover', imageBackground = 'transparent', slug }) {
   return (
     <div>
     <Card sx={{ width: '100%', height: '100%', backgroundColor: 'transparent' }}>
       <CardActionArea href={`/writing/${slug}`} sx={{ height: '100%' }}>
-        {image ? (
+        {video ? (
+          <video
+            className="writing-card-video"
+            src={video}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+          />
+        ) : image ? (
           <CardMedia
             component="img"
             height="200"
@@ -308,6 +319,7 @@ function Writing(){
           <LearningBlogCard
             title="How Do Video Calls Work?"
             excerpt="From a camera frame to somebody else's screen: codecs, packets, jitter, and why latency is hard."
+            video="/melquiades-demo.mp4"
             slug="how-video-calls-work"
           />
           <LearningBlogCard
