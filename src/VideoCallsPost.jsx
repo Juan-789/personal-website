@@ -878,7 +878,7 @@ power_line_frequency = 60 Hz`}</code></pre>
           <p>So instead of optimizing random things, I started adding timestamps.</p>
 
           <h3>The first numbers were not good enough</h3>
-          <p>My first attempt at latency measurement was honestly too naive.</p>
+          <p>My first attempt at latency measurement was honestly too naïve.</p>
 
           <p>
             The receiver would echo a frame timestamp back to the sender, and I divided that round-trip time by two.
@@ -1110,9 +1110,8 @@ power_line_frequency = 60 Hz`}</code></pre>
 
           <p>So I wanted to split the pipeline:</p>
           <div className="article-flow article-flow-two-stage" aria-label="Capture and sender threads">
-            <span><strong>capture thread</strong><small>camera → frame</small></span>
-            <i aria-hidden="true">→</i>
-            <span><strong>sender thread</strong><small>frame → compress → packetize → UDP</small></span>
+            <span><strong>capture thread</strong><small>camera → frame pool</small></span>
+            <span><strong>sender thread</strong><small>frame pool → compress → packetize → UDP</small></span>
           </div>
 
           <p>
@@ -1130,7 +1129,7 @@ power_line_frequency = 60 Hz`}</code></pre>
             really do not want in this project: unnecessary copying and an ever-growing queue of old video.
           </p>
 
-          <div className="article-flow" aria-label="Naive frame queue">
+          <div className="article-flow" aria-label="Naïve frame queue">
             <span>capture</span><i aria-hidden="true">→</i><span>frame, frame, frame, …</span><i aria-hidden="true">→</i><span>sender</span>
           </div>
 

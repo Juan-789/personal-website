@@ -234,7 +234,7 @@ export default function Projects(){
                 Self-Driving Car
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Self-driving car with the naive approach to solve mazes
+                Self-driving car with the naïve approach to solve mazes
               </Typography>
             </CardContent>
           </CardActionArea>
