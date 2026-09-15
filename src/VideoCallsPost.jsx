@@ -1,5 +1,6 @@
+import { useRef, useState } from 'react'
+
 const remainingChapters = [
-  ['04', 'Live Video Is a Queueing Problem', 'Four slots, SPSC ownership, bounded memory, freshness over completeness.'],
   ['05', 'Screen Capture Is Not One API', 'Linux portal + PipeWire; macOS ScreenCaptureKit and IOSurfaces.'],
   ['06', 'Why Deflate Was Useful, but Not Enough', 'A measurable independent-frame baseline before real video coding.'],
   ['07', 'What H.264 Actually Changed', 'Access units, IDRs, SPS/PPS, AVCC → Annex B, decoder recovery.'],
@@ -201,6 +202,120 @@ function V4L2Note() {
         <a href="https://kernel.org/doc/html/latest/userspace-api/media/index.html">Open the Linux media API docs →</a>
       </details>
     </div>
+  )
+}
+
+function SpscResearchNote() {
+  return (
+    <div className="sidenote-anchor" id="spsc-research">
+      <aside className="article-sidenote" aria-label="Further reading: SPSC rings and reusable buffers">
+        <span className="sidenote-type">FURTHER READING</span>
+        <h3>The ideas behind the pool</h3>
+        <p>
+          I did not invent these patterns. These were the useful references while I was learning how a bounded ring
+          and a reusable media buffer pool should behave.
+        </p>
+        <ul className="sidenote-links">
+          <li><a href="https://docs.kernel.org/core-api/circular-buffers.html">Linux kernel: circular buffers</a> explains SPSC head and tail indices, plus the producer/consumer memory-barrier pattern.</li>
+          <li><a href="https://doc.rust-lang.org/std/sync/atomic/enum.Ordering.html">Rust atomic orderings</a> documents the vocabulary behind publishing a completed slot safely.</li>
+          <li><a href="https://doc.rust-lang.org/nomicon/atomics.html">Rustonomicon: atomics</a> is the deeper memory-model background.</li>
+          <li><a href="https://gstreamer.freedesktop.org/documentation/additional/design/bufferpool.html">GStreamer buffer-pool design</a> is useful prior art for fixed reusable media buffers. Its blocking policy is not ours: Melquíades drops old live work instead.</li>
+          <li><a href="https://docs.kernel.org/userspace-api/media/v4l/vidioc-reqbufs.html">Linux V4L2 buffer interface</a> describes the driver-side model and the later mmap and DMA-BUF direction.</li>
+        </ul>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>FURTHER READING</span> The ideas behind the pool</summary>
+        <p>
+          I did not invent these patterns. These were the useful references while I was learning how a bounded ring
+          and a reusable media buffer pool should behave.
+        </p>
+        <ul className="sidenote-links">
+          <li><a href="https://docs.kernel.org/core-api/circular-buffers.html">Linux kernel: circular buffers</a> explains SPSC head and tail indices, plus the producer/consumer memory-barrier pattern.</li>
+          <li><a href="https://doc.rust-lang.org/std/sync/atomic/enum.Ordering.html">Rust atomic orderings</a> documents the vocabulary behind publishing a completed slot safely.</li>
+          <li><a href="https://doc.rust-lang.org/nomicon/atomics.html">Rustonomicon: atomics</a> is the deeper memory-model background.</li>
+          <li><a href="https://gstreamer.freedesktop.org/documentation/additional/design/bufferpool.html">GStreamer buffer-pool design</a> is useful prior art for fixed reusable media buffers. Its blocking policy is not ours: Melquíades drops old live work instead.</li>
+          <li><a href="https://docs.kernel.org/userspace-api/media/v4l/vidioc-reqbufs.html">Linux V4L2 buffer interface</a> describes the driver-side model and the later mmap and DMA-BUF direction.</li>
+        </ul>
+      </details>
+    </div>
+  )
+}
+
+function PowerOfTwoNote() {
+  return (
+    <div className="sidenote-anchor sidenote-left" id="power-of-two-note">
+      <aside className="article-sidenote" aria-label="Under the hood: power-of-two ring sizes">
+        <span className="sidenote-type">UNDER THE HOOD</span>
+        <h3>Why a power of two?</h3>
+        <p>
+          A ring index is usually an unsigned counter. If capacity is 4, its mask is 3, or binary <code>0b11</code>.
+          Keeping only those two low bits wraps 4, 5, 6, 7 back to 0, 1, 2, 3.
+        </p>
+        <pre className="sidenote-code"><code>{`index % 4  →  index & 3`}</code></pre>
+        <p>
+          A runtime modulo operation can take around 50 to 100 clock cycles. A bit mask is one operation. When the
+          compiler knows the modulo capacity is a power of two, it will often perform this exact optimization itself.
+          Making the rule part of the ring design keeps that fast path obvious and dependable.
+        </p>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>UNDER THE HOOD</span> Why a power of two?</summary>
+        <p>
+          A ring index is usually an unsigned counter. If capacity is 4, its mask is 3, or binary <code>0b11</code>.
+          Keeping only those two low bits wraps 4, 5, 6, 7 back to 0, 1, 2, 3.
+        </p>
+        <pre className="sidenote-code"><code>{`index % 4  →  index & 3`}</code></pre>
+        <p>
+          A runtime modulo operation can take around 50 to 100 clock cycles. A bit mask is one operation. When the
+          compiler knows the modulo capacity is a power of two, it will often perform this exact optimization itself.
+          Making the rule part of the ring design keeps that fast path obvious and dependable.
+        </p>
+      </details>
+    </div>
+  )
+}
+
+function ThunderButton() {
+  const audioRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  async function toggleThunder() {
+    const audio = audioRef.current
+    if (!audio) return
+
+    if (!audio.paused) {
+      audio.pause()
+      audio.currentTime = 0
+      setIsPlaying(false)
+      return
+    }
+
+    audio.currentTime = 0
+    try {
+      await audio.play()
+      setIsPlaying(true)
+    } catch {
+      setIsPlaying(false)
+    }
+  }
+
+  return (
+    <>
+      <button
+        className="thunder-button"
+        type="button"
+        onClick={toggleThunder}
+        aria-label={isPlaying ? 'Stop thunder and lightning' : 'Play thunder and lightning'}
+        aria-pressed={isPlaying}
+      >
+        <span aria-hidden="true">▶</span>
+      </button>
+      <audio ref={audioRef} preload="none" onEnded={() => setIsPlaying(false)}>
+        <source src="/scary-lightning-7s.mp3" type="audio/mpeg" />
+      </audio>
+    </>
   )
 }
 
@@ -958,6 +1073,182 @@ power_line_frequency = 60 Hz`}</code></pre>
           <p>Once the camera was genuinely producing 30 frames per second, the next question became much more interesting:</p>
           <blockquote>What happens when frames arrive correctly, but the next stage cannot process them fast enough?</blockquote>
           <p>That is where Melquíades becomes a queueing problem.</p>
+        </div>
+      </section>
+
+      <section className="chapter-with-sidenote">
+        <div className="chapter-main">
+          <h2 className="chapter-title"><span className="chapter-index">04</span><span>Live Video Is a Queueing Problem</span></h2>
+
+          <p>So the time had come to make Melquíades multithreaded.</p>
+          <div className="chapter-aside">
+            <span>scary lightning noises</span>
+            <ThunderButton />
+          </div>
+
+          <p>Until then, the sender was essentially one big loop:</p>
+          <div className="article-flow" aria-label="Original single-threaded sender loop">
+            <span>wait for camera</span><i aria-hidden="true">→</i><span>copy frame</span><i aria-hidden="true">→</i>
+            <span>describe frame</span><i aria-hidden="true">→</i><span>compress</span><i aria-hidden="true">→</i>
+            <span>packetize</span><i aria-hidden="true">→</i><span>send UDP</span><i aria-hidden="true">→</i><span>repeat</span>
+          </div>
+
+          <p>And honestly, this worked.</p>
+          <p>But “it works” and “this is how I want a low-latency system to behave” are two different things.</p>
+
+          <p>
+            At 30 FPS, the camera produces a frame every 33.3 ms. In the single-threaded design, once I received one
+            of those frames, the same thread had to finish everything else before it could go back and wait for
+            another one.
+          </p>
+
+          <p>
+            That meant capture and processing were not really independent stages. If compression suddenly took longer,
+            capture waited. If sending packets took longer, capture waited. Any slowdown downstream could propagate
+            all the way back to the camera.
+          </p>
+
+          <p>So I wanted to split the pipeline:</p>
+          <div className="article-flow article-flow-two-stage" aria-label="Capture and sender threads">
+            <span><strong>capture thread</strong><small>camera → frame</small></span>
+            <i aria-hidden="true">→</i>
+            <span><strong>sender thread</strong><small>frame → compress → packetize → UDP</small></span>
+          </div>
+
+          <p>
+            Now capture can return to waiting for the camera while the sender is still processing the previous frame.
+            Simple enough.
+          </p>
+
+          <p>Except now I had another problem.</p>
+          <h3>How the hell do you efficiently pass a 614,400-byte frame between two threads?</h3>
+
+          <p>The answer was: do not pass the frame.</p>
+
+          <p>
+            The obvious approach would be some kind of thread-safe queue with frames in it. But there are two things I
+            really do not want in this project: unnecessary copying and an ever-growing queue of old video.
+          </p>
+
+          <div className="article-flow" aria-label="Naive frame queue">
+            <span>capture</span><i aria-hidden="true">→</i><span>frame, frame, frame, …</span><i aria-hidden="true">→</i><span>sender</span>
+          </div>
+
+          <p>A 640×480 YUYV frame is:</p>
+          <div className="article-equation">640 × 480 × 2 = 614,400 bytes</div>
+
+          <p>
+            At 30 FPS, that is about 18.4 MB of raw image data every second passing through the capture side alone.
+            Copying those full frames between threads would be a terrible default when the real goal is to keep the
+            newest one moving.
+          </p>
+
+          <h3>The frame pool</h3>
+          <p>
+            Instead, I separated where frames live from how ownership of those frames moves between threads. That is
+            where the frame pool comes in.
+          </p>
+
+          <div className="sidenote-row">
+            <p>
+              At startup, Melquíades allocates <a className="sidenote-reference" href="#power-of-two-note">four large frame slots</a>:
+            </p>
+            <PowerOfTwoNote />
+          </div>
+          <figure className="article-frame-pool" aria-label="Four preallocated frame pool slots">
+            <figcaption>FramePool</figcaption>
+            <div><span>Slot 0</span><span>Slot 1</span><span>Slot 2</span><span>Slot 3</span></div>
+          </figure>
+
+          <p>
+            Each slot contains enough preallocated memory for one raw frame, plus metadata like its dimensions, pixel
+            format, byte length, and capture timestamp. Those allocations are permanent. A frame arrives, gets
+            written into one slot, gets processed, and eventually that exact same memory gets reused for some future
+            frame.
+          </p>
+
+          <p>
+            Four is intentional. It is not enough space for a secret backlog to hide in, but it gives capture and
+            sending room to overlap. At most, there can be four raw frames in the pool, and every one of them has a
+            named owner.
+          </p>
+
+          <p>So instead of sending 614,400 bytes between threads, I can send something tiny:</p>
+          <div className="article-equation">SlotId(2)</div>
+
+          <p>
+            That basically means: “Hey sender, the next frame is sitting in slot 2.” The sender already knows where
+            slot 2 lives.
+          </p>
+
+          <p>This gives the pool a simple ownership lifecycle:</p>
+          <div className="article-flow" aria-label="Frame slot ownership lifecycle">
+            <span>Free</span><i aria-hidden="true">→</i><span>capture owns it</span><i aria-hidden="true">→</i>
+            <span>Ready</span><i aria-hidden="true">→</i><span>sender owns it</span><i aria-hidden="true">→</i><span>Free</span>
+          </div>
+
+          <p>
+            Only capture writes into a slot. Only the sender reads a ready slot. Once the sender finishes with it, the
+            slot becomes available to capture again.
+          </p>
+
+          <h3>Two rings, not one vague queue</h3>
+          <div className="sidenote-row">
+            <p>
+              Now I needed a way to move those tiny <code>SlotId</code>s between the two threads. The answer is two
+              bounded single-producer, single-consumer rings, or <a className="sidenote-reference" href="#spsc-research">SPSC rings</a>.
+            </p>
+            <SpscResearchNote />
+          </div>
+
+          <figure className="article-ownership-rings" aria-label="FreeSlots and ReadySlots ownership circulation">
+            <div className="ownership-ring ready-ring"><strong>ReadySlots</strong><span>capture → sender</span></div>
+            <div className="ownership-actors"><span>CAPTURE</span><i aria-hidden="true">⇄</i><span>SENDER</span></div>
+            <div className="ownership-ring free-ring"><strong>FreeSlots</strong><span>sender → capture</span></div>
+          </figure>
+
+          <p>
+            <code>FreeSlots</code> carries IDs from sender to capture. Capture takes one, fills that slot, and puts
+            its ID in <code>ReadySlots</code>. <code>ReadySlots</code> carries IDs from capture to sender. Sender takes
+            one, processes the corresponding frame, and eventually returns its ID to <code>FreeSlots</code>.
+          </p>
+
+          <p>
+            That direction matters. Each ring has exactly one producer and one consumer, so head and tail indices are
+            enough. I do not need a general-purpose MPMC queue with locks, contention, and a much broader ownership
+            problem. The producer publishes an ID only after it has finished writing the slot. The consumer acquires
+            that publication before reading it. That release and acquire handoff is the small synchronization contract
+            that keeps a ready slot from being read halfway through a write.
+          </p>
+
+          <h3>Freshness over completeness</h3>
+          <p>
+            My first instinct was “if the queue fills, just overwrite the oldest frame.” That sounds perfect for low
+            latency. Unfortunately, it breaks the ownership model I had just designed.
+          </p>
+
+          <p>
+            In a strict SPSC queue, capture is only the producer of <code>ReadySlots</code>. Removing an old ready ID
+            would mean acting like its consumer. Capture cannot safely take ownership back that way.
+          </p>
+
+          <p>
+            The final policy is cleaner. If no slot is free, capture drops the incoming frame. The sender drains{' '}
+            <code>ReadySlots</code> and can discard older ready frames in favor of the newest one, returning each
+            discarded slot to <code>FreeSlots</code>. The sender owns that decision, so the ownership boundary remains
+            intact.
+          </p>
+
+          <p>
+            This is the chapter&apos;s thesis: in a video call, throughput is not enough. If the system falls behind,
+            processing every frame is actually the wrong behavior. I would rather show frame 103 and throw away
+            frames 100 through 102 than faithfully display all four several hundred milliseconds late.
+          </p>
+
+          <p>
+            The four-slot pool deliberately bounds how much stale work can exist in the system. It does not guarantee
+            that every captured frame is delivered. It guarantees that old work cannot quietly become the product.
+          </p>
         </div>
       </section>
 
