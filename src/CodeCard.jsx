@@ -9,7 +9,7 @@ import './CodeCard.css'
   monospace panel instead of a photo. Used for the systems projects that
   don't have anything worth screenshotting.
 */
-export default function CodeCard({ title, description, tags, href }) {
+export default function CodeCard({ title, description, tags, href, video }) {
   return (
     <div className='featured-i'>
       <Card sx={{ maxWidth: 345, backgroundColor: 'transparent' }}>
@@ -18,16 +18,27 @@ export default function CodeCard({ title, description, tags, href }) {
           target='_blank'
           rel="noopener noreferrer"
         >
-          <div className='code-media'>
-            <div className='code-media-bar'>
-              <i /><i /><i />
+          {video ? (
+            <div className='code-video-media' aria-hidden="true">
+              <video src={video} autoPlay muted loop playsInline preload="metadata" />
+              <div className='code-video-tags'>
+                {tags.map((tag) => (
+                  <span className='code-media-tag' key={tag}>{tag}</span>
+                ))}
+              </div>
             </div>
-            <div className='code-media-tags'>
-              {tags.map((tag) => (
-                <span className='code-media-tag' key={tag}>{tag}</span>
-              ))}
+          ) : (
+            <div className='code-media'>
+              <div className='code-media-bar'>
+                <i /><i /><i />
+              </div>
+              <div className='code-media-tags'>
+                {tags.map((tag) => (
+                  <span className='code-media-tag' key={tag}>{tag}</span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <CardContent className='glass-card-content'>
             <Typography gutterBottom variant="h5" component="div" sx={{ color: '#e0e0e0' }}>
               {title}

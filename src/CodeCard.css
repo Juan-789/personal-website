@@ -9,6 +9,37 @@
   box-sizing: border-box;
 }
 
+.code-video-media {
+  position: relative;
+  height: 140px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  background: #0f0f14;
+}
+
+.code-video-media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.code-video-tags {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.code-video-tags .code-media-tag {
+  border-color: rgba(208, 208, 255, 0.65);
+  background: rgba(15, 15, 20, 0.78);
+  color: #e3e3ff;
+}
+
 .code-media-bar {
   display: flex;
   gap: 6px;

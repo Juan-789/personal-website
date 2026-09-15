@@ -23,8 +23,9 @@ export default function Projects(){
     <div className='projects-col'>  {/*first column*/}
       <CodeCard
         title="Melquíades"
-        description="My from-scratch, Rust take on Google Meet: capture, send, and display video between machines. I am building it partly to see where video-call latency actually lives, and partly because video calls are cool."
-        tags={['Rust', 'UDP', 'Systems']}
+        description="A Rust video-call experiment for finding where latency accumulates: capture, H.264, UDP, decode, and display. Also, video calls are cool."
+        tags={['Rust', 'H.264', 'UDP']}
+        video="/melquiades-demo.mp4"
         href="https://github.com/Juan-789/Melquiades"
       />
       <div className='featured-i'>
