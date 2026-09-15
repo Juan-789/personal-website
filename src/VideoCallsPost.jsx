@@ -1,5 +1,4 @@
 const remainingChapters = [
-  ['03', 'The First Surprise: “30 fps” Was Actually 15 fps', 'V4L2, camera cadence, dynamic exposure, measure the source first.'],
   ['04', 'Live Video Is a Queueing Problem', 'Four slots, SPSC ownership, bounded memory, freshness over completeness.'],
   ['05', 'Screen Capture Is Not One API', 'Linux portal + PipeWire; macOS ScreenCaptureKit and IOSurfaces.'],
   ['06', 'Why Deflate Was Useful, but Not Enough', 'A measurable independent-frame baseline before real video coding.'],
@@ -166,6 +165,92 @@ function RealTimeNote() {
           Video has a second version of the same question: from something happening in front of one camera to the
           other person seeing it on their screen. Around 200 ms glass-to-glass is a reasonable place to aim. My
           informal Google Meet test landed around there. The last chapter gets into the funny way I measured that.
+        </p>
+      </details>
+    </div>
+  )
+}
+
+function V4L2Note() {
+  return (
+    <div className="sidenote-anchor sidenote-left" id="v4l2-note">
+      <aside className="article-sidenote" aria-label="Under the hood: V4L2">
+        <span className="sidenote-type">UNDER THE HOOD</span>
+        <h3>V4L2</h3>
+        <p>
+          The Linux media userspace API documentation is a thick one. I did not read all of it. I mostly read the
+          Rust <a href="https://crates.io/crates/linuxvideo">linuxvideo</a> crate, which abstracts a lot of V4L2.
+        </p>
+        <p>
+          It was still cool to see what sits underneath: finding a device, picking a pixel format, requesting a
+          stream, and reading its frames. The kernel docs are the deeper rabbit hole if you want to see that layer.
+        </p>
+        <a href="https://kernel.org/doc/html/latest/userspace-api/media/index.html">Open the Linux media API docs →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>UNDER THE HOOD</span> V4L2</summary>
+        <p>
+          The Linux media userspace API documentation is a thick one. I did not read all of it. I mostly read the
+          Rust <a href="https://crates.io/crates/linuxvideo">linuxvideo</a> crate, which abstracts a lot of V4L2.
+        </p>
+        <p>
+          It was still cool to see what sits underneath: finding a device, picking a pixel format, requesting a
+          stream, and reading its frames. The kernel docs are the deeper rabbit hole if you want to see that layer.
+        </p>
+        <a href="https://kernel.org/doc/html/latest/userspace-api/media/index.html">Open the Linux media API docs →</a>
+      </details>
+    </div>
+  )
+}
+
+function PowerLineNote() {
+  return (
+    <div className="sidenote-anchor" id="power-line-note">
+      <aside className="article-sidenote" aria-label="Detour: power-line frequency and anti-flicker">
+        <span className="sidenote-type">DETOUR</span>
+        <h3>Why 60 Hz matters</h3>
+        <p>
+          Changing <code>power_line_frequency</code> from 50 Hz to 60 Hz told the camera&apos;s auto-exposure and
+          anti-flicker logic what kind of indoor lighting it was under. In Toronto, mains power is 60 Hz. Indoor
+          lights can flicker in sync with it, often effectively at 120 Hz because both halves of the AC cycle produce
+          light.
+        </p>
+        <p>The camera can choose exposure times that fit that rhythm:</p>
+        <pre className="sidenote-code"><code>{`60 Hz: 1/120 s = 8.33 ms
+       1/60 s  = 16.67 ms
+       1/30 s  = 33.33 ms
+
+50 Hz: 1/100 s = 10 ms
+       1/50 s  = 20 ms
+       1/25 s  = 40 ms`}</code></pre>
+        <p>
+          Using 50 Hz logic under 60 Hz lighting can cause brightness pulsing, horizontal banding, or unstable
+          automatic exposure. Dynamic frame rate preserved the 30 FPS cadence; the 60 Hz setting made anti-flicker
+          decisions match the room.
+        </p>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>DETOUR</span> Why 60 Hz matters</summary>
+        <p>
+          Changing <code>power_line_frequency</code> from 50 Hz to 60 Hz told the camera&apos;s auto-exposure and
+          anti-flicker logic what kind of indoor lighting it was under. In Toronto, mains power is 60 Hz. Indoor
+          lights can flicker in sync with it, often effectively at 120 Hz because both halves of the AC cycle produce
+          light.
+        </p>
+        <p>The camera can choose exposure times that fit that rhythm:</p>
+        <pre className="sidenote-code"><code>{`60 Hz: 1/120 s = 8.33 ms
+       1/60 s  = 16.67 ms
+       1/30 s  = 33.33 ms
+
+50 Hz: 1/100 s = 10 ms
+       1/50 s  = 20 ms
+       1/25 s  = 40 ms`}</code></pre>
+        <p>
+          Using 50 Hz logic under 60 Hz lighting can cause brightness pulsing, horizontal banding, or unstable
+          automatic exposure. Dynamic frame rate preserved the 30 FPS cadence; the 60 Hz setting made anti-flicker
+          decisions match the room.
         </p>
       </details>
     </div>
@@ -429,6 +514,450 @@ export default function VideoCallsPost() {
         </p>
 
         <p>That distinction is where video streaming becomes interesting.</p>
+        </div>
+      </section>
+
+      <section className="chapter-with-sidenote">
+        <div className="chapter-main">
+          {/* Previous draft retained temporarily while this chapter is being revised. */}
+          {/*
+          <h2 className="chapter-title"><span className="chapter-index">03</span><span>The First Surprise: “30 FPS” Was Actually 15 FPS</span></h2>
+
+          <p>
+            As usual, before I got to optimize anything cool, I first had to figure out why the thing I thought I had
+            configured was lowkey not doing what I had configured it to do.
+          </p>
+
+          <p>The first version of Melquíades used the built-in ThinkPad camera: 640×480, YUYV, supposedly 30 FPS.</p>
+
+          <p>And 30 FPS should mean that a new frame comes in every:</p>
+          <div className="article-equation">1 / 30 = 0.0333 seconds = 33.3 ms</div>
+
+          <p>
+            This matters because, even if every other part of my program were instant, I cannot show a newer image
+            until the camera has actually made one. But while measuring the pipeline, I noticed something was off. It
+            felt more like 15 FPS.
+          </p>
+
+          <p>At 15 FPS:</p>
+          <div className="article-equation">1 / 15 = 0.0667 seconds = 66.7 ms</div>
+
+          <p>
+            So instead of a new chance to observe the world every 33 ms, I was getting one every 66 ms. That is
+            already a massive amount of time if the eventual objective is a live, low-latency video stream.
+          </p>
+
+          <p>
+            Before I had compressed a frame, sent a UDP packet, decoded anything, or rendered a pixel, the camera
+            itself was already eating a meaningful part of the latency budget.
+          </p>
+
+          <h3>Okay, but was Melquíades actually the problem?</h3>
+          <p>The first thing I wanted to know was whether my program was somehow messing this up.</p>
+
+          <div className="sidenote-row">
+            <p>
+              On Linux, cameras are usually exposed through <a className="sidenote-reference" href="#v4l2-note">V4L2</a>,
+              or Video4Linux2. It is a kernel API that lets programs inspect a camera, choose a format, request a
+              frame rate, set camera controls, queue buffers, and eventually receive captured frames.
+            </p>
+            <V4L2Note />
+          </div>
+
+          <p>Melquíades used the Rust <code>linuxvideo</code> crate, but I also checked the device directly with <code>v4l2-ctl</code>:</p>
+          <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 --get-fmt-video
+v4l2-ctl -d /dev/video0 --get-parm`}</code></pre>
+
+          <p>The camera said it was configured correctly:</p>
+          <pre className="article-code"><code>{`Format Video Capture:
+        Width/Height      : 640/480
+        Pixel Format      : 'YUYV' (YUYV 4:2:2)
+        Field             : None
+        Bytes per Line    : 1280
+        Size Image        : 614400
+        Colorspace        : sRGB
+        Transfer Function : Rec. 709
+        YCbCr/HSV Encoding: ITU-R 601
+        Quantization      : Default (maps to Limited Range)
+
+Streaming Parameters Video Capture:
+        Capabilities     : timeperframe
+        Frames per second: 30.000 (30/1)
+        Read buffers     : 0`}</code></pre>
+
+          <p>This is useful, but it also taught me a distinction I had not fully appreciated yet.</p>
+          <blockquote>“Configured for 30 FPS” does not necessarily mean “actually delivering 30 fresh frames every second.”</blockquote>
+          <p>It only means that the driver and camera negotiated a mode with a nominal 30 FPS rate.</p>
+
+          <p>So I tested the camera outside Melquíades entirely:</p>
+          <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 \\
+  --set-fmt-video=width=640,height=480,pixelformat=MJPG \\
+  --set-parm=30 \\
+  --stream-mmap=4 \\
+  --stream-count=300 \\
+  --stream-to=/dev/null`}</code></pre>
+
+          <p>
+            This requested 30 FPS and streamed camera buffers directly to <code>/dev/null</code>. No Rust code, no
+            DEFLATE, no UDP, no display code, none of my own pipeline.
+          </p>
+
+          <p>The result was kind of insane:</p>
+          <pre className="article-code"><code>{`Frame rate set to 30.000 fps
+<<<<<<<<<<<<<<<< 15.21 fps, dropped buffers: 1
+<<<<<<<<<<<<<<< 15.17 fps
+<<<<<<<<<<<<<<< 15.17 fps
+<<<<<<<<<<<<<<< 15.16 fps
+<<<<<<<<<<<<<<< 15.16 fps
+...`}</code></pre>
+
+          <p>So there it was. The camera was configured for 30 FPS, but it was independently delivering about 15.16 FPS.</p>
+          <p>My program was innocent.</p>
+
+          <h3>The camera was allowed to lower its own frame rate</h3>
+          <p>Next, I looked at the controls the camera exposed:</p>
+          <pre className="article-code"><code>v4l2-ctl -d /dev/video0 --list-ctrls-menus</code></pre>
+
+          <p>The interesting part was this:</p>
+          <pre className="article-code"><code>{`auto_exposure 0x009a0901 (menu)
+    value=3 (Aperture Priority Mode)
+
+exposure_time_absolute 0x009a0902 (int)
+    default=156 value=156 flags=inactive
+
+exposure_dynamic_framerate 0x009a0903 (bool)
+    default=0 value=1`}</code></pre>
+
+          <p>
+            At first, Aperture Priority Mode sounded kind of weird because this is a tiny laptop webcam, not some
+            DSLR with an actual adjustable aperture. But basically, the camera was in an automatic exposure mode. It
+            was allowed to decide how long the sensor should collect light for.
+          </p>
+
+          <p>
+            A camera needs light to make an image. In a darker room, it can leave the sensor exposed for longer,
+            collect more photons, and make the image brighter and less noisy.
+          </p>
+
+          <p>The problem is that light takes time to collect.</p>
+
+          <p>At 30 FPS, the camera has approximately 33.3 ms per frame period:</p>
+          <div className="article-timeline" aria-label="Thirty frames per second frame cadence">
+            <span>frame 0</span><i aria-hidden="true" /><span>frame 1</span><i aria-hidden="true" /><span>frame 2</span>
+            <small>33.3 ms</small><small>33.3 ms</small>
+          </div>
+
+          <p>But <code>exposure_dynamic_framerate = 1</code> gave the camera another option:</p>
+          <blockquote>If I want a longer exposure, I am allowed to lower the effective frame rate.</blockquote>
+
+          <p>So instead of maintaining a stable 30 FPS and accepting a darker or noisier image, the camera was effectively choosing something closer to:</p>
+          <div className="article-timeline article-timeline-slow" aria-label="Fifteen frames per second frame cadence">
+            <span>frame 0</span><i aria-hidden="true" /><span>frame 1</span>
+            <small>66.7 ms</small>
+          </div>
+
+          <p>
+            That is why V4L2 could report a nominal 30 FPS mode while the stream test showed approximately 15 FPS.
+            Auto exposure was not inherently bad. It was doing something sensible for a regular video-call camera:
+            prefer a usable image over a strict capture cadence.
+          </p>
+
+          <p>
+            But Melquíades is not trying to make the prettiest webcam image possible. It is trying to understand and
+            reduce latency. Those are different objectives.
+          </p>
+
+          <h3>Fixing it</h3>
+          <p>I changed two settings:</p>
+          <pre className="article-code"><code>{`exposure_dynamic_framerate = 0
+power_line_frequency = 60 Hz`}</code></pre>
+
+          <p>
+            Toronto uses 60 Hz power, not 50 Hz. My camera had initially been configured for 50 Hz:
+            <code> power_line_frequency: value=1 (50 Hz)</code>.
+          </p>
+
+          <p>The values from the control menu were:</p>
+          <pre className="article-code"><code>{`0: Disabled
+1: 50 Hz
+2: 60 Hz`}</code></pre>
+
+          <p>So I changed both settings with:</p>
+          <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 \\
+  --set-ctrl=exposure_dynamic_framerate=0,power_line_frequency=2`}</code></pre>
+
+          <p>Then I verified them:</p>
+          <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 \\
+  --get-ctrl=exposure_dynamic_framerate,power_line_frequency`}</code></pre>
+
+          <div className="sidenote-row">
+            <p>
+              <a className="sidenote-reference" href="#power-line-note"><code>power_line_frequency</code></a> helps
+              the camera choose exposure timings that do not fight against the flicker of indoor lighting. The more
+              important setting for latency was <code>exposure_dynamic_framerate = 0</code>.
+            </p>
+            <PowerLineNote />
+          </div>
+
+          <p>
+            Disabling dynamic frame rate restored the camera&apos;s 30 FPS cadence. I also corrected the power-line setting
+            to 60 Hz so the camera&apos;s anti-flicker logic matched the local lighting and would not become another source
+            of unstable exposure behavior.
+          </p>
+
+          <p>
+            Once that setting changed, the stream ran the way I expected it to. Before measuring every other stage,
+            it is worth checking the environment first. Some things are outside my control, but the policies I can
+            control need to be explicit, and I need to squeeze the most out of them.
+          </p>
+
+          <p>
+            Obviously, I did not discover a way to make the sensor gather more photons for free. There is still a
+            tradeoff. In darker lighting, forcing a stable frame rate can mean a darker image or more noise.
+          </p>
+
+          <p>
+            But for this experiment, I preferred a stable capture cadence. I wanted to know that when I said “30 FPS,”
+            I was actually getting a new frame every roughly 33 ms.
+          </p>
+
+          <h3>What I learned</h3>
+          <p>This was probably the first real systems lesson of Melquíades:</p>
+          <blockquote>Before optimizing the software, make sure the physical source is doing what you think it is doing.</blockquote>
+
+          <p>
+            I could have spent hours profiling Rust, changing queue structures, optimizing syscalls, rewriting the
+            UDP sender, or blaming the Linux camera stack. None of that would have recovered frames the camera had
+            decided not to produce.
+          </p>
+
+          <p>The problem was not in my networking code. It was not in my compression code. It was not even in my program. It was a camera policy.</p>
+
+          <p>
+            Once the camera was actually producing 30 frames per second, the next problem became much more
+            interesting: what happens when fresh frames arrive correctly, but the next stage cannot process them fast
+            enough?
+          </p>
+
+          <p>That is where Melquíades becomes a queueing problem.</p>
+          */}
+
+          <h2 className="chapter-title"><span className="chapter-index">03</span><span>The First Surprise: “30 FPS” Was Actually 15 FPS</span></h2>
+
+          <p>The first camera version of Melquíades technically worked.</p>
+
+          <p>
+            My ThinkPad camera was sending video. The Mac was receiving it. Pixels were moving through UDP and
+            showing up on another screen.
+          </p>
+
+          <p>But it looked kind of bad.</p>
+
+          <p>
+            Not necessarily broken, just delayed and choppy enough that I could tell something was off. The obvious
+            thing to do would have been to immediately blame my Rust code: maybe compression was slow, maybe UDP was
+            dropping packets, maybe I was copying too much memory, maybe the Mac display code was behind.
+          </p>
+
+          <p>But I did not actually know.</p>
+          <p>So instead of optimizing random things, I started adding timestamps.</p>
+
+          <h3>The first numbers were not good enough</h3>
+          <p>My first attempt at latency measurement was honestly too naive.</p>
+
+          <p>
+            The receiver would echo a frame timestamp back to the sender, and I divided that round-trip time by two.
+            That gave me an early number around 13 ms.
+          </p>
+
+          <p>It was tempting to look at that and think:</p>
+          <blockquote>Nice. Camera video across two computers in 13 ms.</blockquote>
+
+          <p>
+            But that number was not actually camera-to-screen latency. It included some sender-side work, network
+            travel in both directions, receiver work up to the echo, and then assumed the forward and reverse network
+            paths were symmetrical. It said nothing useful about when the frame had actually appeared on the Mac
+            display.
+          </p>
+
+          <p>The video still looked delayed, so the number clearly was not telling the whole story.</p>
+          <p>This became my first lesson in performance measurement:</p>
+          <blockquote>A timestamp is not automatically a useful measurement. You need to know exactly what event it represents.</blockquote>
+
+          <p>So I threw away the misleading “one number for latency” idea and split the pipeline into stages.</p>
+          <pre className="article-code"><code>{`C0 → C1    wait for a camera frame
+C1 → S2    prepare the frame
+S2 → S3    compress it
+S3 → S4    packetize it and submit the first UDP packet
+S4 → S5    submit the remaining UDP packets
+
+R0 → R1    receive the first through final packet
+T0 → T4    decode, convert, and present on the receiver`}</code></pre>
+
+          <p>Now, instead of asking “what is the latency?”, I could ask: where is the time actually going?</p>
+
+          <h3>Something was wrong before my program even started working</h3>
+          <p>The first stage was the one that made me suspicious:</p>
+          <div className="article-equation">C0 → C1 = wait for next camera frame</div>
+
+          <p>
+            This was the time spent waiting for the camera to give my program a completed frame. The camera was
+            configured for 30 FPS. At 30 FPS, one frame period should be:
+          </p>
+          <div className="article-equation">1 / 30 = 33.33 ms</div>
+
+          <p>But the video felt closer to half that rate.</p>
+          <p>At that point, I wanted to separate two possibilities:</p>
+          <ol className="article-numbered-list">
+            <li>Melquíades is accidentally processing only every second frame.</li>
+            <li>The camera itself is only delivering around 15 frames per second.</li>
+          </ol>
+
+          <p>So I stopped looking at my own application and asked Linux to test the camera directly.</p>
+
+          <h3>Asking V4L2 instead of guessing</h3>
+          <div className="sidenote-row">
+            <p>
+              On Linux, the camera appears through <a className="sidenote-reference" href="#v4l2-note">V4L2</a>, or
+              Video4Linux2. It is the kernel interface applications use to configure cameras and receive video
+              buffers.
+            </p>
+            <V4L2Note />
+          </div>
+
+          <p>First, I checked what the camera said it was configured to do:</p>
+          <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 --get-fmt-video
+v4l2-ctl -d /dev/video0 --get-parm`}</code></pre>
+
+          <p>The result looked completely normal:</p>
+          <pre className="article-code"><code>{`Format Video Capture:
+        Width/Height      : 640/480
+        Pixel Format      : 'YUYV' (YUYV 4:2:2)
+        Bytes per Line    : 1280
+        Size Image        : 614400
+
+Streaming Parameters Video Capture:
+        Frames per second: 30.000 (30/1)`}</code></pre>
+
+          <p>So the driver had negotiated exactly what I had asked for:</p>
+          <div className="article-equation article-equation-multiline">
+            <span>640 × 480</span><span>YUYV</span><span>30 FPS</span>
+          </div>
+
+          <p>
+            But that only described the requested mode. It did not prove that the camera was actually producing 30
+            new images every second.
+          </p>
+
+          <p>To test the real delivery rate outside of Melquíades, I streamed directly from the camera into <code>/dev/null</code>:</p>
+          <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 \\
+  --set-fmt-video=width=640,height=480,pixelformat=MJPG \\
+  --set-parm=30 \\
+  --stream-mmap=4 \\
+  --stream-count=300 \\
+  --stream-to=/dev/null`}</code></pre>
+
+          <p>This test bypassed my Rust code, compression, packetization, UDP, and rendering.</p>
+          <p>V4L2 accepted the 30 FPS request:</p>
+          <pre className="article-code"><code>Frame rate set to 30.000 fps</code></pre>
+          <p>Then it reported what was actually arriving:</p>
+          <pre className="article-code"><code>{`15.21 fps, dropped buffers: 1
+15.17 fps
+15.16 fps
+15.16 fps
+...`}</code></pre>
+
+          <p>There it was. The problem was not Melquíades skipping every other frame. The camera itself was delivering roughly 15 FPS.</p>
+
+          <h3>The camera was allowed to lower its own frame rate</h3>
+          <p>I then inspected the controls exposed by the webcam:</p>
+          <pre className="article-code"><code>v4l2-ctl -d /dev/video0 --list-ctrls-menus</code></pre>
+
+          <p>The relevant output was:</p>
+          <pre className="article-code"><code>{`auto_exposure                 : Aperture Priority Mode
+exposure_time_absolute        : inactive
+exposure_dynamic_framerate    : value=1`}</code></pre>
+
+          <p>
+            The camera was running automatic exposure. That means it was allowed to decide how long the sensor
+            should collect light. In a darker room, a longer exposure can make the image brighter and less noisy.
+          </p>
+
+          <p>But exposure takes time.</p>
+          <p>At 30 FPS, the camera has roughly 33.3 ms per frame period:</p>
+          <div className="article-timeline" aria-label="Thirty frames per second frame cadence">
+            <span>frame 0</span><i aria-hidden="true" /><span>frame 1</span><i aria-hidden="true" /><span>frame 2</span>
+            <small>33.3 ms</small><small>33.3 ms</small>
+          </div>
+
+          <p>The key control was <code>exposure_dynamic_framerate = 1</code>. That gave automatic exposure permission to lower the effective frame rate when it wanted more time.</p>
+
+          <p>So the camera could report a nominal 30 FPS mode while actually behaving more like this:</p>
+          <div className="article-timeline article-timeline-slow" aria-label="Fifteen frames per second frame cadence">
+            <span>frame 0</span><i aria-hidden="true" /><span>frame 1</span><small>66.7 ms</small>
+          </div>
+
+          <p>That is approximately 15 FPS.</p>
+          <p>
+            It was not a bug in the camera. For normal video calling, choosing a brighter image over strict frame
+            cadence is reasonable. For Melquíades, though, it was a problem. The whole project cares about how
+            quickly fresh visual information can enter the pipeline.
+          </p>
+
+          <h3>Fixing the actual problem</h3>
+          <p>The final camera configuration was:</p>
+          <pre className="article-code"><code>{`exposure_dynamic_framerate = 0
+power_line_frequency = 60 Hz`}</code></pre>
+
+          <p>I set it with:</p>
+          <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 \\
+  --set-ctrl=exposure_dynamic_framerate=0,power_line_frequency=2`}</code></pre>
+
+          <div className="sidenote-row">
+            <p>
+              Toronto uses 60 Hz power, so <a className="sidenote-reference" href="#power-line-note"><code>power_line_frequency=2</code></a>
+              was the correct anti-flicker setting for the room.
+            </p>
+            <PowerLineNote />
+          </div>
+
+          <p>
+            Disabling dynamic frame rate was the direct fix for cadence. It told the camera: do not silently lower
+            the frame rate to make auto exposure happier.
+          </p>
+
+          <p>
+            The power-line setting was separate. It helped the camera choose exposure timings that matched the local
+            lighting rather than the previous 50 Hz configuration.
+          </p>
+
+          <p>After disabling dynamic frame rate, the camera returned to a genuine frame period of approximately:</p>
+          <div className="article-equation">33 ms, or actual 30 FPS</div>
+
+          <p>
+            Obviously, this was not free performance. I did not somehow make the sensor collect more light in less
+            time. The tradeoff is that, in darker lighting, forcing the camera to maintain cadence can produce a
+            darker or noisier image. I was choosing predictable temporal behavior over the camera&apos;s automatic
+            image-quality preference.
+          </p>
+
+          <h3>What I learned</h3>
+          <p>
+            This is where Melquíades started becoming a real systems project for me. The video was delayed. My first
+            latency number was misleading. So I added timestamps, separated the pipeline into stages, tested the
+            camera outside my application, and found that the bottleneck was upstream of my code.
+          </p>
+
+          <p>
+            I could have optimized compression, rewritten UDP, added more threads, or blamed V4L2. None of that would
+            have recovered frames the camera had decided not to deliver.
+          </p>
+
+          <blockquote>Before optimizing the software, verify what the source is actually doing.</blockquote>
+
+          <p>Once the camera was genuinely producing 30 frames per second, the next question became much more interesting:</p>
+          <blockquote>What happens when frames arrive correctly, but the next stage cannot process them fast enough?</blockquote>
+          <p>That is where Melquíades becomes a queueing problem.</p>
         </div>
       </section>
 

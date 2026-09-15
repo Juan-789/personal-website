@@ -694,6 +694,75 @@
   gap: 0.2rem;
 }
 
+.article-numbered-list {
+  margin: 0 0 1.3rem;
+  padding-left: 1.4rem;
+}
+
+.article-numbered-list li + li {
+  margin-top: 0.3rem;
+}
+
+.article-code {
+  overflow-x: auto;
+  margin: 1rem 0 1.3rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(165, 165, 255, 0.27);
+  background: #0d0e18;
+  color: #d7d7f7;
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 1rem;
+  line-height: 1.35;
+  white-space: pre;
+}
+
+.article-code code {
+  color: inherit;
+  font-size: inherit;
+}
+
+.article-timeline {
+  display: grid;
+  grid-template-columns: auto minmax(5rem, 1fr) auto minmax(5rem, 1fr) auto;
+  align-items: center;
+  margin: 1rem 0 1.3rem;
+  padding: 0.9rem 1rem 1.8rem;
+  background: #121321;
+  color: #dedefe;
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 1.08rem;
+  position: relative;
+}
+
+.article-timeline i {
+  height: 1px;
+  background: #a5a5ff;
+}
+
+.article-timeline small {
+  position: absolute;
+  bottom: 0.45rem;
+  color: #aaaadc;
+  font-size: 0.85rem;
+}
+
+.article-timeline small:first-of-type {
+  left: 24%;
+}
+
+.article-timeline small:last-of-type {
+  right: 15%;
+}
+
+.article-timeline-slow {
+  grid-template-columns: auto minmax(12rem, 1fr) auto;
+}
+
+.article-timeline-slow small {
+  right: auto;
+  left: 42%;
+}
+
 .writing-article blockquote {
   margin: 1rem 0 1.3rem;
   padding: 0.7rem 1rem;
@@ -740,6 +809,18 @@
   margin-top: 0.7rem;
 }
 
+.sidenote-code {
+  overflow-x: auto;
+  margin: 0.65rem 0;
+  padding: 0.6rem;
+  background: #0d0e18;
+  color: #d7d7f7;
+  font-family: 'VT323', ui-monospace, monospace;
+  font-size: 0.83rem;
+  line-height: 1.35;
+  white-space: pre;
+}
+
 .article-sidenote a,
 .article-sidenote-mobile a {
   display: block;
@@ -763,6 +844,10 @@
 .sidenote-reference:focus-visible {
   color: #fff !important;
   background-color: rgba(165, 165, 255, 0.22);
+}
+
+.sidenote-reference code {
+  color: inherit;
 }
 
 .article-sidenote-mobile {
