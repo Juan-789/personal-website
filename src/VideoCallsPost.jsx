@@ -1,14 +1,26 @@
 import { useRef, useState } from 'react'
 import ScreenCaptureChapter from './ScreenCaptureChapter'
 import DeflateChapter from './DeflateChapter'
+import H264Chapter from './H264Chapter'
+import UdpChapter from './UdpChapter'
 
 const remainingChapters = [
-  ['07', 'What H.264 Actually Changed', 'Access units, IDRs, SPS/PPS, AVCC → Annex B, decoder recovery.'],
-  ['08', 'A Tiny UDP Protocol, Deliberately', 'JUAN’s 14-byte header and why it is not WebRTC or RTP.'],
   ['09', 'The Stream Froze', 'Keyframe bursts, socket-buffer overflow, ss, nstat, and the fix.'],
   ['10', 'What the Measurements Actually Say', 'Local timing segments, informal glass-to-glass results, and unknowns.'],
   ['11', 'What Is Still Unfinished', 'Software decode, one receiver thread, CPU copies, no Internet transport.'],
   ['12', 'What Comes Next', 'Controlled 30/60 fps tests, high-speed-camera measurement, VA-API, then the BedWars remote-play demo.'],
+]
+
+const chapterIndex = [
+  ['01', 'How Do Video Calls Work?', '#how-video-calls-work'],
+  ['02', 'Pixels Are Much Bigger Than They Look', '#pixels-are-much-bigger'],
+  ['03', 'The First Surprise: “30 FPS” Was Actually 15 FPS', '#thirty-fps-was-fifteen'],
+  ['04', 'Live Video Is a Queueing Problem', '#live-video-is-a-queueing-problem'],
+  ['05', 'Screen Capture Is Not One API', '#screen-capture'],
+  ['06', 'Why DEFLATE Was Useful, but Not Enough', '#why-deflate-was-not-enough'],
+  ['07', 'What H.264 Actually Changed', '#what-h264-actually-changed'],
+  ['08', 'A Tiny UDP Protocol, Deliberately', '#a-tiny-udp-protocol'],
+  ...remainingChapters.map(([number, title]) => [number, title, `#chapter-${number}`]),
 ]
 
 function IrisEvidence() {
@@ -64,6 +76,49 @@ function FlateNote() {
           support for raw DEFLATE, zlib, and gzip streams.
         </p>
         <a href="https://docs.rs/flate2/latest/flate2/">Read the flate2 docs →</a>
+      </details>
+    </div>
+  )
+}
+
+function PixelFormatsNote() {
+  return (
+    <div className="sidenote-anchor sidenote-left" id="camera-pixel-formats">
+      <aside className="article-sidenote" aria-label="Detour: YUYV and MJPEG">
+        <span className="sidenote-type">DETOUR</span>
+        <h3>YUYV versus MJPEG</h3>
+        <p>
+          My ThinkPad webcam offered both. <code>YUYV</code> is raw camera image data. Its <code>4:2:2</code> layout
+          stores four brightness samples for every four pixels, but only two samples for each of the two colour
+          channels. In other words, neighbouring horizontal pixels share colour information while each keeps its own
+          brightness. This halves horizontal colour detail, not image width or brightness detail.
+        </p>
+        <p>
+          <code>MJPG</code> is Motion JPEG: each frame is a separately JPEG-compressed image. It is much smaller on
+          the wire, but the receiver must decode it before it has pixels. I used raw YUYV for the first baseline and
+          also asked the camera for MJPG when testing its real delivery cadence outside Melquíades.
+        </p>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>DETOUR</span> YUYV versus MJPEG</summary>
+        <p>
+          My ThinkPad webcam offered both. <code>YUYV</code> is raw camera image data. Its <code>4:2:2</code> layout
+          stores four brightness samples for every four pixels, but only two samples for each of the two colour
+          channels. In other words, neighbouring horizontal pixels share colour information while each keeps its own
+          brightness. This halves horizontal colour detail, not image width or brightness detail.
+        </p>
+        <p>
+          The packed bytes for two pixels are <code>Y0 U Y1 V</code>: two brightness values plus one shared
+          blue-difference colour sample and one shared red-difference colour sample. That is four bytes for two
+          pixels, or two bytes per pixel.
+          At 640×480, one frame is 614,400 bytes.
+        </p>
+        <p>
+          <code>MJPG</code> is Motion JPEG: each frame is a separately JPEG-compressed image. It is much smaller on
+          the wire, but the receiver must decode it before it has pixels. I used raw YUYV for the first baseline and
+          also asked the camera for MJPG when testing its real delivery cadence outside Melquíades.
+        </p>
       </details>
     </div>
   )
@@ -381,7 +436,18 @@ export default function VideoCallsPost() {
         An experiment in understanding the machinery that makes a conversation feel like it is happening now.
       </p>
 
-      <section className="chapter-with-sidenote">
+      <nav className="article-index" aria-label="Article chapters">
+        <p className="article-index-label">IN THIS ARTICLE</p>
+        <ol>
+          {chapterIndex.map(([number, title, href]) => (
+            <li key={number}>
+              <a href={href}><span>{number}</span>{title}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <section className="chapter-with-sidenote" id="how-video-calls-work">
         <div className="chapter-main">
           <h2 className="chapter-title"><span className="chapter-index">01</span><span>How Do Video Calls Work?</span></h2>
           <p>One of the things I admire most about modern technology is how ubiquitous video calling has become.</p>
@@ -521,7 +587,7 @@ export default function VideoCallsPost() {
 
       </section>
 
-      <section className="chapter-with-sidenote">
+      <section className="chapter-with-sidenote" id="pixels-are-much-bigger">
         <div className="chapter-main">
           <h2 className="chapter-title"><span className="chapter-index">02</span><span>Pixels Are Much Bigger Than They Look</span></h2>
 
@@ -575,10 +641,14 @@ export default function VideoCallsPost() {
             <FlateNote />
           </div>
 
-        <p>
-          On the original 640×480 camera stream, a raw YUYV frame was 614,400 bytes. Fast DEFLATE reduced it, but
-          compression still took roughly 8–9 milliseconds per frame in representative runs.
-        </p>
+        <div className="sidenote-row">
+          <p>
+            On the original 640×480 camera stream, a raw <a className="sidenote-reference" href="#camera-pixel-formats">YUYV</a>{' '}
+            frame was 614,400 bytes. Fast DEFLATE reduced it, but compression still took roughly 8–9 milliseconds per
+            frame in representative runs.
+          </p>
+          <PixelFormatsNote />
+        </div>
 
         <p>Eight milliseconds does not sound huge. At 30 fps, though, one frame period is only:</p>
         <div className="article-equation">1 second / 30 frames = 33.33 ms per frame</div>
@@ -632,7 +702,7 @@ export default function VideoCallsPost() {
         </div>
       </section>
 
-      <section className="chapter-with-sidenote">
+      <section className="chapter-with-sidenote" id="thirty-fps-was-fifteen">
         <div className="chapter-main">
           {/* Previous draft retained temporarily while this chapter is being revised. */}
           {/*
@@ -1076,7 +1146,7 @@ power_line_frequency = 60 Hz`}</code></pre>
         </div>
       </section>
 
-      <section className="chapter-with-sidenote">
+      <section className="chapter-with-sidenote" id="live-video-is-a-queueing-problem">
         <div className="chapter-main">
           <h2 className="chapter-title"><span className="chapter-index">04</span><span>Live Video Is a Queueing Problem</span></h2>
 
@@ -1253,12 +1323,14 @@ power_line_frequency = 60 Hz`}</code></pre>
 
       <ScreenCaptureChapter />
       <DeflateChapter />
+      <H264Chapter />
+      <UdpChapter />
 
       <section className="article-outline" aria-label="Remaining chapter outline">
         <p className="outline-label">STILL TO WRITE</p>
         <ol>
           {remainingChapters.map(([number, title, description]) => (
-            <li key={number}>
+            <li key={number} id={`chapter-${number}`}>
               <span>{number}</span>
               <div>
                 <h2>{title}</h2>

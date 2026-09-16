@@ -1,3 +1,28 @@
+function Flate2Note() {
+  return (
+    <div className="sidenote-anchor" id="chapter-six-flate2-note">
+      <aside className="article-sidenote" aria-label="Further reading: flate2">
+        <span className="sidenote-type">FURTHER READING</span>
+        <h3>flate2</h3>
+        <p>
+          <code>flate2</code> is the Rust crate I used to get a practical DEFLATE baseline before introducing a video
+          codec. It supports raw DEFLATE, zlib, and gzip streams.
+        </p>
+        <a href="https://docs.rs/flate2/latest/flate2/">Read the flate2 docs →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>FURTHER READING</span> flate2</summary>
+        <p>
+          <code>flate2</code> is the Rust crate I used to get a practical DEFLATE baseline before introducing a video
+          codec. It supports raw DEFLATE, zlib, and gzip streams.
+        </p>
+        <a href="https://docs.rs/flate2/latest/flate2/">Read the flate2 docs →</a>
+      </details>
+    </div>
+  )
+}
+
 export default function DeflateChapter() {
   return (
     <section className="chapter-with-sidenote" id="why-deflate-was-not-enough">
@@ -21,7 +46,13 @@ export default function DeflateChapter() {
 
         <p>I had already written a Huffman compressor for another project, so naturally, there was a moment of “could I just use that?”</p>
 
-        <p>For this experiment, I used DEFLATE through Rust’s <code>flate2</code> crate instead.</p>
+        <div className="sidenote-row">
+          <p>
+            For this experiment, I used DEFLATE through Rust&apos;s{' '}
+            <a className="sidenote-reference" href="#chapter-six-flate2-note"><code>flate2</code></a> crate instead.
+          </p>
+          <Flate2Note />
+        </div>
 
         <p>Funny enough, Huffman coding was still involved. DEFLATE combines LZ77-style references to repeated byte sequences with Huffman coding. It is lossless: decompressing the result gives back the original bytes. <a href="https://www.rfc-editor.org/rfc/rfc1951.html">DEFLATE specification</a></p>
 

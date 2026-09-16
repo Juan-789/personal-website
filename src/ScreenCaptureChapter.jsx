@@ -1,3 +1,111 @@
+function XdgScreenCastNote() {
+  return (
+    <div className="sidenote-anchor sidenote-left" id="xdg-screencast-note">
+      <aside className="article-sidenote" aria-label="Further reading: XDG ScreenCast portal">
+        <span className="sidenote-type">FURTHER READING</span>
+        <h3>XDG ScreenCast portal</h3>
+        <p>
+          I used a Rust binding for this, but the official portal documentation was still genuinely useful for
+          understanding what the interface can do and what an implementation provides.
+        </p>
+        <a href="https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.impl.portal.ScreenCast.html">
+          Read the ScreenCast implementation docs →
+        </a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>FURTHER READING</span> XDG ScreenCast portal</summary>
+        <p>
+          I used a Rust binding for this, but the official portal documentation was still genuinely useful for
+          understanding what the interface can do and what an implementation provides.
+        </p>
+        <a href="https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.impl.portal.ScreenCast.html">
+          Read the ScreenCast implementation docs →
+        </a>
+      </details>
+    </div>
+  )
+}
+
+function PipeWireNote() {
+  return (
+    <div className="sidenote-anchor" id="pipewire-note">
+      <aside className="article-sidenote" aria-label="Further reading: PipeWire">
+        <span className="sidenote-type">FURTHER READING</span>
+        <h3>PipeWire</h3>
+        <p>
+          PipeWire is the Linux multimedia layer that delivers the actual video buffers. In Melquíades, the portal
+          handles consent and source selection; PipeWire is where the pixels arrive.
+        </p>
+        <a href="https://pipewire.org/">PipeWire project site →</a>
+        <a href="https://pipewire.pages.freedesktop.org/pipewire-rs/pipewire/">pipewire-rs docs →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>FURTHER READING</span> PipeWire</summary>
+        <p>
+          PipeWire is the Linux multimedia layer that delivers the actual video buffers. In Melquíades, the portal
+          handles consent and source selection; PipeWire is where the pixels arrive.
+        </p>
+        <a href="https://pipewire.org/">PipeWire project site →</a>
+        <a href="https://pipewire.pages.freedesktop.org/pipewire-rs/pipewire/">pipewire-rs docs →</a>
+      </details>
+    </div>
+  )
+}
+
+function AshpdNote() {
+  return (
+    <div className="sidenote-anchor sidenote-left" id="ashpd-note">
+      <aside className="article-sidenote" aria-label="Under the hood: ashpd">
+        <span className="sidenote-type">UNDER THE HOOD</span>
+        <h3>ashpd</h3>
+        <p>
+          <code>ashpd</code> is a Rust wrapper around the XDG Desktop Portal D-Bus interfaces. Its name is a funny
+          <a href="https://store.steampowered.com/app/400/Portal/">Portal</a> reference: <strong>Aperture Science
+          Handheld Portal Device</strong>.
+        </p>
+        <a href="https://docs.rs/ashpd/0.13.13/ashpd/">Read the ashpd docs →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>UNDER THE HOOD</span> ashpd</summary>
+        <p>
+          <code>ashpd</code> is a Rust wrapper around the XDG Desktop Portal D-Bus interfaces. Its name is a funny
+          <a href="https://store.steampowered.com/app/400/Portal/">Portal</a> reference: <strong>Aperture Science
+          Handheld Portal Device</strong>.
+        </p>
+        <a href="https://docs.rs/ashpd/0.13.13/ashpd/">Read the ashpd docs →</a>
+      </details>
+    </div>
+  )
+}
+
+function ZbusNote() {
+  return (
+    <div className="sidenote-anchor" id="zbus-note">
+      <aside className="article-sidenote" aria-label="Further reading: zbus">
+        <span className="sidenote-type">FURTHER READING</span>
+        <h3>zbus</h3>
+        <p>
+          <code>zbus</code> is the Rust library underneath this portal conversation. Its book is great if you want to
+          understand D-Bus itself, not just use a wrapper around it.
+        </p>
+        <a href="https://z-galaxy.github.io/zbus/">Read the zbus book →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>FURTHER READING</span> zbus</summary>
+        <p>
+          <code>zbus</code> is the Rust library underneath this portal conversation. Its book is great if you want to
+          understand D-Bus itself, not just use a wrapper around it.
+        </p>
+        <a href="https://z-galaxy.github.io/zbus/">Read the zbus book →</a>
+      </details>
+    </div>
+  )
+}
+
 export default function ScreenCaptureChapter() {
   return (
     <section className="chapter-with-sidenote" id="screen-capture">
@@ -71,7 +179,14 @@ export default function ScreenCaptureChapter() {
 
         <h3>Linux: permission first, pixels second</h3>
 
-        <p>On Linux, my screen-capture path used the XDG ScreenCast portal and PipeWire.</p>
+        <div className="sidenote-row">
+          <p>
+            On Linux, my screen-capture path used the <a className="sidenote-reference" href="#xdg-screencast-note">XDG ScreenCast portal</a>{' '}
+            and <a className="sidenote-reference" href="#pipewire-note">PipeWire</a>.
+          </p>
+          <XdgScreenCastNote />
+          <PipeWireNote />
+        </div>
 
         <p>Those are two different parts of the process.</p>
 
@@ -79,13 +194,23 @@ export default function ScreenCaptureChapter() {
 
         <pre className="article-code"><code>{"Melquíades\n    → request screen sharing through the portal\n    → user selects a monitor\n    → receive an authorized PipeWire connection\n    → receive frame buffers through PipeWire"}</code></pre>
 
-        <p>I used <code>ashpd</code> to talk to the portal from Rust. It wraps the portal’s D-Bus interfaces using <code>zbus</code>.</p>
-
-        <p>This led to another small rabbit hole.</p>
-
-        <blockquote><p>Detour: what is D-Bus?</p><p>D-Bus lets separate programs exchange structured messages. A program can call a method exposed by another program, read a property, or receive a signal.</p><p>Here, Melquíades connects to the user’s session bus and talks to the desktop portal service.</p><p><code>zbus</code> implements the D-Bus protocol in Rust. <code>ashpd</code> builds the portal-specific API on top of it.</p><p>The important distinction for this project: D-Bus carries the conversation about screen sharing. The video frames arrive through PipeWire.</p></blockquote>
+        <div className="sidenote-row">
+          <p>
+            I used <a className="sidenote-reference" href="#ashpd-note"><code>ashpd</code></a> to talk to the portal
+            from Rust. It wraps the portal&apos;s D-Bus interfaces.
+          </p>
+          <AshpdNote />
+        </div>
 
         <p>The portal is a standard interface backed by desktop-specific implementations. That lets an application make a screen-sharing request without implementing a separate permission and selection interface for every desktop environment. Portals are also available to applications running outside a sandbox. <a href="https://flatpak.github.io/xdg-desktop-portal/docs/">XDG Desktop Portal documentation</a></p>
+
+        <div className="sidenote-row">
+          <p>
+            Underneath, <code>ashpd</code> uses <a className="sidenote-reference" href="#zbus-note"><code>zbus</code></a>{' '}
+            for that D-Bus conversation.
+          </p>
+          <ZbusNote />
+        </div>
 
         <p>My request was deliberately narrow:</p>
 
