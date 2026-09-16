@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
+import ScreenCaptureChapter from './ScreenCaptureChapter'
+import DeflateChapter from './DeflateChapter'
 
 const remainingChapters = [
-  ['05', 'Screen Capture Is Not One API', 'Linux portal + PipeWire; macOS ScreenCaptureKit and IOSurfaces.'],
-  ['06', 'Why Deflate Was Useful, but Not Enough', 'A measurable independent-frame baseline before real video coding.'],
   ['07', 'What H.264 Actually Changed', 'Access units, IDRs, SPS/PPS, AVCC → Annex B, decoder recovery.'],
   ['08', 'A Tiny UDP Protocol, Deliberately', 'JUAN’s 14-byte header and why it is not WebRTC or RTP.'],
   ['09', 'The Stream Froze', 'Keyframe bursts, socket-buffer overflow, ss, nstat, and the fix.'],
@@ -1250,6 +1250,9 @@ power_line_frequency = 60 Hz`}</code></pre>
           </p>
         </div>
       </section>
+
+      <ScreenCaptureChapter />
+      <DeflateChapter />
 
       <section className="article-outline" aria-label="Remaining chapter outline">
         <p className="outline-label">STILL TO WRITE</p>
