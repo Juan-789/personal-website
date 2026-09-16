@@ -590,7 +590,7 @@
 
 @media (min-width: 1400px) {
   .video-call-post {
-    max-width: 1364px;
+    max-width: 760px;
   }
 
   .video-call-post > .article-kicker,
@@ -598,7 +598,7 @@
   .video-call-post > .article-dek,
   .article-outline,
   .chapter-with-sidenote > .chapter-main {
-    margin-left: 282px;
+    margin-left: 0;
   }
 }
 
