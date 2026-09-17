@@ -34,7 +34,7 @@ function PipeWireNote() {
         <span className="sidenote-type">FURTHER READING</span>
         <h3>PipeWire</h3>
         <p>
-          PipeWire is the Linux multimedia layer that delivers the actual video buffers. In Melquíades, the portal
+          PipeWire is the Linux multimedia layer that delivers the actual video buffers. In Melquiades, the portal
           handles consent and source selection; PipeWire is where the pixels arrive.
         </p>
         <a href="https://pipewire.org/">PipeWire project site →</a>
@@ -44,7 +44,7 @@ function PipeWireNote() {
       <details className="article-sidenote-mobile">
         <summary><span>FURTHER READING</span> PipeWire</summary>
         <p>
-          PipeWire is the Linux multimedia layer that delivers the actual video buffers. In Melquíades, the portal
+          PipeWire is the Linux multimedia layer that delivers the actual video buffers. In Melquiades, the portal
           handles consent and source selection; PipeWire is where the pixels arrive.
         </p>
         <a href="https://pipewire.org/">PipeWire project site →</a>
@@ -81,6 +81,145 @@ function AshpdNote() {
   )
 }
 
+function BgraNote() {
+  return (
+    <div className="sidenote-anchor" id="bgra-note">
+      <aside className="article-sidenote" aria-label="Detour: what is BGRA">
+        <span className="sidenote-type">DETOUR</span>
+        <h3>What is BGRA?</h3>
+        <p>
+          BGRA describes the order of a pixel&apos;s colour channels in memory: <strong>Blue, Green, Red, Alpha</strong>.
+          In Melquiades, each channel occupies one byte, with a value from 0 to 255. That makes each pixel four bytes.
+        </p>
+        <pre className="sidenote-code"><code>{'[blue][green][red][alpha]'}</code></pre>
+        <p>
+          Alpha describes opacity: 0 is fully transparent, and 255 is fully opaque. An opaque red pixel therefore
+          looks like <code>[0][0][255][255]</code>. The order matters. If the renderer reads those bytes as RGBA, it
+          interprets the red channel as blue.
+        </p>
+        <p>
+          PipeWire&apos;s BGRx source has the same blue, green, red ordering, but its fourth <code>x</code> byte is unused
+          here. This is also where the raw-frame arithmetic comes from: <code>1920 × 1080 × 4 = 8,294,400</code> bytes.
+        </p>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>DETOUR</span> What is BGRA?</summary>
+        <p>
+          BGRA describes the order of a pixel&apos;s colour channels in memory: <strong>Blue, Green, Red, Alpha</strong>.
+          In Melquiades, each channel occupies one byte, with a value from 0 to 255. That makes each pixel four bytes.
+        </p>
+        <pre className="sidenote-code"><code>{'[blue][green][red][alpha]'}</code></pre>
+        <p>
+          Alpha describes opacity: 0 is fully transparent, and 255 is fully opaque. An opaque red pixel therefore
+          looks like <code>[0][0][255][255]</code>. The order matters. If the renderer reads those bytes as RGBA, it
+          interprets the red channel as blue.
+        </p>
+        <p>
+          PipeWire&apos;s BGRx source has the same blue, green, red ordering, but its fourth <code>x</code> byte is unused
+          here. This is also where the raw-frame arithmetic comes from: <code>1920 × 1080 × 4 = 8,294,400</code> bytes.
+        </p>
+      </details>
+    </div>
+  )
+}
+
+function ScreenCaptureKitCrateNote() {
+  return (
+    <div className="sidenote-anchor" id="screencapturekit-crate-note">
+      <aside className="article-sidenote" aria-label="Further reading: the screencapturekit crate">
+        <span className="sidenote-type">FURTHER READING</span>
+        <h3>The <code>screencapturekit</code> crate</h3>
+        <p>
+          <code>screencapturekit</code> provides Rust bindings to Apple&apos;s ScreenCaptureKit framework, the macOS
+          machinery for capturing displays, windows, and application content.
+        </p>
+        <p>
+          I used it to select a display, configure the image dimensions and pixel format, and register a handler to
+          receive captured samples.
+        </p>
+        <p>
+          macOS performs the actual capture. The crate exposes that functionality through Rust types and methods,
+          including the <code>SCStreamOutputTrait</code> callback used in Melquiades. Those samples give my code access
+          to native image buffers, which I can copy into the frame pool or pass into the later VideoToolbox encoding
+          path. Screen Recording permission is still controlled by macOS.
+        </p>
+        <a href="https://docs.rs/screencapturekit/latest/screencapturekit/">Read the crate&apos;s documentation →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>FURTHER READING</span> The <code>screencapturekit</code> crate</summary>
+        <p>
+          <code>screencapturekit</code> provides Rust bindings to Apple&apos;s ScreenCaptureKit framework, the macOS
+          machinery for capturing displays, windows, and application content.
+        </p>
+        <p>
+          I used it to select a display, configure the image dimensions and pixel format, and register a handler to
+          receive captured samples.
+        </p>
+        <p>
+          macOS performs the actual capture. The crate exposes that functionality through Rust types and methods,
+          including the <code>SCStreamOutputTrait</code> callback used in Melquiades. Those samples give my code access
+          to native image buffers, which I can copy into the frame pool or pass into the later VideoToolbox encoding
+          path. Screen Recording permission is still controlled by macOS.
+        </p>
+        <a href="https://docs.rs/screencapturekit/latest/screencapturekit/">Read the crate&apos;s documentation →</a>
+      </details>
+    </div>
+  )
+}
+
+function WhyCopyNote() {
+  return (
+    <div className="sidenote-anchor sidenote-left" id="why-copy-note">
+      <aside className="article-sidenote" aria-label="Under the hood: why not just pass a pointer">
+        <span className="sidenote-type">UNDER THE HOOD</span>
+        <h3>Why not just pass a pointer?</h3>
+        <p>
+          You can, but a pointer tells you where the bytes are, not whether they still contain the same image.
+        </p>
+        <p>
+          Suppose PipeWire gives me buffer A containing frame 100. I pass its address to the sender, then return the
+          buffer to PipeWire. Before the sender finishes reading, PipeWire reuses A for frame 103. The address has not
+          changed. The image has. Reading while the buffer is being overwritten could even produce a mixture.
+        </p>
+        <p>
+          In my callback, dropping the buffer handle returns it to PipeWire. Keeping a pointer elsewhere does not
+          prevent that reuse. Avoiding the copy would mean keeping the original buffer checked out until the sender
+          finishes, then returning it. PipeWire supports that approach, but holding its limited buffers longer can
+          reduce what remains available for capture.
+        </p>
+        <p>
+          Copying into my own pool lets PipeWire reuse its buffer promptly while the sender works on an independent
+          image. It is a tradeoff between copying bytes and coordinating buffer lifetimes.
+        </p>
+        <a href="https://docs.pipewire.org/page_streams.html">Read about PipeWire&apos;s buffer lifecycle →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>UNDER THE HOOD</span> Why not just pass a pointer?</summary>
+        <p>You can, but a pointer tells you where the bytes are, not whether they still contain the same image.</p>
+        <p>
+          Suppose PipeWire gives me buffer A containing frame 100. I pass its address to the sender, then return the
+          buffer to PipeWire. Before the sender finishes reading, PipeWire reuses A for frame 103. The address has not
+          changed. The image has. Reading while the buffer is being overwritten could even produce a mixture.
+        </p>
+        <p>
+          In my callback, dropping the buffer handle returns it to PipeWire. Keeping a pointer elsewhere does not
+          prevent that reuse. Avoiding the copy would mean keeping the original buffer checked out until the sender
+          finishes, then returning it. PipeWire supports that approach, but holding its limited buffers longer can
+          reduce what remains available for capture.
+        </p>
+        <p>
+          Copying into my own pool lets PipeWire reuse its buffer promptly while the sender works on an independent
+          image. It is a tradeoff between copying bytes and coordinating buffer lifetimes.
+        </p>
+        <a href="https://docs.pipewire.org/page_streams.html">Read about PipeWire&apos;s buffer lifecycle →</a>
+      </details>
+    </div>
+  )
+}
+
 function ZbusNote() {
   return (
     <div className="sidenote-anchor" id="zbus-note">
@@ -110,7 +249,7 @@ export default function ScreenCaptureChapter() {
   return (
     <section className="chapter-with-sidenote" id="screen-capture">
       <div className="chapter-main">
-        <h2 className="chapter-title"><span className="chapter-index">05</span><span>Screen Capture Is Not One API (draft)</span></h2>
+        <h2 className="chapter-title"><span className="chapter-index">05</span><span>Screen Capture Is Not One API</span></h2>
         <p>Now that my camera was actually producing 30 frames per second, I wanted to go further.</p>
 
         <p>I had timestamps for the individual stages. I knew how long I waited for a camera frame, how long compression took, and how long the sender spent submitting UDP packets.</p>
@@ -157,13 +296,14 @@ export default function ScreenCaptureChapter() {
 
         <pre className="article-code"><code>{"claim a free slot\n    → wait for a camera frame\n    → copy it into the slot\n    → publish the slot\n    → repeat"}</code></pre>
 
-        <p>Melquíades owned that loop. Its <code>FrameSource</code> interface exposed a <code>next_frame()</code> method, and the Linux implementation waited for V4L2 to provide a completed camera buffer.</p>
+        <p>Melquiades owned that loop. Its <code>FrameSource</code> interface exposed a <code>next_frame()</code> method, which waited for V4L2 to provide a completed camera buffer. Once it returned, my code processed the frame and called it again.</p>
 
-        <p>This was not a loop constantly asking “is it done yet?” The operation could block while waiting. But the application still initiated the request.</p>
+        <p>Screen capture gave my code a different shape.</p>
 
-        <p>Screen capture changed that relationship.</p>
+        <p>In my PipeWire and ScreenCaptureKit backends, I registered a handler and started the stream. The capture system then called my handler whenever there was output to process.</p>
 
-        <p>Both PipeWire on Linux and ScreenCaptureKit on macOS deliver output through callbacks. I register a handler, start the capture machinery, and get called when there is output to process.</p>
+        <p>With the camera, my code called a function to obtain the next frame. With screen capture, the capture system called my code to handle incoming output.</p>
+
 
         <pre className="article-code"><code>{"capture system invokes my callback\n    → inspect the supplied image\n    → copy it into a free pool slot\n    → publish the slot\n    → return"}</code></pre>
 
@@ -192,7 +332,7 @@ export default function ScreenCaptureChapter() {
 
         <p>The portal handles the request to share something. PipeWire delivers the resulting video stream.</p>
 
-        <pre className="article-code"><code>{"Melquíades\n    → request screen sharing through the portal\n    → user selects a monitor\n    → receive an authorized PipeWire connection\n    → receive frame buffers through PipeWire"}</code></pre>
+        <pre className="article-code"><code>{"Melquiades\n    → request screen sharing through the portal\n    → user selects a monitor\n    → receive an authorized PipeWire connection\n    → receive frame buffers through PipeWire"}</code></pre>
 
         <div className="sidenote-row">
           <p>
@@ -236,7 +376,13 @@ export default function ScreenCaptureChapter() {
 
         <pre className="article-code"><code>{"blue | green | red | unused"}</code></pre>
 
-        <p>My raw pipeline ignores the fourth byte when displaying the image, so this layout works with its BGRA-style representation.</p>
+        <div className="sidenote-row">
+          <p>
+            My raw pipeline ignores the fourth byte when displaying the image, so this layout works with its{' '}
+            <a className="sidenote-reference" href="#bgra-note">BGRA-style representation</a>.
+          </p>
+          <BgraNote />
+        </div>
 
         <p>PipeWire negotiates the format, and my code checks what it actually agreed to provide. This is the same lesson the webcam had already taught me: requesting a configuration is not the same as verifying the result.</p>
 
@@ -246,19 +392,28 @@ export default function ScreenCaptureChapter() {
 
         <p>The callback checks the buffer, copies its image into the pool, and releases it back to PipeWire.</p>
 
-        <pre className="article-code"><code>{"PipeWire buffer\n    → copy into Melquíades slot\n    → publish SlotId\n    → return PipeWire buffer"}</code></pre>
+        <pre className="article-code"><code>{"PipeWire buffer\n    → copy into Melquiades slot\n    → publish SlotId\n    → return PipeWire buffer"}</code></pre>
 
-        <p>Why copy?</p>
+        <div className="sidenote-row">
+          <p><a className="sidenote-reference" href="#why-copy-note">Why copy?</a></p>
+          <WhyCopyNote />
+        </div>
 
         <p>Because this buffer belongs to the capture system. My sender might still be compressing or sending the image after the callback returns.</p>
 
         <p>Passing the sender a pointer would not magically transfer ownership of those pixels.</p>
 
-        <p>For this implementation, an independent copy gave me a clear boundary: PipeWire could reuse its buffer, and Melquíades could keep working on its own image.</p>
+        <p>For this implementation, an independent copy gave me a clear boundary: PipeWire could reuse its buffer, and Melquiades could keep working on its own image.</p>
 
         <h3>macOS: ScreenCaptureKit</h3>
 
-        <p>On the Mac, I used ScreenCaptureKit through the Rust <code>screencapturekit</code> crate.</p>
+        <div className="sidenote-row">
+          <p>
+            On the Mac, I used ScreenCaptureKit through the Rust{' '}
+            <a className="sidenote-reference" href="#screencapturekit-crate-note"><code>screencapturekit</code></a> crate.
+          </p>
+          <ScreenCaptureKitCrateNote />
+        </div>
 
         <p>The setup looked different:</p>
 
@@ -291,7 +446,7 @@ export default function ScreenCaptureChapter() {
 
         <p>The handler obtains the pixel buffer, checks its dimensions and format, locks it for CPU reading, and copies the image into the frame pool.</p>
 
-        <pre className="article-code"><code>{"ScreenCaptureKit callback\n    → obtain CVPixelBuffer\n    → lock for reading\n    → copy into Melquíades slot\n    → release the lock\n    → return"}</code></pre>
+        <pre className="article-code"><code>{"ScreenCaptureKit callback\n    → obtain CVPixelBuffer\n    → lock for reading\n    → copy into Melquiades slot\n    → release the lock\n    → return"}</code></pre>
 
         <p>Different setup. Different object types. Same ownership question.</p>
 
@@ -363,7 +518,7 @@ export default function ScreenCaptureChapter() {
 
         <p>For now, though, I had reached the next milestone.</p>
 
-        <p>Melquíades could capture screens through two different operating-system APIs and feed those images into a working streaming pipeline.</p>
+        <p>Melquiades could capture screens through two different operating-system APIs and feed those images into a working streaming pipeline.</p>
 
         <p>Getting the pixels was no longer the problem.</p>
 

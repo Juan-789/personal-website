@@ -3,9 +3,9 @@ import ScreenCaptureChapter from './ScreenCaptureChapter'
 import DeflateChapter from './DeflateChapter'
 import H264Chapter from './H264Chapter'
 import UdpChapter from './UdpChapter'
+import StreamFrozeChapter from './StreamFrozeChapter'
 
 const remainingChapters = [
-  ['09', 'The Stream Froze', 'Keyframe bursts, socket-buffer overflow, ss, nstat, and the fix.'],
   ['10', 'What the Measurements Actually Say', 'Local timing segments, informal glass-to-glass results, and unknowns.'],
   ['11', 'What Is Still Unfinished', 'Software decode, one receiver thread, CPU copies, no Internet transport.'],
   ['12', 'What Comes Next', 'Controlled 30/60 fps tests, high-speed-camera measurement, VA-API, then the BedWars remote-play demo.'],
@@ -20,6 +20,7 @@ const chapterIndex = [
   ['06', 'Why DEFLATE Was Useful, but Not Enough', '#why-deflate-was-not-enough'],
   ['07', 'What H.264 Actually Changed', '#what-h264-actually-changed'],
   ['08', 'A Tiny UDP Protocol, Deliberately', '#a-tiny-udp-protocol'],
+  ['09', 'The Stream Froze', '#the-stream-froze'],
   ...remainingChapters.map(([number, title]) => [number, title, `#chapter-${number}`]),
 ]
 
@@ -96,7 +97,7 @@ function PixelFormatsNote() {
         <p>
           <code>MJPG</code> is Motion JPEG: each frame is a separately JPEG-compressed image. It is much smaller on
           the wire, but the receiver must decode it before it has pixels. I used raw YUYV for the first baseline and
-          also asked the camera for MJPG when testing its real delivery cadence outside Melquíades.
+          also asked the camera for MJPG when testing its real delivery cadence outside Melquiades.
         </p>
       </aside>
 
@@ -117,7 +118,7 @@ function PixelFormatsNote() {
         <p>
           <code>MJPG</code> is Motion JPEG: each frame is a separately JPEG-compressed image. It is much smaller on
           the wire, but the receiver must decode it before it has pixels. I used raw YUYV for the first baseline and
-          also asked the camera for MJPG when testing its real delivery cadence outside Melquíades.
+          also asked the camera for MJPG when testing its real delivery cadence outside Melquiades.
         </p>
       </details>
     </div>
@@ -274,7 +275,7 @@ function SpscResearchNote() {
           <li><a href="https://docs.kernel.org/core-api/circular-buffers.html">Linux kernel: circular buffers</a> explains SPSC head and tail indices, plus the producer/consumer memory-barrier pattern.</li>
           <li><a href="https://doc.rust-lang.org/std/sync/atomic/enum.Ordering.html">Rust atomic orderings</a> documents the vocabulary behind publishing a completed slot safely.</li>
           <li><a href="https://doc.rust-lang.org/nomicon/atomics.html">Rustonomicon: atomics</a> is the deeper memory-model background.</li>
-          <li><a href="https://gstreamer.freedesktop.org/documentation/additional/design/bufferpool.html">GStreamer buffer-pool design</a> is useful prior art for fixed reusable media buffers. Its blocking policy is not ours: Melquíades drops old live work instead.</li>
+          <li><a href="https://gstreamer.freedesktop.org/documentation/additional/design/bufferpool.html">GStreamer buffer-pool design</a> is useful prior art for fixed reusable media buffers. Its blocking policy is not ours: Melquiades drops old live work instead.</li>
           <li><a href="https://docs.kernel.org/userspace-api/media/v4l/vidioc-reqbufs.html">Linux V4L2 buffer interface</a> describes the driver-side model and the later mmap and DMA-BUF direction.</li>
         </ul>
       </aside>
@@ -289,7 +290,7 @@ function SpscResearchNote() {
           <li><a href="https://docs.kernel.org/core-api/circular-buffers.html">Linux kernel: circular buffers</a> explains SPSC head and tail indices, plus the producer/consumer memory-barrier pattern.</li>
           <li><a href="https://doc.rust-lang.org/std/sync/atomic/enum.Ordering.html">Rust atomic orderings</a> documents the vocabulary behind publishing a completed slot safely.</li>
           <li><a href="https://doc.rust-lang.org/nomicon/atomics.html">Rustonomicon: atomics</a> is the deeper memory-model background.</li>
-          <li><a href="https://gstreamer.freedesktop.org/documentation/additional/design/bufferpool.html">GStreamer buffer-pool design</a> is useful prior art for fixed reusable media buffers. Its blocking policy is not ours: Melquíades drops old live work instead.</li>
+          <li><a href="https://gstreamer.freedesktop.org/documentation/additional/design/bufferpool.html">GStreamer buffer-pool design</a> is useful prior art for fixed reusable media buffers. Its blocking policy is not ours: Melquiades drops old live work instead.</li>
           <li><a href="https://docs.kernel.org/userspace-api/media/v4l/vidioc-reqbufs.html">Linux V4L2 buffer interface</a> describes the driver-side model and the later mmap and DMA-BUF direction.</li>
         </ul>
       </details>
@@ -670,7 +671,7 @@ export default function VideoCallsPost() {
         <p>
           The compression ratio also changed dramatically with content. A mostly static desktop can compress
           extremely well. Moving windows, games, video, and camera noise give the compressor less repeated data to
-          exploit. There is no single honest “this reduces video by 40%” number.
+          exploit.
         </p>
 
         <h3>Why video needs a video codec</h3>
@@ -694,11 +695,14 @@ export default function VideoCallsPost() {
 
         <p>
           It is not free. It adds encoder delay, decoder delay, predictive-frame dependencies, keyframes, and harder
-          loss recovery. But it changes the problem from “how do I move raw screenshots quickly?” into “how do I
-          send only the visual information that changed, while keeping the stream responsive?”
+          loss recovery. But I was already spending time compressing and decompressing every frame with DEFLATE,
+          so replacing that with a video codec seemed like a fair trade. H.264 could represent the same scene with
+          far fewer bytes, which meant fewer packets to send and reassemble. On top of that, the Mac could encode
+          H.264 in hardware. I figured those savings could outweigh the extra complexity and make the whole
+          pipeline faster.
         </p>
 
-        <p>That distinction is where video streaming becomes interesting.</p>
+        <p>That was the idea. Now I needed to see whether it actually worked.</p>
         </div>
       </section>
 
@@ -713,7 +717,7 @@ export default function VideoCallsPost() {
             configured was lowkey not doing what I had configured it to do.
           </p>
 
-          <p>The first version of Melquíades used the built-in ThinkPad camera: 640×480, YUYV, supposedly 30 FPS.</p>
+          <p>The first version of Melquiades used the built-in ThinkPad camera: 640×480, YUYV, supposedly 30 FPS.</p>
 
           <p>And 30 FPS should mean that a new frame comes in every:</p>
           <div className="article-equation">1 / 30 = 0.0333 seconds = 33.3 ms</div>
@@ -737,7 +741,7 @@ export default function VideoCallsPost() {
             itself was already eating a meaningful part of the latency budget.
           </p>
 
-          <h3>Okay, but was Melquíades actually the problem?</h3>
+          <h3>Okay, but was Melquiades actually the problem?</h3>
           <p>The first thing I wanted to know was whether my program was somehow messing this up.</p>
 
           <div className="sidenote-row">
@@ -749,7 +753,7 @@ export default function VideoCallsPost() {
             <V4L2Note />
           </div>
 
-          <p>Melquíades used the Rust <code>linuxvideo</code> crate, but I also checked the device directly with <code>v4l2-ctl</code>:</p>
+          <p>Melquiades used the Rust <code>linuxvideo</code> crate, but I also checked the device directly with <code>v4l2-ctl</code>:</p>
           <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 --get-fmt-video
 v4l2-ctl -d /dev/video0 --get-parm`}</code></pre>
 
@@ -774,7 +778,7 @@ Streaming Parameters Video Capture:
           <blockquote>“Configured for 30 FPS” does not necessarily mean “actually delivering 30 fresh frames every second.”</blockquote>
           <p>It only means that the driver and camera negotiated a mode with a nominal 30 FPS rate.</p>
 
-          <p>So I tested the camera outside Melquíades entirely:</p>
+          <p>So I tested the camera outside Melquiades entirely:</p>
           <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 \\
   --set-fmt-video=width=640,height=480,pixelformat=MJPG \\
   --set-parm=30 \\
@@ -848,7 +852,7 @@ exposure_dynamic_framerate 0x009a0903 (bool)
           </p>
 
           <p>
-            But Melquíades is not trying to make the prettiest webcam image possible. It is trying to understand and
+            But Melquiades is not trying to make the prettiest webcam image possible. It is trying to understand and
             reduce latency. Those are different objectives.
           </p>
 
@@ -907,7 +911,7 @@ power_line_frequency = 60 Hz`}</code></pre>
           </p>
 
           <h3>What I learned</h3>
-          <p>This was probably the first real systems lesson of Melquíades:</p>
+          <p>This was probably the first real systems lesson of Melquiades:</p>
           <blockquote>Before optimizing the software, make sure the physical source is doing what you think it is doing.</blockquote>
 
           <p>
@@ -924,12 +928,12 @@ power_line_frequency = 60 Hz`}</code></pre>
             enough?
           </p>
 
-          <p>That is where Melquíades becomes a queueing problem.</p>
+          <p>That is where Melquiades becomes a queueing problem.</p>
           */}
 
           <h2 className="chapter-title"><span className="chapter-index">03</span><span>The First Surprise: “30 FPS” Was Actually 15 FPS</span></h2>
 
-          <p>The first camera version of Melquíades technically worked.</p>
+          <p>The first camera version of Melquiades technically worked.</p>
 
           <p>
             My ThinkPad camera was sending video. The Mac was receiving it. Pixels were moving through UDP and
@@ -994,7 +998,7 @@ T0 → T4    decode, convert, and present on the receiver`}</code></pre>
           <p>But the video felt closer to half that rate.</p>
           <p>At that point, I wanted to separate two possibilities:</p>
           <ol className="article-numbered-list">
-            <li>Melquíades is accidentally processing only every second frame.</li>
+            <li>Melquiades is accidentally processing only every second frame.</li>
             <li>The camera itself is only delivering around 15 frames per second.</li>
           </ol>
 
@@ -1034,7 +1038,7 @@ Streaming Parameters Video Capture:
             new images every second.
           </p>
 
-          <p>To test the real delivery rate outside of Melquíades, I streamed directly from the camera into <code>/dev/null</code>:</p>
+          <p>To test the real delivery rate outside of Melquiades, I streamed directly from the camera into <code>/dev/null</code>:</p>
           <pre className="article-code"><code>{`v4l2-ctl -d /dev/video0 \\
   --set-fmt-video=width=640,height=480,pixelformat=MJPG \\
   --set-parm=30 \\
@@ -1052,7 +1056,7 @@ Streaming Parameters Video Capture:
 15.16 fps
 ...`}</code></pre>
 
-          <p>There it was. The problem was not Melquíades skipping every other frame. The camera itself was delivering roughly 15 FPS.</p>
+          <p>There it was. The problem was not Melquiades skipping every other frame. The camera itself was delivering roughly 15 FPS.</p>
 
           <h3>The camera was allowed to lower its own frame rate</h3>
           <p>I then inspected the controls exposed by the webcam:</p>
@@ -1085,7 +1089,7 @@ exposure_dynamic_framerate    : value=1`}</code></pre>
           <p>That is approximately 15 FPS.</p>
           <p>
             It was not a bug in the camera. For normal video calling, choosing a brighter image over strict frame
-            cadence is reasonable. For Melquíades, though, it was a problem. The whole project cares about how
+            cadence is reasonable. For Melquiades, though, it was a problem. The whole project cares about how
             quickly fresh visual information can enter the pipeline.
           </p>
 
@@ -1128,7 +1132,7 @@ power_line_frequency = 60 Hz`}</code></pre>
 
           <h3>What I learned</h3>
           <p>
-            This is where Melquíades started becoming a real systems project for me. The video was delayed. My first
+            This is where Melquiades started becoming a real systems project for me. The video was delayed. My first
             latency number was misleading. So I added timestamps, separated the pipeline into stages, tested the
             camera outside my application, and found that the bottleneck was upstream of my code.
           </p>
@@ -1142,7 +1146,7 @@ power_line_frequency = 60 Hz`}</code></pre>
 
           <p>Once the camera was genuinely producing 30 frames per second, the next question became much more interesting:</p>
           <blockquote>What happens when frames arrive correctly, but the next stage cannot process them fast enough?</blockquote>
-          <p>That is where Melquíades becomes a queueing problem.</p>
+          <p>That is where Melquiades becomes a queueing problem.</p>
         </div>
       </section>
 
@@ -1150,7 +1154,7 @@ power_line_frequency = 60 Hz`}</code></pre>
         <div className="chapter-main">
           <h2 className="chapter-title"><span className="chapter-index">04</span><span>Live Video Is a Queueing Problem</span></h2>
 
-          <p>So the time had come to make Melquíades multithreaded.</p>
+          <p>So the time had come to make Melquiades multithreaded.</p>
           <div className="chapter-aside">
             <span>scary lightning noises</span>
             <ThunderButton />
@@ -1220,7 +1224,7 @@ power_line_frequency = 60 Hz`}</code></pre>
 
           <div className="sidenote-row">
             <p>
-              At startup, Melquíades allocates <a className="sidenote-reference" href="#power-of-two-note">four large frame slots</a>:
+              At startup, Melquiades allocates <a className="sidenote-reference" href="#power-of-two-note">four large frame slots</a>:
             </p>
             <PowerOfTwoNote />
           </div>
@@ -1302,7 +1306,7 @@ power_line_frequency = 60 Hz`}</code></pre>
           </p>
 
           <p>
-            The final policy is cleaner. If no slot is free, capture drops the incoming frame. The sender drains{' '}
+            And the last policy. If no slot is free, capture drops the incoming frame. The sender drains{' '}
             <code>ReadySlots</code> and can discard older ready frames in favor of the newest one, returning each
             discarded slot to <code>FreeSlots</code>. The sender owns that decision, so the ownership boundary remains
             intact.
@@ -1325,6 +1329,7 @@ power_line_frequency = 60 Hz`}</code></pre>
       <DeflateChapter />
       <H264Chapter />
       <UdpChapter />
+      <StreamFrozeChapter />
 
       <section className="article-outline" aria-label="Remaining chapter outline">
         <p className="outline-label">STILL TO WRITE</p>

@@ -43,7 +43,7 @@ export default function UdpChapter() {
           how the two programs would communicate.
         </p>
         <p>That became a small protocol I called JUAN.</p>
-        <p>Yes, the packets have my name on them.</p>
+        <p>Quite convenient to have a short name.</p>
 
         <h3>What UDP gives me</h3>
         <p>

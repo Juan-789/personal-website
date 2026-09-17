@@ -22,7 +22,7 @@ export default function Projects(){
     <div className='projects-container'>
     <div className='projects-col'>  {/*first column*/}
       <CodeCard
-        title="Melquíades"
+        title="Melquiades"
         description="A Rust video-call experiment for finding where latency accumulates: capture, H.264, UDP, decode, and display. Also, video calls are cool."
         tags={['Rust', 'H.264', 'UDP']}
         video="/melquiades-demo.mp4"

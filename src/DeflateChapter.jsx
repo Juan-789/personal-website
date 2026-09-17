@@ -40,11 +40,8 @@ export default function DeflateChapter() {
 
         <p>I knew some algorithms would be better suited to this than others. But I wanted to see what the difference actually looked like in my program.</p>
 
-        <p>So I started with something familiar: DEFLATE.</p>
 
-        <h3>No, I did not use my Huffman compressor</h3>
 
-        <p>I had already written a Huffman compressor for another project, so naturally, there was a moment of “could I just use that?”</p>
 
         <div className="sidenote-row">
           <p>
@@ -216,7 +213,7 @@ export default function DeflateChapter() {
 
         <p>Because decoding order and display order do not have to match. A later picture can be decoded first, then used to reconstruct a picture that will be displayed before it.</p>
 
-        <p>That can improve compression, but waiting for later pictures and reordering output can add delay. For Melquíades, I requested Constrained Baseline encoding and disabled frame reordering. Apple discusses this tradeoff in its <a href="https://developer.apple.com/videos/play/wwdc2021/10158/">low-latency VideoToolbox session</a>.</p>
+        <p>That can improve compression, but waiting for later pictures and reordering output can add delay. For Melquiades, I requested Constrained Baseline encoding and disabled frame reordering. Apple discusses this tradeoff in its <a href="https://developer.apple.com/videos/play/wwdc2021/10158/">low-latency VideoToolbox session</a>.</p>
 
         <p>There was a new complication, though.</p>
 

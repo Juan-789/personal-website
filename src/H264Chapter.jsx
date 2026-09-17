@@ -43,6 +43,59 @@ function H265Note() {
   )
 }
 
+function AccessUnitNote() {
+  return (
+    <div className="sidenote-anchor" id="access-unit-note">
+      <aside className="article-sidenote" aria-label="Detour: what is an access unit">
+        <span className="sidenote-type">DETOUR</span>
+        <h3>What is an access unit?</h3>
+        <p>
+          H.264 organizes its bytes into smaller pieces called NAL units. Some contain encoded image slices; others
+          carry configuration or additional information.
+        </p>
+        <p>
+          An access unit groups the NAL units associated with one coded picture. In Melquiades, that means one video
+          frame. Think of it as the encoded frame&apos;s package: it can contain several NAL units, and sending that package
+          might require one UDP packet or hundreds.
+        </p>
+        <p>
+          A packet boundary does not necessarily match a NAL boundary. Melquiades assigns one <code>frame_id</code> to
+          the whole access unit and reassembles its fragments before decoding.
+        </p>
+        <p>
+          Complete does not mean independently decodable. Having every byte of a predicted frame does not help if the
+          decoder is missing a reference picture it needs. A complete IDR, together with the required SPS/PPS, provides
+          a recovery point.
+        </p>
+        <a href="https://datatracker.ietf.org/doc/html/rfc6184">Further reading: H.264 terminology and packetization →</a>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>DETOUR</span> What is an access unit?</summary>
+        <p>
+          H.264 organizes its bytes into smaller pieces called NAL units. Some contain encoded image slices; others
+          carry configuration or additional information.
+        </p>
+        <p>
+          An access unit groups the NAL units associated with one coded picture. In Melquiades, that means one video
+          frame. Think of it as the encoded frame&apos;s package: it can contain several NAL units, and sending that package
+          might require one UDP packet or hundreds.
+        </p>
+        <p>
+          A packet boundary does not necessarily match a NAL boundary. Melquiades assigns one <code>frame_id</code> to
+          the whole access unit and reassembles its fragments before decoding.
+        </p>
+        <p>
+          Complete does not mean independently decodable. Having every byte of a predicted frame does not help if the
+          decoder is missing a reference picture it needs. A complete IDR, together with the required SPS/PPS, provides
+          a recovery point.
+        </p>
+        <a href="https://datatracker.ietf.org/doc/html/rfc6184">Further reading: H.264 terminology and packetization →</a>
+      </details>
+    </div>
+  )
+}
+
 export default function H264Chapter() {
   return (
     <section className="chapter-with-sidenote" id="what-h264-actually-changed">
@@ -83,7 +136,13 @@ export default function H264Chapter() {
         <h3>One screen image becomes an access unit</h3>
         <p>Before H.264, Melquiades had a simple model:</p>
         <pre className="article-code"><code>{'one captured image\n    = one compressed byte stream\n    = one independently usable frame'}</code></pre>
-        <p>With H.264, one captured image becomes an <strong>access unit</strong>. An access unit is the complete H.264 payload needed to represent one moment in the video stream. It can contain one or more smaller typed pieces called NAL units, or Network Abstraction Layer units.</p>
+        <div className="sidenote-row">
+          <p>
+            With H.264, one captured image becomes an <a className="sidenote-reference" href="#access-unit-note"><strong>access unit</strong></a>.
+            It can contain one or more smaller typed pieces called NAL units, or Network Abstraction Layer units.
+          </p>
+          <AccessUnitNote />
+        </div>
         <p>So the useful hierarchy became:</p>
         <pre className="article-code"><code>{'one screen image\n    → one encoded H.264 access unit\n        → one or more NAL units\n            → later split across one or more UDP packets'}</code></pre>
         <p>Those last two layers are easy to confuse. A NAL unit is not a UDP packet. An access unit is not necessarily a UDP packet either.</p>
@@ -134,7 +193,7 @@ export default function H264Chapter() {
         <h3>H.264 did not solve networking</h3>
         <p>At this point, Melquiades had stopped sending raw screenshots. That was a major improvement.</p>
         <p>But it had gained stateful decoding, recovery frames, parameter sets, two H.264 byte-stream formats, and a new distinction between an encoded access unit and the UDP packets that would carry it.</p>
-        <p>The next problem was therefore not “how do I send a frame?” It was:</p>
+        <p>The next problem was therefore:</p>
         <blockquote>How do I transport one complete, decoder-ready H.264 access unit over UDP without confusing packet boundaries for video boundaries?</blockquote>
         <p>That became the protocol.</p>
       </div>
