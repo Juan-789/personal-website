@@ -22,6 +22,7 @@ const chapterIndex = [
   ['08', 'A Tiny UDP Protocol, Deliberately', '#a-tiny-udp-protocol'],
   ['09', 'The Stream Froze', '#the-stream-froze'],
   ...remainingChapters.map(([number, title]) => [number, title, `#chapter-${number}`]),
+  ['DEMO', 'Its doneee!', '#demo'],
 ]
 
 function IrisEvidence() {
@@ -1344,6 +1345,31 @@ power_line_frequency = 60 Hz`}</code></pre>
             </li>
           ))}
         </ol>
+      </section>
+
+      <p className="article-demo-label" id="demo">Its doneee!</p>
+      <video className="article-demo-video" controls muted playsInline preload="metadata">
+        <source src="/mc_demo_2_long.mp4" type="video/mp4" />
+        Your browser does not support this video.
+      </video>
+
+      <section className="glass-to-glass-placeholders" aria-label="Glass-to-glass latency photos">
+        <figure className="glass-to-glass-placeholder">
+          <img
+            className="glass-to-glass-photo"
+            src="/IMG_0478_2.jpg"
+            alt="A glass-to-glass latency timer on the Mac display and its streamed result on the ThinkPad"
+          />
+          <figcaption>Glass-to-glass latency measurement, approximately 50 ms.</figcaption>
+        </figure>
+        <figure className="glass-to-glass-placeholder">
+          <img
+            className="glass-to-glass-photo"
+            src="/IMG_0482.jpg"
+            alt="A second glass-to-glass latency measurement between the Mac display and ThinkPad"
+          />
+          <figcaption>Glass-to-glass latency measurement, approximately 60 ms.</figcaption>
+        </figure>
       </section>
     </article>
   )

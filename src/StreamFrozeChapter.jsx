@@ -1,3 +1,26 @@
+function SurvivorshipBiasNote() {
+  return (
+    <div className="sidenote-anchor" id="survivorship-bias-note">
+      <aside className="article-sidenote" aria-label="Evidence: survivorship bias in latency measurements">
+        <span className="sidenote-type">EVIDENCE</span>
+        <img
+          className="sidenote-image"
+          src="/Survivorship-bias.svg"
+          alt="Survivorship-bias diagram"
+        />
+        <h3>Survivorship bias</h3>
+        <p>Successful-frame timing only describes the frames that survived long enough to be measured.</p>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>EVIDENCE</span> Survivorship bias</summary>
+        <img className="sidenote-image" src="/Survivorship-bias.svg" alt="Survivorship-bias diagram" />
+        <p>Successful-frame timing only describes the frames that survived long enough to be measured.</p>
+      </details>
+    </div>
+  )
+}
+
 export default function StreamFrozeChapter() {
   return (
     <section className="chapter-with-sidenote" id="the-stream-froze">
@@ -27,11 +50,14 @@ export default function StreamFrozeChapter() {
           Those numbers did not resemble a ten-second freeze. But look at where that measurement begins: after an
           access unit is complete and selected for decoding.
         </p>
-        <p>
-          If packets were missing, or the receiver was waiting for a recovery keyframe, that period did not become a
-          slow decoded-frame sample. It often became no displayed sample at all. The measurements described frames that
-          made it through.
-        </p>
+        <div className="sidenote-row">
+          <p>
+            If packets were missing, or the receiver was waiting for a recovery keyframe, that period did not become a
+            slow decoded-frame sample. It often became no displayed sample at all. The measurements described frames that
+            made it through.
+          </p>
+          <SurvivorshipBiasNote />
+        </div>
         <p>
           That was a huge distinction. A system can process its successful frames quickly while failing to produce a new
           displayable frame for seconds. I needed to measure progress through the stream, not only processing time for
@@ -124,7 +150,7 @@ export default function StreamFrozeChapter() {
         </p>
         <pre className="article-code"><code>{'receive datagrams\n    → reassemble an access unit\n    → decode H.264\n    → convert and copy the decoded pixels\n    → hand the image to the display thread\n    → return to receiving'}</code></pre>
         <p>
-          While it was decoding and converting an image, it was not draining that socket. The stage labeled
+          While it was decoding and converting an image, it was not draining that socket. The stage labeled {' '}
           <code>decode</code> in my logs includes the decoder wrapper&apos;s conversion and copy work too. Its pauses could
           last several milliseconds, with longer outliers. A burst arriving during one of those pauses needed somewhere
           to wait.
@@ -339,4 +365,3 @@ export default function StreamFrozeChapter() {
     </section>
   )
 }
-
