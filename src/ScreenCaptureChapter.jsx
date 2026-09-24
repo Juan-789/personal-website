@@ -59,21 +59,19 @@ function AshpdNote() {
     <div className="sidenote-anchor sidenote-left" id="ashpd-note">
       <aside className="article-sidenote" aria-label="Under the hood: ashpd">
         <span className="sidenote-type">UNDER THE HOOD</span>
-        <h3>ashpd</h3>
+        <img className="sidenote-image sidenote-image-wide" src="/portal-steam-header.jpg" alt="Portal title image from Steam" />
+        <h3>ashpd, a Portal reference</h3>
         <p>
-          <code>ashpd</code> is a Rust wrapper around the XDG Desktop Portal D-Bus interfaces. Its name is a funny
-          <a href="https://store.steampowered.com/app/400/Portal/">Portal</a> reference: <strong>Aperture Science
-          Handheld Portal Device</strong>.
+          <code>ashpd</code> is a Rust wrapper around the XDG Desktop Portal D-Bus interfaces.
         </p>
         <a href="https://docs.rs/ashpd/0.13.13/ashpd/">Read the ashpd docs →</a>
       </aside>
 
       <details className="article-sidenote-mobile">
-        <summary><span>UNDER THE HOOD</span> ashpd</summary>
+        <summary><span>UNDER THE HOOD</span> ashpd, a Portal reference</summary>
+        <img className="sidenote-image sidenote-image-wide" src="/portal-steam-header.jpg" alt="Portal title image from Steam" />
         <p>
-          <code>ashpd</code> is a Rust wrapper around the XDG Desktop Portal D-Bus interfaces. Its name is a funny
-          <a href="https://store.steampowered.com/app/400/Portal/">Portal</a> reference: <strong>Aperture Science
-          Handheld Portal Device</strong>.
+          <code>ashpd</code> is a Rust wrapper around the XDG Desktop Portal D-Bus interfaces.
         </p>
         <a href="https://docs.rs/ashpd/0.13.13/ashpd/">Read the ashpd docs →</a>
       </details>
@@ -285,7 +283,7 @@ export default function ScreenCaptureChapter() {
 
         <pre className="article-code"><code>{"capture system invokes my callback\n    → inspect the supplied image\n    → copy it into a free pool slot\n    → publish the slot\n    → return"}</code></pre>
 
-        <p>Now the question isn't “how do I fetch the next frame?”, but actually:</p>
+        <p>Now the question isn't “how do I fetch the next frame?”, but rather:</p>
 
         <blockquote><p>A frame has arrived. Where can I put it before returning control?</p></blockquote>
 
@@ -302,8 +300,14 @@ export default function ScreenCaptureChapter() {
           simply reading each other's pixels, so screen capture has to cross this compositor-controlled boundary in order to share a whole screen.</p>
 
 
-        <p>The standard way to ask for that access is through the XDG ScreenCast portal which Rust has a crate binding for it called Ashpd, or better known
-           as Aperture Science Handheld Portal Device.</p>
+        <div className="sidenote-row">
+          <p>
+            The standard way to ask for that access is through the XDG ScreenCast portal which Rust has a crate
+            binding for it called Ashpd, or better known as{' '}
+            <a className="sidenote-reference" href="#ashpd-note">Aperture Science Handheld Portal Device</a>.
+          </p>
+          <AshpdNote />
+        </div>
         <blockquote><p> Yayyyy! We have permission, but how do I get the pixels for my program?</p></blockquote>
 
         <p>Turns out I need to use <b>ANOTHER</b> library for that, and that's where Pipewire comes in.</p>
@@ -322,13 +326,7 @@ export default function ScreenCaptureChapter() {
 
         <pre className="article-code"><code>{"Melquiades\n    → request screen sharing through the portal\n    → user selects a monitor\n    → receive an authorized PipeWire connection\n    → receive frame buffers through PipeWire"}</code></pre>
 
-        {/* <div className="sidenote-row">
-          <p>
-            I used <a className="sidenote-reference" href="#ashpd-note"><code>ashpd</code></a> to talk to the portal
-            from Rust. It wraps the portal&apos;s D-Bus interfaces.
-          </p>
-          <AshpdNote />
-        </div> */}
+        <p>I used <code>ashpd</code> to talk to the portal from Rust. It wraps the portal&apos;s D-Bus interfaces.</p>
 
         {/* <p>This is pretty cool but as you may have seen am slightly more interested into what is below this abstraction layer, and for that certain things must be answered</p> */}
 
@@ -398,7 +396,7 @@ export default function ScreenCaptureChapter() {
           <ScreenCaptureKitCrateNote />
         </div>
 
-        <p>The setup looked different:</p>
+        <p>The setup looked slightly different:</p>
 
         <pre className="article-code"><code>{"query shareable content\n    → choose a display\n    → configure the output\n    → register a handler\n    → start capture"}</code></pre>
 
@@ -407,8 +405,6 @@ export default function ScreenCaptureChapter() {
         <pre className="article-code"><code>{"1920 × 1080\nBGRA pixels\n30 FPS"}</code></pre>
 
         <p>When output arrives, ScreenCaptureKit invokes <code>did_output_sample_buffer()</code>.</p>
-
-        <p>And now we get some very Apple names.</p>
 
         <p>The callback receives a <code>CMSampleBuffer</code>. From that, I obtain a <code>CVPixelBuffer</code>. Underneath the screen image is an <code>IOSurface</code>.</p>
 
@@ -431,34 +427,13 @@ export default function ScreenCaptureChapter() {
 
         <pre className="article-code"><code>{"ScreenCaptureKit callback\n    → obtain CVPixelBuffer\n    → lock for reading\n    → copy into Melquiades slot\n    → release the lock\n    → return"}</code></pre>
 
-        <p>Different setup. Different object types. Same ownership question.</p>
+        <p>Different setup. But I get to keep the ownership model.</p>
 
         <p>How do I keep this image available to my sender without holding up the capture system?</p>
 
-        <h3>An image is rectangular. Its memory has opinions.</h3>
 
-        <p>There was another detail hiding inside “copy the image.”</p>
-
-        <p>I had been treating a raw frame as tightly packed rows:</p>
-
-        <pre className="article-code"><code>{"bytes per row = width × bytes per pixel"}</code></pre>
-
-        <p>But a capture buffer can have padding after each row.</p>
-
-        <p>The distance from the start of one row to the start of the next is called its stride. That distance can be larger than the number of useful pixel bytes in the row.</p>
-
-        <p>For a tiny, hypothetical BGRA image three pixels wide:</p>
-
-        <pre className="article-code"><code>{"3 pixels × 4 bytes = 12 useful bytes per row\n\nSource stride: 16 bytes\n\nSource:\n[12 bytes of pixels][4 bytes of padding]\n[12 bytes of pixels][4 bytes of padding]\n\nMy pool:\n[12 bytes of pixels][12 bytes of pixels]"}</code></pre>
-
-        <p>If I copied the first 24 bytes as one continuous image, I would copy the first row, its padding, and only part of the second row.</p>
-
-        <p>The byte count would look right. The image would not.</p>
-
-        <p>So <code>publish_strided()</code> copies one row at a time:</p>
-
-        <pre className="article-code"><code>{"for row in 0..height {\n    let source_start = row * source_stride;\n    let destination_start = row * row_bytes;\n\n    destination[destination_start..destination_start + row_bytes]\n        .copy_from_slice(\n            &source[source_start..source_start + row_bytes]\n        );\n}"}</code></pre>
-
+        <p>There was one more platform detail hidden inside “copy the image”: the source rows were not guaranteed to be tightly packed. Capture buffers can have a larger stride than width × bytes_per_pixel, so a flat memcpy could accidentally copy row padding into the image.
+I handled that at the platform boundary with publish_strided(), which copies row by row into Melquiades' tightly packed frame layout. After that, the rest of the pipeline does not need to know how PipeWire or Core Video arranged the original buffer. </p>
         <p>Both platform backends use this operation.</p>
 
         <p>After that copy, every downstream stage sees the same tightly packed layout. It does not need to know how PipeWire or Core Video arranged the original rows.</p>
@@ -477,7 +452,7 @@ export default function ScreenCaptureChapter() {
 
         <p>It did not wait for compression. It did not wait for UDP. The sender could still discard stale ready frames and keep the newest one.</p>
 
-        <p>The pool was larger now. Four 1080p BGRA slots occupy about 31.6 MiB, compared with roughly 2.34 MiB for the original camera frames. But the number of outstanding raw frames stayed bounded.</p>
+        <p>The pool was larger now. Four 1080p BGRA slots occupy about 33.2 MB, compared with roughly 2.46 MB for the original camera frames. But the number of outstanding raw frames stayed bounded.</p>
 
         <p>That does not eliminate every queue in the operating system. It bounds the particular handoff I control.</p>
 
@@ -489,11 +464,9 @@ export default function ScreenCaptureChapter() {
 
         <p>Apparently, every chapter of this project needed another opportunity to distrust a timestamp.</p>
 
-        <h3>One copy now, another path later</h3>
+        <h3>A different path later</h3>
 
-        <p>The first screen-sharing implementation copied raw pixels into the pool and fed the existing DEFLATE sender.</p>
-
-        <p>Later, the Mac H.264 path took a different route:</p>
+        <p>Later, the Mac H.264 would bypass this raw-frame copy entirely:</p>
 
         <pre className="article-code"><code>{"ScreenCaptureKit\n    → IOSurface\n    → VideoToolbox encoder\n    → encoded frame queue\n    → UDP"}</code></pre>
 

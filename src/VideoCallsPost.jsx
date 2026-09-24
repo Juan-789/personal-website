@@ -4,9 +4,9 @@ import DeflateChapter from './DeflateChapter'
 import H264Chapter from './H264Chapter'
 import UdpChapter from './UdpChapter'
 import StreamFrozeChapter from './StreamFrozeChapter'
+import MeasurementsChapter from './MeasurementsChapter'
 
 const remainingChapters = [
-  ['10', 'What the Measurements Actually Say', 'Local timing segments, informal glass-to-glass results, and unknowns.'],
   ['11', 'What Is Still Unfinished', 'Software decode, one receiver thread, CPU copies, no Internet transport.'],
   ['12', 'What Comes Next', 'Controlled 30/60 fps tests, high-speed-camera measurement, VA-API, then the BedWars remote-play demo.'],
 ]
@@ -21,6 +21,7 @@ const chapterIndex = [
   ['07', 'What H.264 Actually Changed', '#what-h264-actually-changed'],
   ['08', 'A Tiny UDP Protocol, Deliberately', '#a-tiny-udp-protocol'],
   ['09', 'The Stream Froze', '#the-stream-froze'],
+  ['10', 'What the Measurements Actually Say', '#what-the-measurements-actually-say'],
   ...remainingChapters.map(([number, title]) => [number, title, `#chapter-${number}`]),
   ['DEMO', 'Its doneee!', '#demo'],
 ]
@@ -609,7 +610,7 @@ export default function VideoCallsPost() {
         </p>
         <div className="article-equation">2,073,600 pixels × 4 bytes = 8,294,400 bytes per frame</div>
 
-        <p>One uncompressed 1080p frame is therefore about 7.91 MiB.</p>
+        <p>One uncompressed 1080p frame is therefore about 8.29 MB.</p>
 
         <p>That is already much larger than I expected. Now multiply it by the frame rate:</p>
         <div className="article-equation article-equation-multiline">
@@ -1331,6 +1332,7 @@ power_line_frequency = 60 Hz`}</code></pre>
       <H264Chapter />
       <UdpChapter />
       <StreamFrozeChapter />
+      <MeasurementsChapter />
 
       <section className="article-outline" aria-label="Remaining chapter outline">
         <p className="outline-label">STILL TO WRITE</p>
@@ -1353,24 +1355,6 @@ power_line_frequency = 60 Hz`}</code></pre>
         Your browser does not support this video.
       </video>
 
-      <section className="glass-to-glass-placeholders" aria-label="Glass-to-glass latency photos">
-        <figure className="glass-to-glass-placeholder">
-          <img
-            className="glass-to-glass-photo"
-            src="/IMG_0478_2.jpg"
-            alt="A glass-to-glass latency timer on the Mac display and its streamed result on the ThinkPad"
-          />
-          <figcaption>Glass-to-glass latency measurement, approximately 50 ms.</figcaption>
-        </figure>
-        <figure className="glass-to-glass-placeholder">
-          <img
-            className="glass-to-glass-photo"
-            src="/IMG_0482.jpg"
-            alt="A second glass-to-glass latency measurement between the Mac display and ThinkPad"
-          />
-          <figcaption>Glass-to-glass latency measurement, approximately 60 ms.</figcaption>
-        </figure>
-      </section>
     </article>
   )
 }

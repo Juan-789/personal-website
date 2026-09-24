@@ -240,7 +240,7 @@ export default function StreamFrozeChapter() {
         <p>I checked the host&apos;s settings:</p>
         <pre className="article-code"><code>{'net.core.rmem_default = 212992\nnet.core.rmem_max = 4194304'}</code></pre>
         <p>
-          The host already allowed a 4 MiB request. I did not need to change the system-wide limit. The receiver was
+          The host already allowed a 4.19 MB request. I did not need to change the system-wide limit. The receiver was
           changed to request that buffer before binding port 5000, so the first arriving burst would get the larger queue too.
         </p>
         <p>At startup it printed:</p>

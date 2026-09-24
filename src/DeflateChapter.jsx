@@ -225,7 +225,7 @@ export default function DeflateChapter() {
 
         <p>I would eventually need to understand recovery points, including IDR pictures, rather than treating every encoded frame as disposable. That became part of the next chapter.</p>
 
-        <h3>A slightly unreasonable detour</h3>
+        <h3>A slight detour</h3>
 
         <p>While reading about prediction, I started wondering how far the idea could go.</p>
 
@@ -245,7 +245,7 @@ export default function DeflateChapter() {
 
         <p>For now, I had enough problems delivering pixels that actually existed.</p>
 
-        <h3>Why I am glad I started with DEFLATE</h3>
+        <h3>I am glad I started with DEFLATE</h3>
 
         <p>DEFLATE gave me a simple, lossless baseline.</p>
 
