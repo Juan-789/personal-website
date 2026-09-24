@@ -250,45 +250,23 @@ export default function ScreenCaptureChapter() {
     <section className="chapter-with-sidenote" id="screen-capture">
       <div className="chapter-main">
         <h2 className="chapter-title"><span className="chapter-index">05</span><span>Screen Capture Is Not One API</span></h2>
-        <p>Now that my camera was actually producing 30 frames per second, I wanted to go further.</p>
+        <p>My camera worked at 30 FPS, but I had no tangible latency number to brag about this project, I mean I
+           had timestamps for the individual stages. I knew how long I waited for a camera frame, how 
+           long compression took, and how long the sender spent submitting UDP packets. </p>
+        <p>But these are all things that are minuscule, like unless you are an engineer deep into this, you don't have a point of reference and don't know whether these numbers are good or bad.
+          What we can all comprehend is how long what happens in A takes to get shown in Screen of B (informal definition of glass-to-glass),
+           and with that we have at least a common point of reference</p>
+        <blockquote>So what is my glass-to-glass?</blockquote>
+        <p>Well I had thought of many ways to measure it, but the setup was slightly weird and overly engineered for my liking,</p>
+        <p>Thus I implemented Screen sharing, Screen sharing gave me a convenient experiment. Put a changing timer on one screen, stream it to the other computer, and compare the original with the received image. The actual measurement has some complications, which I will get into later, but at least I would have something visible to compare and much simpler than the above.</p>
 
-        <p>I had timestamps for the individual stages. I knew how long I waited for a camera frame, how long compression took, and how long the sender spent submitting UDP packets.</p>
+        <p>Plus, It also gave me another source to play with.</p>
+        <h3>Idea</h3>
+        <p>My ThinkPad’s screen runs at 60 Hz. The monitor connected to my Mac mini runs at 100 Hz. After fighting to get a real 30 FPS from the webcam, screen capture gave me a chance to experiment with a faster source.</p>
 
-        <p>But I still wanted to answer the more obvious question:</p>
+        <p>But first, I need to get the pixels.</p>
 
-        <blockquote><p>How far behind reality is the image on the other screen?</p></blockquote>
-
-        <p>The useful end-to-end measurement for camera video is usually called glass-to-glass: from something happening in front of the camera to that change appearing on the receiving display.</p>
-
-        <p>Screen sharing gave me a convenient experiment. Put a changing timer on one screen, stream it to the other computer, and compare the original with the received image. The actual measurement has some complications, which I will get into later, but at least I would have something visible to compare.</p>
-
-        <p>It also gave me another source to play with.</p>
-
-        <p>My ThinkPad’s screen runs at 60 Hz. The display connected to my Mac mini runs at 100 Hz. My camera had just made me fight for 30 FPS.</p>
-
-        <p>So my first thought was: could I use the screen as a faster source of images?</p>
-
-        <p>Potentially. But there was a catch.</p>
-
-        <h3>A 100 Hz display is not a 100 FPS capture stream</h3>
-
-        <p>A display refreshing at 100 Hz has a refresh period of:</p>
-
-        <pre className="article-code"><code>{"1 / 100 = 10 ms"}</code></pre>
-
-        <p>That does not mean my program receives a new captured image every 10 milliseconds.</p>
-
-        <p>Display refresh, capture delivery, encoding, and presentation on the receiving machine all have their own timing. In fact, my first Mac screen-capture implementation still requested 30 FPS.</p>
-
-        <p>The 33.3 ms frame period at 30 FPS is also not automatically 33.3 ms of latency added to every frame. A change could happen just before the next capture opportunity, or just after one. In a simplified model, randomly timed changes wait half a frame period on average.</p>
-
-        <p>Higher capture rates could help. They were an experiment to run, not a performance improvement I had already earned.</p>
-
-        <p>First, I needed to get the pixels.</p>
-
-        <p>Which sounded easy enough.</p>
-
-        <p>The computer already knows what is on its screen. Surely I can just ask for that image?</p>
+        <p>Which sound easy enough.</p>
 
         <h3>Who asks for the next frame?</h3>
 
@@ -307,64 +285,69 @@ export default function ScreenCaptureChapter() {
 
         <pre className="article-code"><code>{"capture system invokes my callback\n    → inspect the supplied image\n    → copy it into a free pool slot\n    → publish the slot\n    → return"}</code></pre>
 
-        <p>Now the question was less “how do I fetch the next frame?” and more:</p>
+        <p>Now the question isn't “how do I fetch the next frame?”, but actually:</p>
 
         <blockquote><p>A frame has arrived. Where can I put it before returning control?</p></blockquote>
 
         <p>Conveniently, the previous chapter had already given me somewhere to put it.</p>
 
-        <p>The frame pool stayed. I added a <code>publish_strided()</code> operation so a callback could copy an externally supplied image into a free slot and publish it to the sender.</p>
+        <p>The frame pool still worked. I added a <code>publish_strided()</code> operation so a callback could copy an externally supplied image into a free slot and publish it to the sender.</p>
 
         <p>The platform-specific part was everything that happened before that handoff.</p>
 
-        <h3>Linux: permission first, pixels second</h3>
+        <h3>Linux: permission then pixels</h3>
+        <p>The usual UI/UX for sharing your screen is pretty standard accross different apps, so I wondered if that is something that I'll need to implement or comes done for me?</p>
+        <p>Turns out the whole permission thing is already part of Linux, (makes sense why they all look the same); but the reason is more technical than I expected and is that
+          on a modern Wayland desktop, applications are deliberately prevented from 
+          simply reading each other's pixels, so screen capture has to cross this compositor-controlled boundary in order to share a whole screen.</p>
 
-        <div className="sidenote-row">
+
+        <p>The standard way to ask for that access is through the XDG ScreenCast portal which Rust has a crate binding for it called Ashpd, or better known
+           as Aperture Science Handheld Portal Device.</p>
+        <blockquote><p> Yayyyy! We have permission, but how do I get the pixels for my program?</p></blockquote>
+
+        <p>Turns out I need to use <b>ANOTHER</b> library for that, and that's where Pipewire comes in.</p>
+
+        <p>PipeWire is Linux's multimedia framework for moving audio and video between producers and consumers. In my case, the compositor exposes the shared screen as a video source, and PipeWire is what actually delivers those frame buffers to Melquiades.</p>
+        {/* <div className="sidenote-row">
           <p>
-            On Linux, my screen-capture path used the <a className="sidenote-reference" href="#xdg-screencast-note">XDG ScreenCast portal</a>{' '}
+            my screen-capture path used the <a className="sidenote-reference" href="#xdg-screencast-note">XDG ScreenCast portal</a>{' '}
             and <a className="sidenote-reference" href="#pipewire-note">PipeWire</a>.
           </p>
           <XdgScreenCastNote />
           <PipeWireNote />
-        </div>
-
-        <p>Those are two different parts of the process.</p>
-
-        <p>The portal handles the request to share something. PipeWire delivers the resulting video stream.</p>
+        </div> */}
+        <p>In essence the portal handles the request to share something. PipeWire delivers the resulting video stream.</p>
+        <p>The whole pipeline then looks like</p>
 
         <pre className="article-code"><code>{"Melquiades\n    → request screen sharing through the portal\n    → user selects a monitor\n    → receive an authorized PipeWire connection\n    → receive frame buffers through PipeWire"}</code></pre>
 
-        <div className="sidenote-row">
+        {/* <div className="sidenote-row">
           <p>
             I used <a className="sidenote-reference" href="#ashpd-note"><code>ashpd</code></a> to talk to the portal
             from Rust. It wraps the portal&apos;s D-Bus interfaces.
           </p>
           <AshpdNote />
-        </div>
+        </div> */}
 
-        <p>The portal is a standard interface backed by desktop-specific implementations. That lets an application make a screen-sharing request without implementing a separate permission and selection interface for every desktop environment. Portals are also available to applications running outside a sandbox. <a href="https://flatpak.github.io/xdg-desktop-portal/docs/">XDG Desktop Portal documentation</a></p>
+        {/* <p>This is pretty cool but as you may have seen am slightly more interested into what is below this abstraction layer, and for that certain things must be answered</p> */}
 
-        <div className="sidenote-row">
+
+        {/* <div className="sidenote-row">
           <p>
             Underneath, <code>ashpd</code> uses <a className="sidenote-reference" href="#zbus-note"><code>zbus</code></a>{' '}
             for that D-Bus conversation.
           </p>
           <ZbusNote />
-        </div>
+        </div> */}
+        <p>My screen sharing request was deliberately narrow: one monitor, include cursor, and no persistant permission </p>
 
-        <p>My request was deliberately narrow:</p>
-
-        <pre className="article-code"><code>{"one monitor\ncursor included in the image\nno persistent permission"}</code></pre>
 
         <p>The code creates a session, selects those source options, and starts the request.</p>
 
         <p>Once the user has selected a monitor, the response identifies its PipeWire stream. I then ask the portal for a file descriptor representing an authorized PipeWire connection.</p>
 
         <p>The stream’s node ID tells me which source to connect to. The file descriptor gives me the connection through which I can access it. Neither one is an image yet. <a href="https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.ScreenCast.html">ScreenCast portal specification</a></p>
-
-        <p>That was the first useful distinction:</p>
-
-        <blockquote><p>Permission to capture a screen and delivery of its pixels are separate problems.</p></blockquote>
 
         <h3>PipeWire gives me a buffer, temporarily</h3>
 
@@ -388,7 +371,7 @@ export default function ScreenCaptureChapter() {
 
         <p>When PipeWire invokes the process callback, I dequeue an available buffer.</p>
 
-        <p>Yes, there is still a dequeue operation. The difference is that it happens inside PipeWire’s callback, rather than inside my own “wait for the next camera frame” loop. <a href="https://docs.pipewire.org/page_tutorial5.html">PipeWire capture tutorial</a></p>
+        <p>Yup, there is still a dequeue operation. The difference is that it happens inside PipeWire’s callback, rather than inside my own “wait for the next camera frame” loop. <a href="https://docs.pipewire.org/page_tutorial5.html">PipeWire capture tutorial</a></p>
 
         <p>The callback checks the buffer, copies its image into the pool, and releases it back to PipeWire.</p>
 
