@@ -23,6 +23,39 @@ function Flate2Note() {
   )
 }
 
+function PredictionDetourNote() {
+  return (
+    <div className="sidenote-anchor" id="prediction-detour-note">
+      <aside className="article-sidenote" aria-label="Detour: prediction beyond video coding">
+        <span className="sidenote-type">DETOUR</span>
+        <h3>A slight detour</h3>
+        <p>While reading about prediction, I started wondering how far the idea could go.</p>
+        <p>What if a receiver could predict motion while waiting for the next update?</p>
+        <p>I came across <a href="https://openaccess.thecvf.com/content/CVPR2026/html/Baumann_Envisioning_the_Future_One_Step_at_a_Time_CVPR_2026_paper.html">Envisioning the Future, One Step at a Time</a>, which explores predicting possible future motion through sparse point trajectories. Instead of generating every pixel of a future video, its model rolls out how selected points might move.</p>
+        <p>That is pretty cool.</p>
+        <p>It also is not a ready-made replacement for H.264. The paper studies plausible future motion, not transmitting and reconstructing the actual screen content.</p>
+        <p>The distinction matters. A model might predict where something is likely to move. It cannot know which unexpected character I am about to type.</p>
+        <p>I could imagine experimenting with prediction to hide brief gaps, provided the receiver could correct itself when real information arrived. That is my speculation, not a result demonstrated by the paper.</p>
+        <p>Faster GPUs might make more experiments practical. They would not make an uncertain future stop being uncertain.</p>
+        <p>For now, I had enough problems delivering pixels that actually existed.</p>
+      </aside>
+
+      <details className="article-sidenote-mobile">
+        <summary><span>DETOUR</span> A slight detour</summary>
+        <p>While reading about prediction, I started wondering how far the idea could go.</p>
+        <p>What if a receiver could predict motion while waiting for the next update?</p>
+        <p>I came across <a href="https://openaccess.thecvf.com/content/CVPR2026/html/Baumann_Envisioning_the_Future_One_Step_at_a_Time_CVPR_2026_paper.html">Envisioning the Future, One Step at a Time</a>, which explores predicting possible future motion through sparse point trajectories. Instead of generating every pixel of a future video, its model rolls out how selected points might move.</p>
+        <p>That is pretty cool.</p>
+        <p>It also is not a ready-made replacement for H.264. The paper studies plausible future motion, not transmitting and reconstructing the actual screen content.</p>
+        <p>The distinction matters. A model might predict where something is likely to move. It cannot know which unexpected character I am about to type.</p>
+        <p>I could imagine experimenting with prediction to hide brief gaps, provided the receiver could correct itself when real information arrived. That is my speculation, not a result demonstrated by the paper.</p>
+        <p>Faster GPUs might make more experiments practical. They would not make an uncertain future stop being uncertain.</p>
+        <p>For now, I had enough problems delivering pixels that actually existed.</p>
+      </details>
+    </div>
+  )
+}
+
 export default function DeflateChapter() {
   return (
     <section className="chapter-with-sidenote" id="why-deflate-was-not-enough">
@@ -221,33 +254,20 @@ export default function DeflateChapter() {
 
         <p>With predictive video, losing a reference picture can affect later pictures too.</p>
 
-        <p>The thing that saves bytes also creates dependencies.</p>
-
         <p>I would eventually need to understand recovery points, including IDR pictures, rather than treating every encoded frame as disposable. That became part of the next chapter.</p>
 
-        <h3>A slight detour</h3>
-
-        <p>While reading about prediction, I started wondering how far the idea could go.</p>
-
-        <p>What if a receiver could predict motion while waiting for the next update?</p>
-
-        <p>I came across <a href="https://openaccess.thecvf.com/content/CVPR2026/html/Baumann_Envisioning_the_Future_One_Step_at_a_Time_CVPR_2026_paper.html">Envisioning the Future, One Step at a Time</a>, which explores predicting possible future motion through sparse point trajectories. Instead of generating every pixel of a future video, its model rolls out how selected points might move.</p>
-
-        <p>That is pretty cool.</p>
-
-        <p>It also is not a ready-made replacement for H.264. The paper studies plausible future motion, not transmitting and reconstructing the actual screen content.</p>
-
-        <p>The distinction matters. A model might predict where something is likely to move. It cannot know which unexpected character I am about to type.</p>
-
-        <p>I could imagine experimenting with prediction to hide brief gaps, provided the receiver could correct itself when real information arrived. That is my speculation, not a result demonstrated by the paper.</p>
-
-        <p>Faster GPUs might make more experiments practical. They would not make an uncertain future stop being uncertain.</p>
-
-        <p>For now, I had enough problems delivering pixels that actually existed.</p>
+        <div className="sidenote-row">
+          <p>
+            The thing that saves bytes also creates dependencies. I would eventually need to understand recovery
+            points, including IDR pictures, rather than treating every encoded frame as disposable. That became part
+            of the next chapter.
+          </p>
+          <PredictionDetourNote />
+        </div>
 
         <h3>I am glad I started with DEFLATE</h3>
 
-        <p>DEFLATE gave me a simple, lossless baseline.</p>
+        <p>Although DEFLATE was garbage, it gave me a simple, lossless baseline.</p>
 
         <p>I could inspect raw images, compress each frame independently, measure the cost, and debug packetization without also debugging a stateful video decoder.</p>
 

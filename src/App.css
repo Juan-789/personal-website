@@ -576,6 +576,10 @@
   z-index: 1;
 }
 
+#prediction-detour-note {
+  width: 500px;
+}
+
 .sidenote-left {
   right: calc(100% + 2rem);
   left: auto;
